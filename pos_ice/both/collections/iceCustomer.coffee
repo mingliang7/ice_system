@@ -1,6 +1,6 @@
-Ice.Collection.Customer = new MongoCollection('ice_customers')
+Ice.Collection.Customer = new Mongo.Collection('ice_customers')
 
-Ice.Collection.Customer = new SimpleSchema(
+Ice.Schema.Customer = new SimpleSchema(
 	name:
 		type: String
 		max: 250
@@ -29,3 +29,5 @@ Ice.Collection.Customer = new SimpleSchema(
 			options: -> 
 				Ice.List.type()
 )
+
+Ice.Collection.Customer.attachSchema Ice.Schema.Customer
