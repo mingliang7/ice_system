@@ -20,3 +20,18 @@
 		list.push {label: '20 days', value: '20'}
 		list.push {label: '30 days', value: '30'}
 		list
+
+	status: (selectOne) ->
+		list = []
+		if !_.isEqual(selecOne, false)
+			list.push {label: "(Select One)", value: "" }
+
+		list.push {label: 'Disable', value: 'disable'}
+		list.push {label: 'Enable', value: 'enable'}
+		list
+
+	unit: (selectOne) ->
+		list = []
+		if !_.isEqual(selecOne, false)
+			list.push {label: "(Select One)", value: "" }
+		
