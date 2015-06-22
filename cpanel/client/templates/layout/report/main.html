@@ -1,0 +1,15 @@
+<head>
+    <link rel="icon" href="rabbit.png">
+    <title>Rabbit Report</title>
+</head>
+
+<template name="reportLayout">
+    <body class="report-body">
+    <div class="report-{{pageSize}}-{{orientation}}">
+
+        {{> yield}}
+
+    </div>
+    </body>
+</template>
+
