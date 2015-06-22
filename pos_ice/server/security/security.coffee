@@ -1,8 +1,8 @@
-# Restuarant.Collection.OrderTable.permit([
-#   'insert'
-#   'update'
-#   'remove'
-# ]).restuarant_ifGeneral().apply()
+Ice.Collection.Customer.permit([
+  'insert'
+  'update'
+  'remove'
+]).ice_ifGeneral().apply()
 
 # Restuarant.Collection.FoodCategory.permit([
 #   'insert'

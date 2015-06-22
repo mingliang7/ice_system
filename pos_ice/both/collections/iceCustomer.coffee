@@ -21,13 +21,13 @@ Ice.Schema.Customer = new SimpleSchema(
 		type: String
 		max: 250
 
-	type: 
+	customerType: 
 		type: String
 		max: 10
 		autoform: 
 			type: 'select2'
 			options: -> 
-				Ice.List.type()
+				Ice.List.customerType()
 )
 
 Ice.Collection.Customer.attachSchema Ice.Schema.Customer
