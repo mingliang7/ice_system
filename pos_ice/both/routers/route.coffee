@@ -1,4 +1,4 @@
-Router.route 'ice/customers', 
+Router.route 'ice/customers',
 	->
     @render 'ice_customer'
 
@@ -9,3 +9,13 @@ Router.route 'ice/customers',
 	icon: 'customer'
 	title: "customer"
 
+Router.route 'ice/orders',
+	->
+		@render 'ice_order'
+
+	name: 'ice.order'
+	header:
+		title: 'order'
+		sub: ''
+	icon: 'shopping-cart'
+	title: 'order'

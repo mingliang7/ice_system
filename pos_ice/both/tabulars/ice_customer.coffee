@@ -1,7 +1,7 @@
-# Customer
-Ice.TabularTable.Customer = new (Tabular.Table)(
-  name: 'iceCustomerList'
-  collection: Ice.Collection.Customer
+# Order
+Ice.TabularTable.Order = new (Tabular.Table)(
+  name: 'iceOrderList'
+  collection: Ice.Collection.Order
   pagingType: 'full_numbers'
   autoWidth: false
   columnDefs: [ {
@@ -21,25 +21,25 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
       data: '_id'
       title: 'ID'
     }
-    {
-      data: 'name'
-      title: 'Name'
-    }
-    {
-      data: 'gender'
-      title: 'Gender'
-    }
-		{
-			data: 'customerType'
-			title: 'Type', render: (val) ->
-        "#{val} days"
-		}
-    {
-      data: 'address'
-      title: 'Address'
-    }
-    {
-      data: 'telephone'
-      title: 'Telephone'
-    }
+    # {
+    #   data: 'name'
+    #   title: 'Name'
+    # }
+    # {
+    #   data: 'gender'
+    #   title: 'Gender'
+    # }
+		# {
+		# 	data: 'customerType'
+		# 	title: 'Type', render: (val) ->
+    #     "#{val} days"
+		# }
+    # {
+    #   data: 'address'
+    #   title: 'Address'
+    # }
+    # {
+    #   data: 'telephone'
+    #   title: 'Telephone'
+    # }
   ])
