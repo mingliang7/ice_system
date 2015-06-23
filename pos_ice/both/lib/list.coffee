@@ -34,4 +34,6 @@
 		list = []
 		if !_.isEqual(selecOne, false)
 			list.push {label: "(Select One)", value: "" }
-		
+
+		list.push {label: 'Derm', value: 'D'}
+		list.push {label: 'Kg', value: 'kg'}
