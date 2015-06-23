@@ -5,7 +5,7 @@ Ice.Schema.Customer = new SimpleSchema(
 		type: String
 		max: 250
 
-	gender: 
+	gender:
 		type: String
 		max: 10
 		autoform:
@@ -17,16 +17,16 @@ Ice.Schema.Customer = new SimpleSchema(
 		type: String
 		max: 500
 
-	telephone: 
+	telephone:
 		type: String
 		max: 250
 
-	customerType: 
+	customerType:
 		type: String
 		max: 10
-		autoform: 
+		autoform:
 			type: 'select2'
-			options: -> 
+			options: ->
 				Ice.List.customerType()
 )
 

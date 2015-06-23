@@ -3,7 +3,7 @@ Ice.Collection.Customer.permit([
   'update'
   'remove'
 ]).ice_ifGeneral().apply()
-
+Ice.Collection.Item.permit(['insert', 'update', 'remove'])
 # Restuarant.Collection.FoodCategory.permit([
 #   'insert'
 #   'update'

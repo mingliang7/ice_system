@@ -1,11 +1,7 @@
 Ice.Collection.Item = new Mongo.Collection('ice_items')
 
 Ice.Schema.Item = new SimpleSchema(
-	name:
-		type: String
-		max: 250
-
-  price:
+	price:
     type: Number
     decimal: true
 
@@ -15,7 +11,7 @@ Ice.Schema.Item = new SimpleSchema(
     autoform:
       type: 'select2'
       options: ->
-      Ice.List.status()
+      	Ice.List.status()
 
   unit:
     type: String
@@ -24,6 +20,14 @@ Ice.Schema.Item = new SimpleSchema(
       type: 'select2'
       options: ->
         Ice.List.unit()
+
+	name:
+		type: String
+		max: 250
+
+	code:
+		type: String
+		max: 10
 )
 
 Ice.Collection.Item.attachSchema Ice.Schema.Item
