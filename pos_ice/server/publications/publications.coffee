@@ -3,3 +3,6 @@ Meteor.publish 'ice_customer', ->
 
 Meteor.publish 'ice_item', ->
 	Ice.Collection.Item.find() if @userId
+
+Meteor.publish 'ice_order', ->
+	Ice.Collection.Order.find() if @userId

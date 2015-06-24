@@ -67,3 +67,5 @@ cfs:gridfs
 yogiben:autoform-file
 jeanfredrik:denormalize
 theara:round-khr
+comerc:autoform-selectize
+chhib:selectize-bootstrap-3

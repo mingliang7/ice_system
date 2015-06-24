@@ -52,9 +52,6 @@
 
 	item: (selectOne) ->
 		list = []
-		if !_.isEqual(selectOne, false)
-			list.push {label: '(Select One)', value: ''}
-
 		items = Ice.Collection.Item.find()
 		items.forEach (item) ->
 			list.push {label: "#{item.code} | #{item.name}", value: item._id}

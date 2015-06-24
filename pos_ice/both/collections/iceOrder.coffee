@@ -5,7 +5,13 @@ Ice.Schema.Order = new SimpleSchema(
   orderDate:
     type: String
     label: 'Order Date'
+
   discount:
+    type: Number
+    decimal: true
+    optional: true
+
+  subtotal:
     type: Number
     decimal: true
 
@@ -16,6 +22,7 @@ Ice.Schema.Order = new SimpleSchema(
   status:
     type: String
     max: 50
+    optional: true
     autoform:
       type: 'select2'
       options: ->
@@ -36,13 +43,14 @@ Ice.Schema.Order = new SimpleSchema(
   iceStaffId:
     type: String
     max: 10
-
+    optional: true
   iceOrderGroupId:
     type: String
     max: 10
 
   iceOrderDetail:
     type: Array
+    minCount: 1
 
   'iceOrderDetail.$':
     type: Object
@@ -50,9 +58,25 @@ Ice.Schema.Order = new SimpleSchema(
   'iceOrderDetail.$.iceItemId':
     type: String
     autoform:
-      type: 'select2'
+      type: 'selectize'
       options: ->
         Ice.List.item()
+        
+  'iceOrderDetail.$.price':
+    type: Number
+    decimal: true
+
+  'iceOrderDetail.$.qty':
+    type: Number
+
+  'iceOrderDetail.$.amount':
+    type: Number
+    decimal: true
+
+  'iceOrderDetail.$.discount':
+    type: Number
+    decimal: true
+    optional: true
 
   iceOrderGroupId:
     type: Object

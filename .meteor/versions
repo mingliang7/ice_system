@@ -38,8 +38,10 @@ cfs:tempstore@0.1.5
 cfs:upload-http@0.0.20
 cfs:worker@0.1.4
 check@1.0.5
+chhib:selectize-bootstrap-3@0.0.1
 chuangbo:cookie@1.1.0
 coffeescript@1.0.6
+comerc:autoform-selectize@2.2.3
 dburles:collection-helpers@1.0.3
 dburles:spacebars-tohtml@1.0.0
 ddp@1.1.0
