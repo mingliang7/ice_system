@@ -80,9 +80,9 @@ Ice.Schema.Order = new SimpleSchema(
     optional: true
 
   iceOrderGroupId:
-    type: Object
+    type: String
     optional: true
-    blackbox: true
+    
 )
 
 Ice.Collection.Order.attachSchema Ice.Schema.Order

@@ -1,3 +1,4 @@
+findRecord = OneRecord #calling from OneRecord in query methods file
 #item query
 itemQuery = 
   detail: (itemId, qty, discount = '0', amount) ->
@@ -21,12 +22,6 @@ customerDetail =
     else
       "#{customerType} days"
 
-findRecord = 
-  customer: (customerId) ->
-    Ice.Collection.Customer.findOne customerId
-  item: (itemId) ->
-    Ice.Collection.Item.findOne itemId
-@Record = findRecord
 # Order Tabular
 Ice.TabularTable.Order = new (Tabular.Table)(
   name: 'iceOrderList'

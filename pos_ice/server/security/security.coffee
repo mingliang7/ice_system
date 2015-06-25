@@ -10,3 +10,8 @@ Ice.Collection.Order.permit([
 	'update'
 	'remove'
 ]).ice_ifGeneral().apply()
+Ice.Collection.OrderGroup.permit([
+	'insert'
+	'update'
+	'remove'
+]).ice_ifGeneral().apply()
