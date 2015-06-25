@@ -1,7 +1,36 @@
-# Customer
-Ice.TabularTable.Customer = new (Tabular.Table)(
-  name: 'iceCustomerList'
-  collection: Ice.Collection.Customer
+#item query
+itemQuery = 
+  detail: (itemId, qty, discount = '0', amount) ->
+    {name, price} = findRecord.item(itemId)
+    "<small>
+    {Name:#{name}, 
+    Price: #{price}, 
+    Qty:#{qty},
+    Discount:#{discount},
+    Amount: #{amount}}</small>"
+
+#customer query
+customerDetail = 
+  name: (val) ->
+    {name} = findRecord.customer(val)
+    name
+  type: (val) ->
+    {customerType} = findRecord.customer(val)
+    if customerType is 'general'
+      "<p class='label label-primary'>General</p>"
+    else
+      "#{customerType} days"
+
+findRecord = 
+  customer: (customerId) ->
+    Ice.Collection.Customer.findOne customerId
+  item: (itemId) ->
+    Ice.Collection.Item.findOne itemId
+@Record = findRecord
+# Order Tabular
+Ice.TabularTable.Order = new (Tabular.Table)(
+  name: 'iceOrderList'
+  collection: Ice.Collection.Order
   pagingType: 'full_numbers'
   autoWidth: false
   columnDefs: [ {
@@ -22,24 +51,36 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
       title: 'ID'
     }
     {
-      data: 'name'
-      title: 'Name'
+      data: 'iceCustomerId'
+      title: 'Customer'
+      render: (val) ->
+        customerDetail.name(val)
     }
     {
-      data: 'gender'
-      title: 'Gender'
+      data: 'iceCustomerId'
+      title: 'Type'
+      render: (val) ->
+        customerDetail.type(val)
     }
 		{
-			data: 'customerType'
-			title: 'Type', render: (val) ->
-        "#{val} days"
-		}
-    {
-      data: 'address'
-      title: 'Address'
+			data: 'iceOrderDetail'
+			title: 'Item', render: (val) ->
+        items = []
+        val.forEach (item) ->
+          items.push itemQuery.detail(item.iceItemId, item.qty, item.discount, item.amount)
+        items
     }
     {
-      data: 'telephone'
-      title: 'Telephone'
+      data: 'discount'
+      title: 'Discount'
+      render: (val) ->
+        if val isnt undefined
+          "<p class='label label-success'>#{val}%</p>" 
+        else
+          "<p class='label label-success'>None</p>" 
+    }
+    {
+      data: 'total'
+      title: 'Total'
     }
   ])

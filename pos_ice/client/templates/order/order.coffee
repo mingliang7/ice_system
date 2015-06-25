@@ -3,13 +3,15 @@ Template.ice_orderInsertTemplate.onRendered ->
 
 Template.ice_order.onRendered ->
   createNewAlertify('order')
+
 Template.ice_order.events
   "click .insert": ->
     alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderInsertTemplate))
     .maximize()
     $('[name="total"]').attr('readonly', true)
 
-Template.ice_orderInsertTemplate.events
+# insert form event
+Template.ice_orderInsertTemplate.events 
   'change .item': (event) ->
     current = $(event.currentTarget)
     item = Ice.Collection.Item.findOne(current.val())
@@ -41,6 +43,7 @@ Template.ice_orderInsertTemplate.events
       discountTotal = (currentSubTotal * parseFloat currentDiscount)/100
       total = currentSubTotal - discountTotal
       $('[name="total"]').val(total)
+
 # functions
 datePicker = ->
   orderDate = $('[name="orderDate"]')
@@ -81,4 +84,11 @@ totalAmount = () ->
   $('.amount').each ->
     total += parseFloat $(this).val()
   $('[name="subtotal"]').val(total)
-  $('[name="total"]').val(total)
+  subtotal = parseFloat $('[name="subtotal"]').val()
+  discount = $('[name="discount"]').val()
+  if  discount is ''
+    $('[name="total"]').val(total)
+  else
+    discountAmount = (subtotal * parseInt discount)/100
+    $('[name="total"]').val(subtotal - discountAmount)
+  

@@ -31,6 +31,7 @@ Ice.Schema.Order = new SimpleSchema(
   description:
     type: String
     max: 500
+    optional: true
 
   iceCustomerId:
     type: String
@@ -81,7 +82,7 @@ Ice.Schema.Order = new SimpleSchema(
   iceOrderGroupId:
     type: Object
     optional: true
-
+    blackbox: true
 )
 
 Ice.Collection.Order.attachSchema Ice.Schema.Order
