@@ -1,5 +1,8 @@
 Ice.Collection.OrderGroup = new Mongo.Collection('ice_orderGroups')
 Ice.Schema.OrderGroup = new SimpleSchema(
+	groupId: 
+		type: String
+		
 	startDate:
 		type: String
 
