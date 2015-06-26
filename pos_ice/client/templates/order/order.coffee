@@ -1,6 +1,7 @@
 Template.ice_orderInsertTemplate.onRendered ->
+  today = moment(new Date()).format('YYYY-MM-DD') 
+  $('[name="orderDate"]').val(today)
   datePicker()
-
 Template.ice_order.onRendered ->
   createNewAlertify('order')
 

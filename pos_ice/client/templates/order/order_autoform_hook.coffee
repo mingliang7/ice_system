@@ -14,6 +14,8 @@ setOrderGroup = (doc) ->
 			prefix = "#{Session.get('currentBranch')}-"
 			id = idGenerator.genWithPrefix(Ice.Collection.OrderGroup, prefix, 12)
 			orderGroup.whenNoActiveDate(id, startDate, endDate)
+		else
+			orderGroup.whenActiveDate(group, startDate, endDate)
 	
 AutoForm.hooks
 	ice_orderInsertTemplate:
@@ -25,8 +27,7 @@ AutoForm.hooks
 				doc.cpanel_branchId = Session.get('currentBranch')
 				doc.createdAt = new Date()
 				setOrderGroup(doc)
-				
-
+				doc
 		onSuccess: (formType, result) ->
 			alertify.success 'Successfully'
 
