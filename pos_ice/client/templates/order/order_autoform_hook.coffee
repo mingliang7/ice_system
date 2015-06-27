@@ -26,8 +26,10 @@ AutoForm.hooks
 				doc._id = idGenerator.genWithPrefix(Ice.Collection.Order, prefix, 12)
 				doc.cpanel_branchId = Session.get('currentBranch')
 				doc.createdAt = new Date()
-				setOrderGroup(doc)
+				if (doc.orderDate and doc.iceCustomerId and doc.iceOrderDetail) isnt undefined
+					setOrderGroup(doc)
 				doc
+
 		onSuccess: (formType, result) ->
 			alertify.success 'Successfully'
 
