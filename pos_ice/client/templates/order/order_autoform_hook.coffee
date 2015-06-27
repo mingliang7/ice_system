@@ -7,8 +7,8 @@ setOrderGroup = (doc) ->
 	orderGroup = new OrderGroup(doc) #instantiate from OrderGroup class inside classes folder
 	{customerType: type} = OneRecord.customer(doc.iceCustomerId) #calling from OneRecord in query methods file
 	if type isnt 'general'
-		startDate = moment(doc.createdAt).format('YYYY-MM-DD')
-		endDate = sumDate(doc.createdAt, type)
+		startDate = moment(new Date(doc.orderDate)).format('YYYY-MM-DD')
+		endDate = sumDate(new Date(doc.orderDate), type)
 		group =  OneRecord.findOrderGroupActiveDate(doc.iceCustomerId, startDate, endDate ) #calling from OneRecord in query methods file
 		if group is undefined 
 			prefix = "#{Session.get('currentBranch')}-"

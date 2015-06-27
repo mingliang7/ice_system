@@ -5,9 +5,9 @@ class @OrderGroup
 		doc = @doc
 		groupBy = {}
 		groupBy["day#{startDate}"]=
-			item:
+			items:
 				findItem(doc)
-			Total: doc.total
+			total: doc.total
 		orderGroupId = Ice.Collection.OrderGroup.insert({
 			_id: id
 			startDate: startDate
@@ -19,27 +19,42 @@ class @OrderGroup
 			updatedAt: new Date()   
 		})
 		doc.iceOrderGroupId = orderGroupId		
-	whenActiveDate: (group, startDate, endDate) =>
+	whenActiveDate: (orderGroup, startDate, endDate) =>
 		doc = @doc
-		# Ice.Collection.OrderGroup.update({
-		# 	_id: group._id
-		# }, {$set: {groupBy: }})
+		groupBy = orderGroup.groupBy
+
+		if _.has(groupBy, "day#{startDate}")
+			doc.iceOrderDetail.forEach (item) ->
+				{name: name, price: price} = findItemName(item.iceItemId)
+				itemObj = groupBy["day#{startDate}"]['items']["#{item.iceItemId}"]
+				itemObj['qty'] += item.qty  
+				itemObj['amount'] += item.amount
+		else
+			groupBy["day#{startDate}"] = 
+				items:
+					findItem(doc)
+				total: 0		
+			
+		groupBy
+		if _.has(groupBy, "day#{startDate}")
+			groupBy["day#{startDate}"]['total'] = groupBy["day#{startDate}"]['total'] + doc.total
+			groupBy
+		console.log groupBy
 
 	findItemName = (itemId, qty=0 , amount = 0) ->
-		
 		{name, price} = OneRecord.item(itemId)
-		{Name: name, Price: price, Qty: qty, Amount: amount }
+		{name: name, price: price, qty: qty, amount: amount }
 		
-
 	findItem = (doc) ->
 		items = {}
+		allItems = Ice.Collection.Item.find()
+		allItems.forEach (item) ->
+			items[item._id] = {name: item.name, price: item.price, qty: 0, amount: 0} 
 		doc.iceOrderDetail.forEach (item) ->
-			items[item.iceItemId] = findItemName(item.iceItemId, item.qty, item.amount)
+			items[item.iceItemId] = 
+				name: items[item.iceItemId]['name']
+				price: items[item.iceItemId]['price']
+				qty: items[item.iceItemId]['qty'] += item.qty
+				amount: items[item.iceItemId]['amount'] += item.amount
 		items
 		
-	newItemName: (iceItemId) ->
-		item = {}
-		item[iceItemId] = 
-			qty: 0 
-			amount: 0
-
