@@ -41,9 +41,12 @@ class @OrderGroup
 		if _.has(groupBy, "day#{startDate}")
 			groupBy["day#{startDate}"]['total'] = groupBy["day#{startDate}"]['total'] + doc.total		
 		groupBy
-		debugger
-		# Ice.Collection.OrderGroup.update({_id: orderGroup._id},{$set:{total: orderGroupTotal, updatedAt: new Date(), groupBy: groupBy}})
 
+		for i of groupBy
+			total += groupBy[i]['total']
+		total
+		Ice.Collection.OrderGroup.update({_id: orderGroup._id},{$set:{total: total, updatedAt: new Date(), groupBy: groupBy}})
+		doc.iceOrderGroupId = orderGroup._id 
 	#functions	
 	findItemName = (itemId, qty=0 , amount = 0) ->
 		{name, price} = OneRecord.item(itemId)

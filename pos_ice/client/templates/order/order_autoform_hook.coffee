@@ -10,7 +10,8 @@ setOrderGroup = (doc) ->
 		startDate = moment(new Date(doc.orderDate)).format('YYYY-MM-DD')
 		endDate = sumDate(new Date(doc.orderDate), type)
 		group =  OneRecord.findOrderGroupActiveDate(doc.iceCustomerId, startDate, endDate ) #calling from OneRecord in query methods file
-		if group is undefined 
+		debugger
+		if group is undefined || group is null
 			prefix = "#{Session.get('currentBranch')}-"
 			id = idGenerator.genWithPrefix(Ice.Collection.OrderGroup, prefix, 12)
 			orderGroup.whenNoActiveDate(id, startDate, endDate)
@@ -32,6 +33,5 @@ AutoForm.hooks
 
 		onSuccess: (formType, result) ->
 			alertify.success 'Successfully'
-
 		onError: (formType, error) ->
 			alertify.error error.message
