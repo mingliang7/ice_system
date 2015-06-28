@@ -54,19 +54,14 @@ class @OrderGroup
 		
 	findItem = (doc) ->
 		items = {}
-		price = 0
+
 		allItems = Ice.Collection.Item.find()
 		allItems.forEach (item) ->
 			items[item._id] = {name: item.name, price: item.price, qty: 0, amount: 0} 
 		doc.iceOrderDetail.forEach (item) ->
-			if items[item.iceItemId]['price'] is item.price
-				updatedPrice = items[item.iceItemId]['price']
-			else
-				updatedPrice = item.price
-
 			items[item.iceItemId] = 
 				name: items[item.iceItemId]['name']
-				price: price
+				price: item.price
 				qty: items[item.iceItemId]['qty'] += item.qty
 				amount: items[item.iceItemId]['amount'] += item.amount
 		items

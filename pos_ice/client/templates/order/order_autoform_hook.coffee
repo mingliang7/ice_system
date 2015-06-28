@@ -33,5 +33,6 @@ AutoForm.hooks
 
 		onSuccess: (formType, result) ->
 			alertify.success 'Successfully'
+			alertify.order().close()
 		onError: (formType, error) ->
 			alertify.error error.message

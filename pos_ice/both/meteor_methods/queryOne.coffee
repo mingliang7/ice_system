@@ -6,4 +6,4 @@
     Ice.Collection.Item.findOne itemId
 
   findOrderGroupActiveDate: (customerId, startDate, endDate) ->
-  	Ice.Collection.OrderGroup.findOne({iceCustomerId: customerId, startDate:{$gte: startDate, $lt: endDate}, endDate: {$lte: endDate}})
+  	Ice.Collection.OrderGroup.findOne({iceCustomerId: customerId, startDate:{$lt: endDate}, endDate: {$gt: startDate}})
