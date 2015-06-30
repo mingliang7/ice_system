@@ -64,20 +64,21 @@
 .report-content {
     border-collapse: collapse;
     width: 100%;
-    border: 1px solid #000000;
+    /*border: 1px solid #000000;*/
+    border: none;
 }
 
 .report-content-header th {
-    background-color: #d0d2d0;
     padding: 3px;
     text-align: center;
     font-weight: bold;
-    border: 1px solid #555555;
+    border-bottom: 1px solid #555555;
 }
 
 .report-content-body td {
     padding: 3px;
-    border: 1px solid #555555;
+    border: none;
+    font-size: 9px;
 }
 
 .report-page-header-footer {

@@ -1,0 +1,9 @@
+.small-table{
+	border-top: 1px solid #000;
+	width: 100%;
+}
+
+.small-table > thead > tr > th{
+	widows: 100px;
+	padding-left: 10px;
+}
