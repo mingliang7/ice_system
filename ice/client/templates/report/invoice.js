@@ -62,22 +62,41 @@ Template.ice_invoiceReportGen.helpers({
 
         /********* Content & Footer *********/
         var content = [];
-
-        
-
+        var getOrder = Ice.Collection.Order.findOne(self.orderId);
+        var itemsDetail = getOrder.iceOrderDetail
+        itemsDetail.forEach(function (item) {
+        	item.price = formatNum(item.price);
+        	item.amount = formatNum(item.amount);
+        	content.push(item);
+        });
+        content.push(itemsDetail);
         if (content.length > 0) {
             data.content = content;
-            data.footer = [
-                {col1: 'Subtotal:', col2: numeral(getInvoice.subtotal).format('$0,0.00')},
-                {col1: 'Deposit:', col2: numeral(getInvoice.deposit).format('$0,0.00')},
-                {col1: 'Discount:', col2: numeral(getInvoice.subDiscount).format('0,0.00')},
-                {col1: 'Total:', col2: numeral(getInvoice.total).format('$0,0.00')}
-            ];
-
+            data.footer = {
+            	subtotal: formatNum(getOrder.subtotal),
+            	discount: formatNum(getOrder.discount),
+            	total: formatNum(getOrder.total)
+            }
             return data;
         } else {
             data.content.push({index: 'no results'});
             return data;
         }
+    },
+
+    itemName: function(id){
+    	var name = Ice.Collection.Item.findOne(id).name;
+    	return name;
+    },
+    itemDiscount: function(discount) {
+    	if(discount == undefined){
+   			return '';
+    	}else{
+    		return discount;
+    	}
     }
 });
+
+var formatNum = function(value){
+	return numeral(value).format('0,0.00');
+}
