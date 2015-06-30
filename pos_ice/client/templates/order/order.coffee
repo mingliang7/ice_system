@@ -45,6 +45,11 @@ Template.ice_orderInsertTemplate.events
       total = currentSubTotal - discountTotal
       $('[name="total"]').val(total)
 
+  'click .print': ->
+    Print.set 'print', true
+
+
+
 # functions
 datePicker = ->
   orderDate = $('[name="orderDate"]')

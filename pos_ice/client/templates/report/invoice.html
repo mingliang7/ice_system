@@ -1,0 +1,101 @@
+<!--Form-->
+<template name="dental_invoiceReport">
+    {{#autoForm schema=Dental.Schema.InvoiceReport id="dental_invoiceReport" action="invoiceReportGen" target="_blank"}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name='patient' class="patientId"}}
+                {{> afQuickField name='register'}}
+            </div>
+            <div class="col-md-6">
+                {{> afQuickField name='date'}}
+
+                <!--{{> afQuickField name='exchange'}}-->
+                <!--<div class="form-group{{#if afFieldIsInvalid name='exchange'}} has-error{{/if}}" data-required="true">-->
+                <!--<label class="control-label" for="exchange">Exchange</label>-->
+
+                <!--<div class="input-group select2-bootstrap-append">-->
+                <!--{{> afFieldInput name='exchange'}}-->
+                <!--<span class="input-group-addon">-->
+                <!--<a href="#" class="exchangeAddon">-->
+                <!--{{fa "plus"}}-->
+                <!--</a>-->
+                <!--</span>-->
+                <!--</div>-->
+                    <!--{{#if afFieldIsInvalid name='exchange'}}-->
+                <!--<span class="help-block">{{afFieldMessage name='exchange'}}</span>-->
+                    <!--{{/if}}-->
+                <!--</div>-->
+
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">{{fa "file-text"}} Generate</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+
+<!--Generate-->
+<template name="ice_invoiceReportGen">
+    {{#with data}}
+        <!--Title-->
+        <div class="report-title">
+            <span class="report-company-name" style="font-family: 'Khmer OS Muol"></span><br>
+            <span class="report-company-name">ទឹកកកអនាម័យបេងភី</span><br>
+            <u> វិក្កយបត្រ (Invoice)</u><br>
+            អាស័យដ្ឋាន: ផ្លូវលេខ ១០១ ភូមិព្រែកមហាទេព សង្កាត់ស្វាយប៉ោ ក្រុងបាត់ដំបង ខេត្តបាត់ដំបង<br>
+            ទូរស័ព្ទ: 012 44-79-44, 010 44-79-44, 088 40-72-444
+        </div>
+
+        <!--Header-->
+        <table width="100%" border="0">
+            {{#each header}}
+                <tr>
+                    <td width="33%">{{col1}}</td>
+                    <td width="33%">{{col2}}</td>
+                    <td>{{col3}}</td>
+                </tr>
+            {{/each}}
+        </table>
+
+        <!--Content-->
+        <table class="report-content">
+            <thead class="report-content-header">
+            <tr>
+                <th>No</th>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Amount</th>
+            </tr>
+            </thead>
+
+            <tbody class="report-content-body">
+            {{#each content}}
+                <tr>
+                    <td>{{index}}</td>
+                    <td>{{itemName}}</td>
+                    <td>{{qty}}</td>
+                    <td>{{price}}</td>
+                    <td>{{discount}}</td>
+                    <td>{{amount}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+
+        <!--Footer-->
+        <p></p>
+        
+    {{/with}}
+
+    <!--Sign-->
+    {{> dental_invoiceReportGenFooterNote}}
+</template>
+
+<!--footerNote-->
+<template name="dental_invoiceReportGenFooterNote">
+    <div style="text-align: center">
+        <strong><u>Note:</u></strong> All payments will not refundable (ទឹកប្រាក់បង់ មិនអាចយកវិញបានទេ).
+    </div>
+</template>

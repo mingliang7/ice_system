@@ -1,3 +1,8 @@
+@Print = new ReactiveObj();
+generateReport = (id) ->
+	doc = Ice.Collection.Order.findOne(id)
+	url = "invoiceReportGen?orderId=#{id}&customerId=#{doc.iceCustomerId}&date=#{moment(doc.createdAt).format('YYYY-MM-DD hh:mm:ss a')}"
+	window.open(url, '_blank')
 sumDate = (orderStarted, type) ->
 	orderStarted.setDate(orderStarted.getDate() + parseInt type) 
 	endDate = moment(orderStarted).format('YYYY-MM-DD')
@@ -10,7 +15,6 @@ setOrderGroup = (doc) ->
 		startDate = moment(new Date(doc.orderDate)).format('YYYY-MM-DD')
 		endDate = sumDate(new Date(doc.orderDate), type)
 		group =  OneRecord.findOrderGroupActiveDate(doc.iceCustomerId, startDate, endDate ) #calling from OneRecord in query methods file
-		debugger
 		if group is undefined || group is null
 			prefix = "#{Session.get('currentBranch')}-"
 			id = idGenerator.genWithPrefix(Ice.Collection.OrderGroup, prefix, 12)
@@ -31,8 +35,20 @@ AutoForm.hooks
 					setOrderGroup(doc)
 				doc
 
+		after:
+			insert: (err, id) ->
+				if err
+					Print.set 'print', false
+				else
+					print = Print.get 'print'
+					if print is true
+						generateReport(id)
+						Print.set 'print', false
+
 		onSuccess: (formType, result) ->
-			alertify.success 'Successfully'
 			alertify.order().close()
+			alertify.success 'Successfully'
+
 		onError: (formType, error) ->
 			alertify.error error.message
+
