@@ -45,7 +45,12 @@
 
 		customers = Ice.Collection.Customer.find()
 		customers.forEach (customer) ->
-			list.push {label: "#{customer._id} | #{customer.name}", value: customer._id}
+			type = ''
+			if customer.customerType is 'general'
+				type = '(general)'
+			else
+				type = "(#{customer.customerType} days)"
+			list.push {label: "#{customer._id} | #{customer.name} #{type}", value: customer._id}
 		list
 	staff: (selecOne) ->
 		list = []
@@ -57,3 +62,14 @@
 			list.push {label: "#{item.code} | #{item.name}", value: item._id}
 
 		list
+
+	exchange: (selectOne) ->
+		list = []
+		if !_.isEqual(selectOne, false)
+			list.push {label: '(Select One)', value: ''}
+		exchanges = Cpanel.Collection.Exchange.find()
+		exchanges.forEach (exchange) ->
+			list.push {label: "#{exchange.base}: #{JSON.stringify(exchange.rates)}", value: exchange._id}
+		list
+
+

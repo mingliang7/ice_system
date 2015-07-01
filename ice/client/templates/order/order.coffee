@@ -11,6 +11,9 @@ Template.ice_order.events
     .maximize()
     $('[name="total"]').attr('readonly', true)
 
+  "click .print": ->
+    GenReport(@_id) #generateReport alias function in order_autoform_hook
+
 # insert form event
 Template.ice_orderInsertTemplate.events 
   'change .item': (event) ->
@@ -36,17 +39,17 @@ Template.ice_orderInsertTemplate.events
     current = $(event.currentTarget)
     itemDiscount(current)
   'keyup [name="discount"]': (event) ->
-    currentSubTotal = parseFloat $('[name="subtotal"]').val()
-    currentDiscount = $(event.currentTarget).val()
-    if currentDiscount is ''
-      totalAmount()
-    else
-      discountTotal = (currentSubTotal * parseFloat currentDiscount)/100
-      total = currentSubTotal - discountTotal
-      $('[name="total"]').val(total)
+    totalAmount()
 
   'click .print': ->
     Print.set 'print', true
+
+  'change [name="exchange"]': (event) ->
+    val = findExchange($(event.currentTarget).val())
+    total = parseInt $('[name="total"]').val()
+    if val.base is 'KHR'
+      $('[name="totalInDollar"]').val(total * val.rates["USD"])
+
 
 
 
@@ -97,4 +100,19 @@ totalAmount = () ->
   else
     discountAmount = (subtotal * parseInt discount)/100
     $('[name="total"]').val(subtotal - discountAmount)
-  
+  displayTotalInDollar($('[name="total"]').val(),findExchange($('[name="exchange"]').val()))
+
+findExchange = (id) ->
+  if id isnt ''
+    {base, rates} = Cpanel.Collection.Exchange.findOne(id)
+    {base, rates}
+
+displayTotalInDollar = (total, exchange) ->
+  total = parseInt(total)
+  totalInDollar = $('[name="totalInDollar"]')
+  debugger
+  if exchange is undefined
+    totalInDollar.val('')
+  else 
+    if exchange.base is 'KHR'
+      totalInDollar.val(total * exchange.rates["USD"])

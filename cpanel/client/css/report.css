@@ -76,6 +76,7 @@
 }
 
 .report-content-body td {
+    text-align:center;
     padding: 3px;
     border: none;
     font-size: 9px;

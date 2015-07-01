@@ -50,7 +50,7 @@
         <table width="100%" border="0">
             {{#each header}}
                 <tr>
-                    <td width="33%">{{col1}}</td>
+                    <td width="50%">{{col1}}</td>
                     <td width="33%">{{col2}}</td>
                     <td>{{col3}}</td>
                 </tr>
@@ -62,20 +62,18 @@
         <table class="report-content">
             <thead class="report-content-header">
             <tr>
-                <th>Product</th>
-                <th></th>
-                <th>Qty</th>
-                <th>Price</th>
-                <th>Dis</th>
-                <th>Amount</th>
+                <th colspan="2">ទំនិញ</th>
+                <th>ចំនួន</th>
+                <th>តម្លៃ</th>
+                <th>បញ្ចុះ</th>
+                <th>សរុប</th>
             </tr>
             </thead>
 
             <tbody class="report-content-body">
             {{#each content}}
                 <tr>
-                    <td>{{itemName iceItemId}}</td>
-                    <td></td>
+                    <td colspan="2">{{itemName iceItemId}}</td>
                     <td>{{qty}}</td>
                     <td>{{price}}</td>
                     <td>{{itemDiscount discount}}</td>
@@ -108,7 +106,7 @@
              <tr>
                 <th></th>
                 <th></th>
-                <th class="pull-right">តម្លៃសរុប(ដុល្លារ):</th> 
+                <th class="pull-right">តម្លៃសរុប(ដុល្លារ):</th> <th>{{footer.totalInDollar}}</th>
             </tr>
         </thead>
         </table>

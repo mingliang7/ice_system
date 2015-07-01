@@ -3,6 +3,8 @@ generateReport = (id) ->
 	doc = Ice.Collection.Order.findOne(id)
 	url = "invoiceReportGen?orderId=#{id}&customerId=#{doc.iceCustomerId}&date=#{moment(doc.createdAt).format('YYYY-MM-DD hh:mm:ss a')}"
 	window.open(url, '_blank')
+@GenReport = generateReport
+
 sumDate = (orderStarted, type) ->
 	orderStarted.setDate(orderStarted.getDate() + parseInt type) 
 	endDate = moment(orderStarted).format('YYYY-MM-DD')

@@ -19,6 +19,11 @@ Ice.Schema.Order = new SimpleSchema(
     type: Number
     decimal: true
 
+  totalInDollar:
+    type: Number
+    decimal: true
+    label: 'Total($)'
+
   status:
     type: String
     max: 50
@@ -28,6 +33,14 @@ Ice.Schema.Order = new SimpleSchema(
       options: ->
         Ice.List.status()
 
+  exchange:
+    type: String
+    decimal: true
+    label: 'Exchange(to$)'
+    autoform:
+      type: 'select2'
+      options: ->
+        Ice.List.exchange()
   description:
     type: String
     max: 500

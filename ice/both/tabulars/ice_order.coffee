@@ -39,7 +39,7 @@ Ice.TabularTable.Order = new (Tabular.Table)(
   columns: [
     {
       title: '<i class="fa fa-bars"></i>'
-      tmpl: Meteor.isClient and Template.ice_customerAction
+      tmpl: Meteor.isClient and Template.ice_orderAction
     }
     {
       data: '_id'

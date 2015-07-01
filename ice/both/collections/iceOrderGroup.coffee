@@ -9,7 +9,9 @@ Ice.Schema.OrderGroup = new SimpleSchema(
 	total:
 		type: Number
 		decimal: true
-
+	totalInDollar:
+		type: Number
+		decimal: true
 	groupBy:
 		type: Object
 		blackbox: true
