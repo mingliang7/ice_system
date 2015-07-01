@@ -11,6 +11,9 @@ Template.ice_order.events
     .maximize()
     $('[name="total"]').attr('readonly', true)
 
+  "click .print": ->
+    GenReport(@_id) #generateReport alias function in order_autoform_hook
+
 # insert form event
 Template.ice_orderInsertTemplate.events 
   'change .item': (event) ->

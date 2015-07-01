@@ -45,7 +45,12 @@
 
 		customers = Ice.Collection.Customer.find()
 		customers.forEach (customer) ->
-			list.push {label: "#{customer._id} | #{customer.name}", value: customer._id}
+			type = ''
+			if customer.customerType is 'general'
+				type = '(general)'
+			else
+				type = "(#{customer.customerType} days)"
+			list.push {label: "#{customer._id} | #{customer.name} #{type}", value: customer._id}
 		list
 	staff: (selecOne) ->
 		list = []

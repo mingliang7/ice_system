@@ -48,15 +48,15 @@ Template.ice_invoiceReportGen.helpers({
         // dueDate = '' + getGroup.startDate + '-' + getGroup.endDate;
         
         if(customerDoc.customerType !== 'general'){
-        	type = customerDoc.customerType + ' days';
+        	type = customerDoc.customerType + ' ថ្ងៃ';
         }
         else{
         	type = 'general';
         }
         data.header = [
-            {col1: '#: ' + self.orderId },
-            {col1: 'Staff: ' + '', col2: 'Name: ' + customerDoc.name, col3: 'Type: ' + type},
-            { col1: 'Date: ' + date, col2: 'Time: ' + time }
+            {col1: '#: ' + self.orderId, col2: 'បុគ្គលិក: ' + '' },
+            {col1: 'អតិថិជន: ' + customerDoc.name, col2: 'ប្រភេទ: ' + type},
+            { col1: 'កាលបរិច្ឆេទ: ' + date, col2: 'ម៉ោង: ' + time }
         ];
 
         /********* Content & Footer *********/
@@ -66,6 +66,7 @@ Template.ice_invoiceReportGen.helpers({
         itemsDetail.forEach(function (item) {
         	item.price = formatNum(item.price);
         	item.amount = formatNum(item.amount);
+            item.discount = item.discount == undefined ? '' : item.discount + '%'
         	content.push(item);
         });
         content.push(itemsDetail);
@@ -73,8 +74,9 @@ Template.ice_invoiceReportGen.helpers({
             data.content = content;
             data.footer = {
             	subtotal: formatNum(getOrder.subtotal),
-            	discount: formatNum(getOrder.discount),
-            	total: formatNum(getOrder.total)
+            	discount: getOrder.discount == undefined ? '' : getOrder.discount + '%',
+            	total: formatNum(getOrder.total),
+                totalInDollar: formatNum(getOrder.totalInDollar)
             }
             return data;
         } else {
