@@ -57,3 +57,14 @@
 			list.push {label: "#{item.code} | #{item.name}", value: item._id}
 
 		list
+
+	exchange: (selectOne) ->
+		list = []
+		if !_.isEqual(selectOne, false)
+			list.push {label: '(Select One)', value: ''}
+		exchanges = Cpanel.Collection.Exchange.find()
+		exchanges.forEach (exchange) ->
+			list.push {label: "#{exchange.base}: #{JSON.stringify(exchange.rates)}", value: exchange._id}
+		list
+
+

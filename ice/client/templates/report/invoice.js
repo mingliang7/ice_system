@@ -19,7 +19,6 @@
 //     }
 
 // });
-
 /************ Generate *************/
 Template.ice_invoiceReportGen.helpers({
     data: function () {

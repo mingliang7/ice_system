@@ -8,11 +8,13 @@ class @OrderGroup
 			items:
 				findItem(doc)
 			total: doc.total
+			totalInDollar: doc.totalInDollar
 		orderGroupId = Ice.Collection.OrderGroup.insert({
 			_id: id
 			startDate: startDate
 			endDate: endDate
 			total: doc.total
+			totalInDollar: doc.totalInDollar
 			iceCustomerId: doc.iceCustomerId
 			groupBy: groupBy
 			createdAt: new Date()
@@ -22,6 +24,7 @@ class @OrderGroup
 	whenActiveDate: (orderGroup, startDate, endDate) =>
 		doc = @doc
 		total = 0
+		totalInDollar = 0
 		groupBy = orderGroup.groupBy
 
 		if _.has(groupBy, "day#{startDate}")
@@ -35,17 +38,17 @@ class @OrderGroup
 			groupBy["day#{startDate}"] = 
 				items:
 					findItem(doc)
-				total: 0		
-		groupBy
+				total: 0
+				totalInDollar: 0		
 
 		if _.has(groupBy, "day#{startDate}")
 			groupBy["day#{startDate}"]['total'] = groupBy["day#{startDate}"]['total'] + doc.total		
-		groupBy
+			groupBy["day#{startDate}"]['totalInDollar'] = groupBy["day#{startDate}"]['totalInDollar'] + doc.totalInDollar
 
 		for i of groupBy
 			total += groupBy[i]['total']
-		total
-		Ice.Collection.OrderGroup.update({_id: orderGroup._id},{$set:{total: total, updatedAt: new Date(), groupBy: groupBy}})
+			totalInDollar += groupBy[i]['totalInDollar']
+		Ice.Collection.OrderGroup.update({_id: orderGroup._id},{$set:{total: total, totalInDollar: totalInDollar, updatedAt: new Date(), groupBy: groupBy}})
 		doc.iceOrderGroupId = orderGroup._id 
 	#functions	
 	findItemName = (itemId, qty=0 , amount = 0) ->
