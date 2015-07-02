@@ -20,7 +20,7 @@ customerDetail =
     if customerType is 'general'
       "<p class='label label-primary'>General</p>"
     else
-      "#{customerType} days"
+      "<p class='label label-warning'>#{customerType} days</p>"
 
 # Order Tabular
 Ice.TabularTable.Order = new (Tabular.Table)(
