@@ -1,0 +1,7 @@
+.delete-mark{
+  text-decoration: line-through;
+  color: rgb(74, 54, 130);
+  }
+li.finished{
+ font-size: 16px;
+}
