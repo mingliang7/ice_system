@@ -17,7 +17,7 @@
             </div>
 
             <div class="timeline-label">
-              <h2 class="order-info">#<a href="#" class="order-id {{#if paid}} delete-mark{{/if}}">{{_id}}</a><span class="bg-blue pull-right {{#if paid}} delete-mark{{/if}}"> Date:{{startDate}}-{{endDate}}</span>&nbsp;<input type="checkbox" name="paid" class="paid" checked="{{paid}}"> </h2>
+              <h2 class="order-info">#<a href="#" class="order-id {{#if paid}} delete-mark not-active{{/if}}">{{_id}}</a><span class="bg-blue pull-right {{#if paid}} delete-mark{{/if}}"> Date:{{startDate}}-{{endDate}}</span>&nbsp;<!-- <input type="checkbox" name="paid" class="paid" checked="{{paid}}"> --> </h2>
         <!--       <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{progress paid}}%;">
                   60%
@@ -27,7 +27,7 @@
               <p class="invoiceId">
                 <input type="hidden" class="id" value="{{_id}}">
                 <ul class="nav">
-                  <li>{{{reportInfo iceCustomerId total totalInDollar}}}</li>
+                  <li class="{{#if paid}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
                 </ul>
               </p>
               <!-- 
@@ -50,7 +50,7 @@
             </div>
 
             <div class="timeline-label">
-              <h2 class="order-info">#<a href="#" class="order-id {{#if paid}} delete-mark{{/if}}">{{_id}}</a><span class="bg-info pull-right {{#if paid}} delete-mark{{/if}}"> Date:{{startDate}}-{{endDate}}</span>&nbsp;<input type="checkbox" name="paid" class="paid" checked="{{paid}}"> </h2>
+              <h2 class="order-info">#<a href="#" class="order-id {{#if paid}} delete-mark not-active{{/if}}">{{_id}}</a><span class="bg-info pull-right {{#if paid}} delete-mark{{/if}}"> Date:{{startDate}}-{{endDate}}</span>&nbsp;<!-- <input type="checkbox" name="paid" class="paid" checked="{{paid}}"> --> </h2>
               <!-- <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{progress _id}}%;">
                   60%
@@ -60,7 +60,7 @@
               <p class="invoiceId">
                 <input type="hidden" class="id" value="{{_id}}">
                 <ul class="nav">
-                  <li>{{{reportInfo iceCustomerId total totalInDollar}}}</li>
+                  <li class="{{#if paid}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
                 </ul>
               </p>
               <!-- 

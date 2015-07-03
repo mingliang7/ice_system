@@ -9,7 +9,8 @@ Template.list_invoices.events
 		Meteor.call('updatePaid', id, value)
 Template.list_invoices.helpers
 	invoices: ->
-		invoices = Ice.Collection.OrderGroup.find().fetch()
+		today = moment(new Date()).format('YYYY-MM-DD')
+		invoices = Ice.Collection.OrderGroup.find({endDate: today}).fetch()
 		console.log(invoices)
 		$.each invoices, (index, invoice) ->
 			invoice.index = index
@@ -18,16 +19,13 @@ Template.list_invoices.helpers
 		customerType = findCustomer(id).customerType
 		"#{customerType} Days"
 	reportInfo: (id, total, totalInDollar) ->
-		total = numeral(total).format('0.0,000')
-		totalInDollar = numeral(totalInDollar).format('0.0,000')
+		total = numeral(total).format('0,0.000')
+		totalInDollar = numeral(totalInDollar).format('0,0.000')
 		name = findCustomer(id).name
 		"Customer: #{name}<br> Total(R): #{total}<br>Total($): #{totalInDollar}"
 		
 	isEven: (index) ->
 		index % 2 is 0
-	isPaid: (paid) ->
-		if paid
-			true
 		
 	format: (createdAt) ->
 		moment(createdAt).format('hh:mm a')
