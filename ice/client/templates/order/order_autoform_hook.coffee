@@ -6,10 +6,27 @@ generateReport = (id) ->
 @GenReport = generateReport
 
 sumDate = (orderStarted, type) ->
-	orderStarted.setDate(orderStarted.getDate() + parseInt type) 
-	endDate = moment(orderStarted).format('YYYY-MM-DD')
+	date = orderStarted
+	lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+	if date.getMonth() + 1 is 2
+		if date.getDate() + (parseInt(type) - 1) > lastDate.getDate()
+			endDate = lastDate
+			endDate = moment(lastDate).format('YYYY-MM-DD')
+		else
+			date.setDate(date.getDate() + (parseInt(type) -1))
+			endDate = moment(date).format('YYYY-MM-DD')
+	else
+		if date.getDate() + (parseInt(type) - 1) > lastDate.getDate()
+			if lastDate.getDate() is 31
+				endDate = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate() - 1) 
+				endDate = moment(endDate).format('YYYY-MM-DD')
+			else if lastDate.getDate() is 30
+				endDate = new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate()) 
+				endDate= moment(endDate).format('YYYY-MM-DD')
+		else
+			date.setDate(date.getDate() + (parseInt(type) - 1))
+			endDate = moment(date).format('YYYY-MM-DD')
 	endDate
-
 setOrderGroup = (doc) ->
 	orderGroup = new OrderGroup(doc) #instantiate from OrderGroup class inside classes folder
 	{customerType: type} = OneRecord.customer(doc.iceCustomerId) #calling from OneRecord in query methods file
