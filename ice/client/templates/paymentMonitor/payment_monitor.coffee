@@ -1,12 +1,19 @@
 findCustomer = (id) ->
 	{name, customerType: type} = Ice.Collection.Customer.findOne(id)
 	{name: name, customerType: type}
-Template.list_invoices.events
-	'change .paid': (event) ->
-		element = $(event.currentTarget)
-		id = element.parents('.order-info').find('.order-id').text()
-		value = element.prop('checked')
-		Meteor.call('updatePaid', id, value)
+
+Template.list_invoices.events 
+	# 'change .paid': (event) ->
+	# 	element = $(event.currentTarget)
+	# 	id = element.parents('.order-info').find('.order-id').text()
+	# 	value = element.prop('checked')
+	# 	Meteor.call('updatePaid', id, value)
+	"click .order-id": (e) ->
+		id = $(e.currentTarget).text()
+		doc = Ice.Collection.OrderGroup.findOne(id)
+		url = "invoiceGroupReportGen?id=#{id}&customerId=#{doc.iceCustomerId}&date=#{moment(doc.createdAt).format('YYYY-MM-DD hh:mm:ss a')}"
+		window.open(url, '_blank')
+
 Template.list_invoices.helpers
 	invoices: ->
 		today = moment(new Date()).format('YYYY-MM-DD')
