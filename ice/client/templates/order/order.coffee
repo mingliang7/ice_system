@@ -1,5 +1,5 @@
 Template.ice_orderInsertTemplate.onRendered ->
-  today = moment(new Date()).format('YYYY-MM-DD') 
+  today = moment(new Date()).format('YYYY-MM-DD HH:mm:ss') 
   $('[name="orderDate"]').val(today)
   datePicker()
 Template.ice_order.onRendered ->
@@ -56,7 +56,7 @@ Template.ice_orderInsertTemplate.events
 # functions
 datePicker = ->
   orderDate = $('[name="orderDate"]')
-  DateTimePicker.date orderDate
+  DateTimePicker.dateTime orderDate
 
 itemDiscount = (current) ->
   currentDiscount = current.val()
@@ -110,7 +110,6 @@ findExchange = (id) ->
 displayTotalInDollar = (total, exchange) ->
   total = parseInt(total)
   totalInDollar = $('[name="totalInDollar"]')
-  debugger
   if exchange is undefined
     totalInDollar.val('')
   else 
