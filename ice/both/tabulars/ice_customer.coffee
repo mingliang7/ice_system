@@ -35,7 +35,7 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
         if val is 'general'
           "<p class='label label-primary'>General</p>"
         else
-          "#{val} days"
+          "<p class='label label-warning'>#{val} days</p>"
 		}
     {
       data: 'address'

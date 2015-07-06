@@ -19,3 +19,14 @@ Router.route 'ice/orders',
 		sub: ''
 	icon: 'shopping-cart'
 	title: 'order'
+
+Router.route 'ice/paymentMonitors',
+	->
+		@render 'ice_paymentMonitor'
+
+	name: 'ice.paymentMonitor'
+	header:
+		title: 'paymentMonitor'
+		sub: ''
+	icon: 'payment'
+	title: 'payment'
