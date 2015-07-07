@@ -44,7 +44,7 @@ Template.ice_invoiceGroupReportGen.helpers({
         var time = moment(self.date).format('hh:mm:ss a');
         var type = '';
          
-                // var getGroup = Ice.Collection.OrderGroup.findOne({_id: self.groupId, iceCustomerId: self.customerId, startDate: {$lt: self.endDate}, endDate:{$gt: self.startDate}});
+        // var getGroup = Ice.Collection.OrderGroup.findOne({_id: self.groupId, iceCustomerId: self.customerId, startDate: {$lt: self.endDate}, endDate:{$gt: self.startDate}});
         // dueDate = '' + getGroup.startDate + '-' + getGroup.endDate;
         
         if(customerDoc.customerType !== 'general'){
@@ -54,7 +54,7 @@ Template.ice_invoiceGroupReportGen.helpers({
         	type = 'general';
         }
         data.header = [
-            {col1: '#: ' + self.orderId, col2: 'បុគ្គលិក: ' + '' },
+            {col1: '#: ' + self.id, col2: 'បុគ្គលិក: ' + '' },
             {col1: 'អតិថិជន: ' + customerDoc.name, col2: 'ប្រភេទ: ' + type},
             { col1: 'កាលបរិច្ឆេទ: ' + date, col2: 'ម៉ោង: ' + time }
         ];
@@ -62,22 +62,32 @@ Template.ice_invoiceGroupReportGen.helpers({
         /********* Content & Footer *********/
         var content = [];
         var groupOrder = Ice.Collection.OrderGroup.findOne(self.id);
-        var itemsDetail = getOrder.iceOrderDetail
-        itemsDetail.forEach(function (item) {
-        	item.price = formatNum(item.price);
-        	item.amount = formatNum(item.amount);
-            item.discount = item.discount == undefined ? '' : item.discount + '%'
-        	content.push(item);
-        });
-        content.push(itemsDetail);
+        var itemsDetail = groupOrder.groupBy;
+        var dataItem = {};
+        dataItem['items'] = {};
+        var orderDay = '';
+        for(var k in itemsDetail){
+            orderDay = k.slice(3);
+            for(var i in itemsDetail[k]['items']){
+                if( dataItem['items'][orderDay] == undefined ) {
+                    dataItem['items'][orderDay] = {};
+                    dataItem['items'][orderDay][i] = itemsDetail[k]['items'][i];
+                    dataItem['items'][orderDay].orderDate = orderDay;
+                }else{    
+                     dataItem['items'][orderDay][i] = itemsDetail[k]['items'][i];
+                     dataItem['items'][orderDay].orderDate = orderDay;
+                }
+            }
+        }
+        content.push(dataItem);
         if (content.length > 0) {
             data.content = content;
-            data.footer = {
-            	subtotal: formatNum(getOrder.subtotal),
-            	discount: getOrder.discount == undefined ? '' : getOrder.discount + '%',
-            	total: formatNum(getOrder.total),
-                totalInDollar: formatNum(getOrder.totalInDollar)
-            }
+            // data.footer = {
+            // 	subtotal: formatNum(getOrder.subtotal),
+            // 	discount: getOrder.discount == undefined ? '' : getOrder.discount + '%',
+            // 	total: formatNum(getOrder.total),
+            //     totalInDollar: formatNum(getOrder.totalInDollar)
+            // }
             return data;
         } else {
             data.content.push({index: 'no results'});
@@ -95,7 +105,21 @@ Template.ice_invoiceGroupReportGen.helpers({
     	}else{
     		return discount;
     	}
-    }
+    },
+    listItems: function(items){
+        var results = '';
+        for(var k in items){
+            results += '<tr>' + '<td>' + items[k]['orderDate'] + '</td>';
+            for(var j in items[k]){
+              if(items[k][j].name !== undefined){
+                results += '<td>' + items[k][j].price + '</td>' + '<td>' + items[k][j].qty + '</td>' + '<td>' + items[k][j].amount + '</td>' ;
+              }
+            }
+            results += '</tr>'; 
+        }
+        console.log(results);
+        return results;
+    } 
 });
 
 var formatNum = function(value){
