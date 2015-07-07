@@ -78,6 +78,8 @@ Template.ice_invoiceGroupReportGen.helpers({
                      dataItem['items'][orderDay].orderDate = orderDay;
                 }
             }
+            dataItem['items'][orderDay].total = itemsDetail[k].total;
+            dataItem['items'][orderDay].totalInDollar = itemsDetail[k].totalInDollar;
         }
         content.push(dataItem);
         if (content.length > 0) {
@@ -115,7 +117,7 @@ Template.ice_invoiceGroupReportGen.helpers({
                 results += '<td>' + items[k][j].price + '</td>' + '<td>' + items[k][j].qty + '</td>' + '<td>' + items[k][j].amount + '</td>' ;
               }
             }
-            results += '</tr>'; 
+            results += '<td>' + items[k].total +'</td>' +'</tr>'; 
         }
         console.log(results);
         return results;

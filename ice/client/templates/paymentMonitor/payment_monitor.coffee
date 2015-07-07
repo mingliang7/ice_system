@@ -8,8 +8,8 @@ Template.list_invoices.events
 	# 	id = element.parents('.order-info').find('.order-id').text()
 	# 	value = element.prop('checked')
 	# 	Meteor.call('updatePaid', id, value)
-	"click .order-id": (e) ->
-		id = $(e.currentTarget).text()
+	"click .i-print": (e) ->
+		id = $(e.currentTarget).parents('.order-info').find('.order-id').text()
 		doc = Ice.Collection.OrderGroup.findOne(id)
 		url = "invoiceGroupReportGen?id=#{id}&customerId=#{doc.iceCustomerId}&date=#{moment(doc.createdAt).format('YYYY-MM-DD hh:mm:ss a')}"
 		window.open(url, '_blank')
