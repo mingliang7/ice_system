@@ -30,3 +30,17 @@ Router.route 'ice/paymentMonitors',
 		sub: ''
 	icon: 'payment'
 	title: 'payment'
+
+Router.route 'ice/payments',
+	->
+		@render 'ice_payment',
+			data: () ->
+				@params.query
+
+
+	name: 'ice.payment'
+	header:
+		title: 'payment'
+		sub: ''
+	icon: 'payment'
+	title: 'payment'

@@ -1,0 +1,32 @@
+<template name="ice_payment">
+	{{> ice_paymentForm}}
+</template>
+
+<template name="ice_paymentForm">
+	{{#autoForm schema=Ice.Schema.Payment id="ice_paymentFrom"}}
+		<div class="row">
+			<div class="col-sm-4"> 
+				{{> afQuickField name="customerId"}}
+			</div>
+			<div class="col-sm-4"> 
+				{{> afQuickField name="invoiceId" disabled="true"}}
+			</div>
+			<div class="col-sm-4"> 
+				{{> afQuickField name="staffId"}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-4"> 
+				{{> afQuickField name="dueAmount"}}
+			</div>
+			<div class="col-sm-4"> 
+				{{> afQuickField name="paidAmount"}}
+			</div>
+			<div class="col-sm-4"> 
+				{{> afQuickField name="balance" readonly='true'}}
+			</div>
+		</div>
+		<button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+		<button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+	{{/autoForm}}
+</template>

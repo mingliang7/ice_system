@@ -1,33 +1,28 @@
-// /**
-//  * List
-//  */
-// Ice.ListForReportState = new ReactiveObj();
+/**
+ * List
+ */
+Ice.ListForReportState = new ReactiveObj();
 
-// Ice.ListForReport = {
-//     patient: function () {
-//         var list = [];
-//         list.push({label: "(Select One)", value: ""});
-
-//         var currentBranch = Session.get('currentBranch');
-//         Ice.Collection.Patient.find({branchId: currentBranch})
-//             .forEach(function (obj) {
-//                 list.push({label: obj._id + " : " + obj.name + ' (' + obj.gender + ')', value: obj._id});
-//             });
-
-//         return list;
-//     },
-//     registerForPatient: function () {
-//         var list = [];
-//         list.push({label: "Select One", value: ""});
-
-//         var patientId = Ice.ListForReportState.get('patientId');
-//         Ice.Collection.Register.find({
-//             patientId: patientId
-//         }).forEach(function (obj) {
-//             var label = obj._id + ' | Date: ' + obj.registerDate + ' | Total: ' + numeral(obj.total).format('0,0.00');
-//             list.push({label: label, value: obj._id});
-//         });
-
-//         return list;
-//     }
-// };
+Ice.ListForReport = {
+   customer: function(selectOne){
+   	var list = [];
+   	var type = '';
+   	var customers = Ice.Collection.Customer.find();
+   	if(!_.isEqual(selectOne, false)){
+   		list.push({label: "(Select One)", value: ""});
+   	}
+   	customers.forEach(function (customer) {
+   		type = customer.customerType == 'general' ? 'General' : customer.customerType + ' days'; 
+   		list.push({label: '' + customer._id + ' | ' + customer.name + '(' + type + ')',
+   		value: customer._id})
+   	});
+   	return list;
+   },
+   invoice: function(selectOne){
+   	var list = [];
+   	if(!_.isEqual(selectOne, false)){
+   		list.push({label: "(Select One)", value: ""});
+   	}
+   	return list;
+   }
+}
