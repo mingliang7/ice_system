@@ -26,21 +26,23 @@ Template.ice_orderInsertTemplate.events
     current.parents('.array-item').find('.amount').val(item.amount)
     current.parents('.array-item').find('.discount').val('')
     totalAmount()
-  'keyup .qty': (event) ->
+  'keyup .qty , change .qty': (event) ->
     current = $(event.currentTarget)
     itemQty(current)
 
-  'keyup .price': (event) ->
+  'keyup .price , change .price': (event) ->
     current = $(event.currentTarget)
     itemPrice(current)
     
-  
-  'keyup .discount': (event) ->
+
+  'keyup .discount , change .discount': (event) ->
     current = $(event.currentTarget)
     itemDiscount(current)
   'keyup [name="discount"]': (event) ->
     totalAmount()
-
+  'click .btnRemove' : ->
+    setTimeout(-> totalAmount()
+    200)
   'click .print': ->
     Print.set 'print', true
 
