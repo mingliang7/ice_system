@@ -1,5 +1,4 @@
-
-<template name="ice_invoiceReportGen">
+<template name="ice_invoiceGroupReportGen">
     {{#with data}}
         <!--Title-->
         <div class="report-title">
@@ -24,35 +23,45 @@
         <!--Content-->
         <br>
         <table class="report-content">
-            <thead class="report-content-header">
+        <thead class="report-content-header">
             <tr>
-                <th colspan="2">ទំនិញ</th>
-                <th>ចំនួន</th>
-                <th>តម្លៃ</th>
-                <th>បញ្ចុះ</th>
-                <th>សរុប</th>
+                <th>កាលបរិច្ឆេទ</th>
+                <th >ទឹកកកកិន</th>
+                <th >ទឹកកកម៉ត់</th>
+                <th >អនាម័យ-តូច</th>
+                <th >អនាម័យ-ធំ</th>
+                <th >ទឹកកកដើម</th>
+                <th >សរុប</th>
             </tr>
             </thead>
-
             <tbody class="report-content-body">
             {{#each content}}
-                <tr>
-                    <td colspan="2">{{itemName iceItemId}}</td>
-                    <td>{{qty}}</td>
-                    <td>{{price}}</td>
-                    <td>{{itemDiscount discount}}</td>
-                    <td>{{amount}}</td>
-                </tr>
+               {{{listItems items}}}
             {{/each}}
+            <br>
+            <tr class="dotted">
+                <td>Qty:</td>
+                {{{totalDetail.qty}}}
+                <td></td>
+            </tr>
+            <tr>
+                <td>Price:</td>
+                {{{totalDetail.price}}}
+            </tr>
+            <tr>
+                <td>Amount:</td>
+                {{{totalDetail.amount}}}
+            </tr>
             </tbody>
         </table>
 
 
         <!--Footer-->
         <p></p>
+        <br>
         <table class="small-table" >
         <thead>
-            <tr>
+      <!--       <tr>
                 <th></th>
                 <th></th>
                 <th class="pull-right">តម្លៃសរុប: </th> <th>{{footer.subtotal}}</th>
@@ -65,23 +74,27 @@
              <tr>
                 <th></th>
                 <th></th>
-            <th class="pull-right">តម្លៃសរុប(រៀល): </th> <th>{{footer.total}}</th>
-            </tr>
-             <tr>
-                <th></th>
-                <th></th>
+                -->
+
+             <tr >
+                 <th class="pull-right">តម្លៃសរុប(រៀល): </th> <th>{{footer.total}}</th>
                 <th class="pull-right">តម្លៃសរុប(ដុល្លារ):</th> <th>{{footer.totalInDollar}}</th>
             </tr>
+             <tr>
+                
+                <th class="pull-right">ប្រាក់បង់:</th> <th></th>
+                 <th class="pull-right">ប្រាក់ជំពាក់: </th> <th></th>
+            </tr> 
         </thead>
         </table>
         
     {{/with}}
 
     <!--Sign-->
-    {{> dental_invoiceReportGenFooterNote}}
+    {{> ice_invoiceReportGenFooterNote}}
 </template>
 <!--footerNote-->
-<template name="dental_invoiceReportGenFooterNote">
+<template name="ice_invoiceReportGenFooterNote">
     <div style="text-align: center">
     <br>
         <strong><u>Note:</u></strong> សូមអរគុណដែលបានជាវទឹកកកពីហាងយើងខ្ញំុ
