@@ -38,7 +38,6 @@ Template.ice_invoiceGroupReportGen.helpers({
 
         /********* Header ********/
 
-        console.log(self);
         var customerDoc = Ice.Collection.Customer.findOne(self.customerId);
         var date = moment(self.date).format('YYYY-MM-DD');
         var time = moment(self.date).format('hh:mm:ss a');
@@ -63,33 +62,21 @@ Template.ice_invoiceGroupReportGen.helpers({
         var content = [];
         var groupOrder = Ice.Collection.OrderGroup.findOne(self.id);
         var itemsDetail = groupOrder.groupBy;
-        var dataItem = {};
-        dataItem['items'] = {};
-        var orderDay = '';
-        for(var k in itemsDetail){
-            orderDay = k.slice(3);
-            for(var i in itemsDetail[k]['items']){
-                if( dataItem['items'][orderDay] == undefined ) {
-                    dataItem['items'][orderDay] = {};
-                    dataItem['items'][orderDay][i] = itemsDetail[k]['items'][i];
-                    dataItem['items'][orderDay].orderDate = orderDay;
-                }else{    
-                     dataItem['items'][orderDay][i] = itemsDetail[k]['items'][i];
-                     dataItem['items'][orderDay].orderDate = orderDay;
-                }
-            }
-            dataItem['items'][orderDay].total = itemsDetail[k].total;
-            dataItem['items'][orderDay].totalInDollar = itemsDetail[k].totalInDollar;
-        }
-        content.push(dataItem);
+        contentDetail(content, itemsDetail); //function call
+        var totalItem = itemTotalDetail(itemsDetail);//function call
         if (content.length > 0) {
             data.content = content;
-            // data.footer = {
-            // 	subtotal: formatNum(getOrder.subtotal),
-            // 	discount: getOrder.discount == undefined ? '' : getOrder.discount + '%',
-            // 	total: formatNum(getOrder.total),
-            //     totalInDollar: formatNum(getOrder.totalInDollar)
-            // }
+            data.footer = {
+            	// subtotal: formatNum(groupOrder.subtotal),
+            	// discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
+            	total: formatNum(groupOrder.total),
+                totalInDollar: formatNum(groupOrder.totalInDollar)
+            }
+            data.totalDetail ={
+                qty: extractTotalQty(totalItem),
+                price: extractPrice(totalItem),
+                amount: extractTotalAmount(data.footer.total, totalItem)
+            }
             return data;
         } else {
             data.content.push({index: 'no results'});
@@ -113,17 +100,86 @@ Template.ice_invoiceGroupReportGen.helpers({
         for(var k in items){
             results += '<tr>' + '<td>' + items[k]['orderDate'] + '</td>';
             for(var j in items[k]){
-              if(items[k][j].name !== undefined){
-                results += '<td>' + items[k][j].price + '</td>' + '<td>' + items[k][j].qty + '</td>' + '<td>' + items[k][j].amount + '</td>' ;
+              if(items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម'){
+                results += '<td>' +  + items[k][j].qty +  'kg' + '</td>'  ;
+              }else if(items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម'){
+                results += '<td>' +  + items[k][j].qty +  'ដើម' + '</td>'  ;
               }
             }
             results += '<td>' + items[k].total +'</td>' +'</tr>'; 
         }
-        console.log(results);
         return results;
     } 
 });
 
+// functions 
 var formatNum = function(value){
 	return numeral(value).format('0,0.00');
+}
+
+var contentDetail = function(content, itemsDetail){
+    var dataItem = {};
+        dataItem['items'] = {};
+        var orderDay = '';
+        for(var k in itemsDetail){
+            orderDay = k.slice(3);
+            for(var i in itemsDetail[k]['items']){
+                if( dataItem['items'][orderDay] == undefined ) {
+                    dataItem['items'][orderDay] = {};
+                    dataItem['items'][orderDay][i] = itemsDetail[k]['items'][i];
+                    dataItem['items'][orderDay].orderDate = orderDay;
+                }else{    
+                     dataItem['items'][orderDay][i] = itemsDetail[k]['items'][i];
+                     dataItem['items'][orderDay].orderDate = orderDay;
+                }
+            }
+            dataItem['items'][orderDay].total = itemsDetail[k].total;
+            dataItem['items'][orderDay].totalInDollar = itemsDetail[k].totalInDollar;
+        }
+        return content.push(dataItem);
+}
+
+var itemTotalDetail = function(itemsDetail){
+    var itemSubTotal = {};
+        itemSubTotal.qty ={};
+        itemSubTotal.price = {}
+        itemSubTotal.amount ={};
+        for(var k in itemsDetail){
+            for(var i in itemsDetail[k]['items']){
+                itemSubTotal.qty[i] = 0 ;
+                itemSubTotal.amount[i] = 0;
+            }
+        }
+
+        for(var k in itemsDetail){
+            for(var i in itemsDetail[k]['items']){
+                itemSubTotal.qty[i] += itemsDetail[k]['items'][i].qty;
+                itemSubTotal.price[i] = itemsDetail[k]['items'][i].price
+                itemSubTotal.amount[i] += itemsDetail[k]['items'][i].amount
+            }
+        }
+        return itemSubTotal;
+}
+
+var extractTotalQty = function(totalItem){
+    var qty = '';
+    for(var i in totalItem.qty) {
+        qty += '<td>' + formatNum(totalItem.qty[i]) + '</td>';
+    }
+    return qty;
+}
+var extractPrice = function(totalItem){
+    var price = '';
+    for(var i in totalItem.price) {
+        price += '<td>' + totalItem.price[i] + '</td>';
+    }
+    return price;
+}
+var extractTotalAmount = function(total, totalItem){
+    var amount = '';
+    for(var i in totalItem.amount) {
+        amount += '<td>' + formatNum(totalItem.amount[i]) + '</td>';
+    }
+    amount += '<td>'+ '<strong>' + total + '</strong>'+'</td>'
+    return amount;
 }

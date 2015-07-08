@@ -7,8 +7,11 @@
 	widows: 100px;
 	padding-left: 10px;
 }
-
+table.group-head{
+	width: 100%;
+}
 table.group-head > thead > tr > th {
+	margin-right: 100px;
 	font-size: 8px;
-	width: 100px;
+	width: 70px;
 }

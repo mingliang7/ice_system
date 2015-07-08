@@ -22,30 +22,42 @@
 
         <!--Content-->
         <br>
-        <table class="group-head">
-        	<thead>
-        	<tr>
-                <th>កាលបរិច​​​្ឆទ</th>
+        <table class="report-content">
+        <thead class="report-content-header">
+            <tr>
+                <th>កាលបរិច្ឆេទ</th>
                 <th >ទឹកកកកិន</th>
                 <th >ទឹកកកម៉ត់</th>
-                <th >អនាម័យតូ-ច</th>
+                <th >អនាម័យ-តូច</th>
                 <th >អនាម័យ-ធំ</th>
                 <th >ទឹកកកដើម</th>
-                <th colspan="2">សរុប</th>
+                <th >សរុប</th>
             </tr>
             </thead>
-        </table>
-        <table class="report-content">
             <tbody class="report-content-body">
             {{#each content}}
                {{{listItems items}}}
             {{/each}}
+            <br>
+            <tr>
+                <td>Qty:</td>
+                {{{totalDetail.qty}}}
+            </tr>
+            <tr>
+                <td>Price:</td>
+                {{{totalDetail.price}}}
+            </tr>
+            <tr>
+                <td>Amount:</td>
+                {{{totalDetail.amount}}}
+            </tr>
             </tbody>
         </table>
 
 
         <!--Footer-->
         <p></p>
+        <br>
         <table class="small-table" >
         <thead>
       <!--       <tr>
@@ -61,13 +73,17 @@
              <tr>
                 <th></th>
                 <th></th>
-            <th class="pull-right">តម្លៃសរុប(រៀល): </th> <th>{{footer.total}}</th>
+                -->
+
+             <tr >
+                 <th class="pull-right">តម្លៃសរុប(រៀល): </th> <th>{{footer.total}}</th>
+                <th class="pull-right">តម្លៃសរុប(ដុល្លារ):</th> <th>{{footer.totalInDollar}}</th>
             </tr>
              <tr>
-                <th></th>
-                <th></th>
-                <th class="pull-right">តម្លៃសរុប(ដុល្លារ):</th> <th>{{footer.totalInDollar}}</th>
-            </tr> -->
+                
+                <th class="pull-right">ប្រាក់បង់:</th> <th></th>
+                 <th class="pull-right">ប្រាក់ជំពាក់: </th> <th></th>
+            </tr> 
         </thead>
         </table>
         
