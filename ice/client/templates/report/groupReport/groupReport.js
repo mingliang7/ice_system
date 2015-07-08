@@ -40,22 +40,23 @@ Template.ice_invoiceGroupReportGen.helpers({
 
         var customerDoc = Ice.Collection.Customer.findOne(self.customerId);
         var date = moment(self.date).format('YYYY-MM-DD');
+        var endDate = moment(self.endDate).format('YYYY-MM-DD');
         var time = moment(self.date).format('hh:mm:ss a');
         var type = '';
-         
+
         // var getGroup = Ice.Collection.OrderGroup.findOne({_id: self.groupId, iceCustomerId: self.customerId, startDate: {$lt: self.endDate}, endDate:{$gt: self.startDate}});
         // dueDate = '' + getGroup.startDate + '-' + getGroup.endDate;
-        
-        if(customerDoc.customerType !== 'general'){
-        	type = customerDoc.customerType + ' ថ្ងៃ';
+
+        if (customerDoc.customerType !== 'general') {
+            type = customerDoc.customerType + ' ថ្ងៃ';
         }
-        else{
-        	type = 'general';
+        else {
+            type = 'general';
         }
         data.header = [
-            {col1: '#: ' + self.id, col2: 'បុគ្គលិក: ' + '' },
+            {col1: '#: ' + self.id, col2: 'បុគ្គលិក: ' + ''},
             {col1: 'អតិថិជន: ' + customerDoc.name, col2: 'ប្រភេទ: ' + type},
-            { col1: 'កាលបរិច្ឆេទ: ' + date, col2: 'ម៉ោង: ' + time }
+            {col1: 'កាលបរិច្ឆេទ: ' + date +" ដល់ " + endDate, col2: 'ម៉ោង: ' + time}
         ];
 
         /********* Content & Footer *********/
@@ -67,12 +68,12 @@ Template.ice_invoiceGroupReportGen.helpers({
         if (content.length > 0) {
             data.content = content;
             data.footer = {
-            	// subtotal: formatNum(groupOrder.subtotal),
-            	// discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
-            	total: formatKhmerCurrency(groupOrder.total),
+                // subtotal: formatNum(groupOrder.subtotal),
+                // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
+                total: formatKhmerCurrency(groupOrder.total),
                 totalInDollar: formatNum(groupOrder.totalInDollar)
             }
-            data.totalDetail ={
+            data.totalDetail = {
                 qty: extractTotalQty(totalItem),
                 price: extractPrice(totalItem),
                 amount: extractTotalAmount(data.footer.total, totalItem)
@@ -84,106 +85,106 @@ Template.ice_invoiceGroupReportGen.helpers({
         }
     },
 
-    itemName: function(id){
-    	var name = Ice.Collection.Item.findOne(id).name;
-    	return name;
+    itemName: function (id) {
+        var name = Ice.Collection.Item.findOne(id).name;
+        return name;
     },
-    itemDiscount: function(discount) {
-    	if(discount == undefined){
-   			return '';
-    	}else{
-    		return discount;
-    	}
+    itemDiscount: function (discount) {
+        if (discount == undefined) {
+            return '';
+        } else {
+            return discount;
+        }
     },
-    listItems: function(items){
+    listItems: function (items) {
         var results = '';
-        for(var k in items){
+        for (var k in items) {
             results += '<tr>' + '<td>' + items[k]['orderDate'] + '</td>';
-            for(var j in items[k]){
-              if(items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម'){
-                results += '<td>' +  + items[k][j].qty +  'kg' + '</td>'  ;
-              }else if(items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម'){
-                results += '<td>' +  + items[k][j].qty +  'ដើម' + '</td>'  ;
-              }
+            for (var j in items[k]) {
+                if (items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម') {
+                    results += '<td>' + +items[k][j].qty + 'kg' + '</td>';
+                } else if (items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម') {
+                    results += '<td>' + +items[k][j].qty + 'ដើម' + '</td>';
+                }
             }
-            results += '<td>' + formatKhmerCurrency(items[k].total) +'</td>' +'</tr>'; 
+            results += '<td>' + formatKhmerCurrency(items[k].total) + '</td>' + '</tr>';
         }
         return results;
-    } 
+    }
 });
 
 // functions 
-var formatNum = function(value){
-	return numeral(value).format('0,0.00');
+var formatNum = function (value) {
+    return numeral(value).format('0,0.00');
 }
-var formatKhmerCurrency = function(value){
+var formatKhmerCurrency = function (value) {
     return numeral(value).format('0,0');
 }
 
 
-var contentDetail = function(content, itemsDetail){
+var contentDetail = function (content, itemsDetail) {
     var dataItem = {};
-        dataItem['items'] = {};
-        var orderDay = '';
-        for(var k in itemsDetail){
-            orderDay = k.slice(3);
-            for(var i in itemsDetail[k]['items']){
-                if( dataItem['items'][orderDay] == undefined ) {
-                    dataItem['items'][orderDay] = {};
-                    dataItem['items'][orderDay][i] = itemsDetail[k]['items'][i];
-                    dataItem['items'][orderDay].orderDate = orderDay;
-                }else{    
-                     dataItem['items'][orderDay][i] = itemsDetail[k]['items'][i];
-                     dataItem['items'][orderDay].orderDate = orderDay;
-                }
+    dataItem['items'] = {};
+    var orderDay = '';
+    for (var k in itemsDetail) {
+        orderDay = k.slice(3);
+        for (var i in itemsDetail[k]['items']) {
+            if (dataItem['items'][orderDay] == undefined) {
+                dataItem['items'][orderDay] = {};
+                dataItem['items'][orderDay][i] = itemsDetail[k]['items'][i];
+                dataItem['items'][orderDay].orderDate = orderDay;
+            } else {
+                dataItem['items'][orderDay][i] = itemsDetail[k]['items'][i];
+                dataItem['items'][orderDay].orderDate = orderDay;
             }
-            dataItem['items'][orderDay].total = itemsDetail[k].total;
-            dataItem['items'][orderDay].totalInDollar = itemsDetail[k].totalInDollar;
         }
-        return content.push(dataItem);
+        dataItem['items'][orderDay].total = itemsDetail[k].total;
+        dataItem['items'][orderDay].totalInDollar = itemsDetail[k].totalInDollar;
+    }
+    return content.push(dataItem);
 }
 
-var itemTotalDetail = function(itemsDetail){
+var itemTotalDetail = function (itemsDetail) {
     var itemSubTotal = {};
-        itemSubTotal.qty ={};
-        itemSubTotal.price = {}
-        itemSubTotal.amount ={};
-        for(var k in itemsDetail){
-            for(var i in itemsDetail[k]['items']){
-                itemSubTotal.qty[i] = 0 ;
-                itemSubTotal.amount[i] = 0;
-            }
+    itemSubTotal.qty = {};
+    itemSubTotal.price = {}
+    itemSubTotal.amount = {};
+    for (var k in itemsDetail) {
+        for (var i in itemsDetail[k]['items']) {
+            itemSubTotal.qty[i] = 0;
+            itemSubTotal.amount[i] = 0;
         }
+    }
 
-        for(var k in itemsDetail){
-            for(var i in itemsDetail[k]['items']){
-                itemSubTotal.qty[i] += itemsDetail[k]['items'][i].qty;
-                itemSubTotal.price[i] = itemsDetail[k]['items'][i].price
-                itemSubTotal.amount[i] += itemsDetail[k]['items'][i].amount
-            }
+    for (var k in itemsDetail) {
+        for (var i in itemsDetail[k]['items']) {
+            itemSubTotal.qty[i] += itemsDetail[k]['items'][i].qty;
+            itemSubTotal.price[i] = itemsDetail[k]['items'][i].price
+            itemSubTotal.amount[i] += itemsDetail[k]['items'][i].amount
         }
-        return itemSubTotal;
+    }
+    return itemSubTotal;
 }
 
-var extractTotalQty = function(totalItem){
+var extractTotalQty = function (totalItem) {
     var qty = '';
-    for(var i in totalItem.qty) {
+    for (var i in totalItem.qty) {
         qty += '<td>' + formatNum(totalItem.qty[i]) + '</td>';
     }
     return qty;
 }
-var extractPrice = function(totalItem){
+var extractPrice = function (totalItem) {
     var price = '';
-    for(var i in totalItem.price) {
+    for (var i in totalItem.price) {
         price += '<td>' + formatKhmerCurrency(totalItem.price[i]) + '</td>';
     }
     return price;
 }
-var extractTotalAmount = function(total, totalItem){
+var extractTotalAmount = function (total, totalItem) {
     var amount = '';
-    for(var i in totalItem.amount) {
+    for (var i in totalItem.amount) {
         amount += '<td>' + formatNum(totalItem.amount[i]) + '</td>';
     }
-    amount += '<td>'+ '<strong>' + total + '</strong>'+'</td>'
+    amount += '<td>' + '<strong>' + total + '</strong>' + '</td>'
     return amount;
 }
