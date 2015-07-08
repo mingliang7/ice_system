@@ -9,9 +9,21 @@ Ice.Schema.OrderGroup = new SimpleSchema(
 	total:
 		type: Number
 		decimal: true
+	
 	totalInDollar:
 		type: Number
 		decimal: true
+
+	overviewAmount:
+		type: Number
+		decimal: true
+		optional: true
+	
+	paidAmount:
+		type: Number
+		decimal: true
+		optional: true
+	
 	paid: 
 		type: Boolean
 		defaultValue: false

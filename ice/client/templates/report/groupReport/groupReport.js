@@ -69,7 +69,7 @@ Template.ice_invoiceGroupReportGen.helpers({
             data.footer = {
             	// subtotal: formatNum(groupOrder.subtotal),
             	// discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
-            	total: formatNum(groupOrder.total),
+            	total: formatKhmerCurrency(groupOrder.total),
                 totalInDollar: formatNum(groupOrder.totalInDollar)
             }
             data.totalDetail ={
@@ -106,7 +106,7 @@ Template.ice_invoiceGroupReportGen.helpers({
                 results += '<td>' +  + items[k][j].qty +  'ដើម' + '</td>'  ;
               }
             }
-            results += '<td>' + items[k].total +'</td>' +'</tr>'; 
+            results += '<td>' + formatKhmerCurrency(items[k].total) +'</td>' +'</tr>'; 
         }
         return results;
     } 
@@ -116,6 +116,10 @@ Template.ice_invoiceGroupReportGen.helpers({
 var formatNum = function(value){
 	return numeral(value).format('0,0.00');
 }
+var formatKhmerCurrency = function(value){
+    return numeral(value).format('0,0');
+}
+
 
 var contentDetail = function(content, itemsDetail){
     var dataItem = {};
@@ -171,7 +175,7 @@ var extractTotalQty = function(totalItem){
 var extractPrice = function(totalItem){
     var price = '';
     for(var i in totalItem.price) {
-        price += '<td>' + totalItem.price[i] + '</td>';
+        price += '<td>' + formatKhmerCurrency(totalItem.price[i]) + '</td>';
     }
     return price;
 }
