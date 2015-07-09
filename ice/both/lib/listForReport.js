@@ -20,9 +20,24 @@ Ice.ListForReport = {
    },
    invoice: function(selectOne){
    	var list = [];
-   	if(!_.isEqual(selectOne, false)){
-   		list.push({label: "(Select One)", value: ""});
-   	}
-   	return list;
+   	var customerId = Ice.ListForReportState.get('customer');
+      if(!_.isEqual(selectOne, false)){
+         list.push({label: "(Select One)", value: ""});
+      }
+      if(customerId != ''){
+         var type = Ice.Collection.Customer.findOne(customerId).customerType; 
+         if(type == 'general'){
+            Ice.Collection.Order.find({iceCustomerId: customerId, closing: false}).forEach(function (invoice) {
+            list.push({label: '' + invoice._id + ' | '+ invoice.orderDate  , value: invoice._id})
+            });
+            Ice.ListForReportState.set('type', type);
+         }else{
+            Ice.Collection.OrderGroup.find({iceCustomerId: customerId, closing: false}).forEach(function (invoice) {
+            list.push({label: '' + invoice._id + ' | ' + invoice.startDate + ' To ' + invoice.endDate , value: invoice._id})
+            });
+            Ice.ListForReportState.set('type', type);
+         }          
+      }
+      return list;
    }
 }

@@ -14,7 +14,7 @@ Ice.Schema.OrderGroup = new SimpleSchema(
 		type: Number
 		decimal: true
 
-	overviewAmount:
+	outstandingAmount:
 		type: Number
 		decimal: true
 		optional: true
@@ -24,9 +24,10 @@ Ice.Schema.OrderGroup = new SimpleSchema(
 		decimal: true
 		optional: true
 	
-	paid: 
+	closing: 
 		type: Boolean
 		defaultValue: false
+
 	groupBy:
 		type: Object
 		blackbox: true

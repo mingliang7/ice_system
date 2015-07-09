@@ -33,10 +33,10 @@ Router.route 'ice/paymentMonitors',
 
 Router.route 'ice/payments',
 	->
+		q = @params.query
 		@render 'ice_payment',
 			data: () ->
-				@params.query
-
+				q
 
 	name: 'ice.payment'
 	header:
