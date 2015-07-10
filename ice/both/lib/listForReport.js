@@ -2,7 +2,6 @@
  * List
  */
 Ice.ListForReportState = new ReactiveObj();
-
 Ice.ListForReport = {
    customer: function(selectOne){
    	var list = [];
@@ -21,22 +20,37 @@ Ice.ListForReport = {
    invoice: function(selectOne){
    	var list = [];
    	var customerId = Ice.ListForReportState.get('customer');
+      var update = Session.get('checkIfUpdate');
       if(!_.isEqual(selectOne, false)){
          list.push({label: "(Select One)", value: ""});
       }
       if(customerId != ''){
          var type = Ice.Collection.Customer.findOne(customerId).customerType; 
-         if(type == 'general'){
-            Ice.Collection.Order.find({iceCustomerId: customerId, closing: false}).forEach(function (invoice) {
-            list.push({label: '' + invoice._id + ' | '+ invoice.orderDate  , value: invoice._id})
-            });
-            Ice.ListForReportState.set('type', type);
+         if(update == true){
+            if(type == 'general'){
+               Ice.Collection.Order.find({iceCustomerId: customerId}).forEach(function (invoice) {
+               list.push({label: '' + invoice._id + ' | '+ invoice.orderDate  , value: invoice._id})
+               });
+               Ice.ListForReportState.set('type', type);
+            }else{
+               Ice.Collection.OrderGroup.find({iceCustomerId: customerId}).forEach(function (invoice) {
+               list.push({label: '' + invoice._id + ' | ' + invoice.startDate + ' To ' + invoice.endDate , value: invoice._id})
+               });
+               Ice.ListForReportState.set('type', type);
+            }
          }else{
-            Ice.Collection.OrderGroup.find({iceCustomerId: customerId, closing: false}).forEach(function (invoice) {
-            list.push({label: '' + invoice._id + ' | ' + invoice.startDate + ' To ' + invoice.endDate , value: invoice._id})
-            });
-            Ice.ListForReportState.set('type', type);
-         }          
+            if(type == 'general'){
+               Ice.Collection.Order.find({iceCustomerId: customerId, closing: false}).forEach(function (invoice) {
+               list.push({label: '' + invoice._id + ' | '+ invoice.orderDate  , value: invoice._id})
+               });
+               Ice.ListForReportState.set('type', type);
+            }else{
+               Ice.Collection.OrderGroup.find({iceCustomerId: customerId, closing: false}).forEach(function (invoice) {
+               list.push({label: '' + invoice._id + ' | ' + invoice.startDate + ' To ' + invoice.endDate , value: invoice._id})
+               });
+               Ice.ListForReportState.set('type', type);
+            }
+       }
       }
       return list;
    }
