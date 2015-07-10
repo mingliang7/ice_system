@@ -62,7 +62,7 @@ Ice.TabularTable.Order = new (Tabular.Table)(
 			title: 'Item', render: (val) ->
         items = []
         val.forEach (item) ->
-          items.push itemQuery.detail(item.iceItemId, item.qty, item.discount, item.amount)
+          items.push itemQuery.detail(item.iceItemId, item.qty, item.discount, format(item.amount))
         items
     }
     {
@@ -76,6 +76,10 @@ Ice.TabularTable.Order = new (Tabular.Table)(
     }
     {
       data: 'total'
-      title: 'Total'
+      title: 'Total', render: (value) ->
+        format(value) 
     }
   ])
+
+format = (value) ->
+  numeral(value).format('0,0')

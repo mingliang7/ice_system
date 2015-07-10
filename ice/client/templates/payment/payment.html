@@ -1,10 +1,26 @@
 <template name="ice_payment">
-	{{foo}}
-	{{> ice_paymentForm}}
+	{{> ice_paymentTabular}}
 </template>
 
-<template name="ice_paymentForm">
-	{{#autoForm collection=Ice.Collection.Payment id="ice_paymentForm" type="insert"}}
+<template name="ice_paymentTabular">
+    <p>
+        <button type="button" class="btn btn-primary insert">{{fa "plus"}} Add New</button>
+    </p>
+
+    {{> tabular table=Ice.TabularTable.Payment selector=selector class="table table-striped table-bordered table-condensed table-hover"}}
+</template>
+
+<!--Action-->
+<template name="ice_paymentAction">
+    {{#tabularAction}}
+        <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
+        <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
+        <li><a href="#" class="show">{{fa "eye"}} Show</a></li>
+    {{/tabularAction}}
+</template>
+
+<template name="ice_paymentInsertTemplate">
+	{{#autoForm collection=Ice.Collection.Payment id="ice_paymentInsertTemplate" type="insert"}}
 		<div class="row">
 			<div class="col-sm-4"> 
 				{{> afQuickField name="customerId"}}
@@ -30,4 +46,23 @@
 		<button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
 		<button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
 	{{/autoForm}}
+</template>
+
+<template name="ice_paymentShowTemplate">
+    <dl class="dl-horizontal">
+        <dt>Id</dt>
+        <dd>{{_id}}</dd>
+        <dt>Customer ID</dt>
+        <dd>{{customerId}}</dd>
+        <dt>Invoice ID</dt>
+        <dd>{{orderId_orderGroupId}}</dd>
+        <dt>Due Amount</dt>
+        <dd>{{format dueAmount}}</dd>
+        <dt>Paid Amount</dt>
+        <dd>{{format paidAmount}}</dd>
+        <dt>Outstanding Amount</dt>
+        <dd>{{format outstandingAmount}}</dd>
+        <dt>Payment Date</dt>
+        <dd>{{paymentDate}}</dd>
+    </dl>
 </template>

@@ -20,7 +20,7 @@ invoiceUpdate = (doc) ->
 	else
 		orderGroupInvoiceUpdate(doc)	
 AutoForm.hooks
-	ice_paymentForm:
+	ice_paymentInsertTemplate:
 		before: 
 			insert: (doc) ->
 				prefix = "#{Session.get('currentBranch')}-"
