@@ -11,6 +11,9 @@
                 General <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
+                <li class="{{isActiveRoute regex='ice.payment'}}">
+                    <a href="{{pathFor 'ice.payment'}}">Payment</a>
+                </li>
                 <li class="{{isActiveRoute regex='cpanel.exchange'}}"><a
                         href="{{pathFor 'cpanel.exchange'}}">Exchange</a>
                 </li>

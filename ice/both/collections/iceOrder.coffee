@@ -92,8 +92,27 @@ Ice.Schema.Order = new SimpleSchema(
     decimal: true
     optional: true
 
+  dueAmount: 
+    type: Number
+    decimal: true
+    optional: true
+  
+  paidAmount: 
+    type: Number
+    decimal: true
+    optional: true
+
+  outstandingAmount:
+    type: Number
+    decimal: true
+    optional: true
+      
   iceOrderGroupId:
     type: String
+    optional: true
+
+  closing:
+    type: Boolean
     optional: true
     
 )

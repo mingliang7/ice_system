@@ -40,7 +40,10 @@ setOrderGroup = (doc) ->
 			orderGroup.whenNoActiveDate(id, startDate, endDate)
 		else
 			orderGroup.whenActiveDate(group, startDate, endDate)
-	
+	else
+		doc.paidAmount = 0
+		doc.outstandingAmount = doc.total
+		doc.closing = false
 AutoForm.hooks
 	ice_orderInsertTemplate:
 		before: 
@@ -49,7 +52,6 @@ AutoForm.hooks
 				prefix = "#{Session.get('currentBranch')}-"
 				doc._id = idGenerator.genWithPrefix(Ice.Collection.Order, prefix, 12)
 				doc.cpanel_branchId = Session.get('currentBranch')
-				doc.createdAt = new Date()
 				if (doc.orderDate and doc.iceCustomerId and doc.iceOrderDetail) isnt undefined
 					setOrderGroup(doc)
 				doc

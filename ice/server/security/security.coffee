@@ -15,3 +15,8 @@ Ice.Collection.OrderGroup.permit([
 	'update'
 	'remove'
 ]).ice_ifGeneral().apply()
+Ice.Collection.Payment.permit([
+	'insert'
+	'update'
+	'remove'
+]).ice_ifGeneral().apply()

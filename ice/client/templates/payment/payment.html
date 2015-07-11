@@ -1,0 +1,78 @@
+<template name="ice_payment">
+	{{> ice_paymentTabular}}
+</template>
+
+<template name="ice_paymentTabular">
+    <p>
+        <button type="button" class="btn btn-primary insert">{{fa "plus"}} Add New</button>
+    </p>
+
+    {{> tabular table=Ice.TabularTable.Payment selector=selector class="table table-striped table-bordered table-condensed table-hover"}}
+</template>
+
+<!--Action-->
+<template name="ice_paymentAction">
+    {{#tabularAction}}
+        <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
+        <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
+        <li><a href="#" class="show">{{fa "eye"}} Show</a></li>
+    {{/tabularAction}}
+</template>
+
+<template name="ice_paymentInsertTemplate">
+	{{#autoForm collection=Ice.Collection.Payment id="ice_paymentInsertTemplate" type="insert"}}
+	<div class="row">
+		<div class="col-md-7">
+					{{> afQuickField name="customerId"}}
+					{{> afQuickField name="orderId_orderGroupId" disabled="true"}}
+					{{> afQuickField name="paymentDate"}}
+		</div>
+		<div class="col-md-5">
+					{{> afQuickField name="staffId"}}
+					{{> afQuickField name="dueAmount" readonly='true'}}
+					{{> afQuickField name="paidAmount"}}
+					{{> afQuickField name="outstandingAmount" readonly='true'}}
+		</div>
+		<button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+		<button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+	</div>
+	{{/autoForm}}
+</template>
+
+<template name="ice_paymentUpdateTemplate">
+	{{#autoForm collection=Ice.Collection.Payment id="ice_paymentUpdateTemplate" type="update" doc=this}}
+		<div class="row">
+		<div class="col-md-7">
+					{{> afQuickField name="customerId" disabled="true"}}
+					{{> afQuickField name="orderId_orderGroupId" disabled="true"}}
+					{{> afQuickField name="paymentDate"}}
+		</div>
+		<div class="col-md-5">
+					{{> afQuickField name="staffId"}}
+					{{> afQuickField name="dueAmount" readonly='true'}}
+					{{> afQuickField name="paidAmount"}}
+					{{> afQuickField name="outstandingAmount" readonly='true'}}
+		</div>
+		<button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+		<button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+	</div>
+	{{/autoForm}}
+</template>
+<template name="ice_paymentShowTemplate">
+    <dl class="dl-horizontal">
+        <dt>Id</dt>
+        <dd>{{_id}}</dd>
+        <dt>Customer ID</dt>
+        <dd>{{customer customerId}}</dd>
+        <dt>Invoice ID</dt>
+        <dd>{{orderId_orderGroupId}}</dd>
+        <dt>Due Amount</dt>
+        <dd>{{format dueAmount}}</dd>
+        <dt>Paid Amount</dt>
+        <dd>{{format paidAmount}}</dd>
+        <dt>Outstanding Amount</dt>
+        <dd>{{format outstandingAmount}}</dd>
+        <dt>Payment Date</dt>
+        <dd>{{paymentDate}}</dd>
+    </dl>
+</template>
