@@ -3,6 +3,7 @@ Template.ice_payment.onRendered(function() {
   return createNewAlertify('paymentForm');
 });
 
+
 Template.ice_payment.helpers({
   foo: function() {
     var self;
@@ -31,6 +32,7 @@ Template.ice_payment.events({
   	if(flag) {
   		Ice.ListForReportState.set('customer', this.customerId)
   		Session.set('checkIfUpdate', true);
+  		Session.set('paidAmount', this.paidAmount);
   		Session.set('invoiceId', this.orderId_orderGroupId);
   		alertify.paymentForm(fa('money', 'Update Payment'), renderTemplate(Template.ice_paymentUpdateTemplate, this)).maximize(); 
   		
@@ -68,6 +70,7 @@ Template.ice_paymentInsertTemplate.events({
       $('[name="paidAmount"]').val(currentInvoice.outstandingAmount);
       return $('[name="outstandingAmount"]').val(0);
     }
+    datePicker(currentInvoiceId);    
   },
   'keyup [name="paidAmount"]': function() {
     var dueAmount, paidAmount;
@@ -141,3 +144,9 @@ var checkAvailablity = function(doc){
   	});
   	return flag;
 } 
+
+var datePicker = function(currentInvoiceId){
+  payments = Ice.Collection.Payment.find(currentInvoiceId);
+  var paymentDate = $('[name="paymentDate"]')
+  DateTimePicker.dateTime(paymentDate);
+}

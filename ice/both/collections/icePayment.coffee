@@ -41,9 +41,6 @@ Ice.Schema.Payment = new SimpleSchema(
 	
 	paymentDate:
 		type: String
-		autoValue: ->
-			if @isInsert
-				moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
 	createdAt: 
 		type: Date
 		autoValue: ->
