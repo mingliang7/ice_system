@@ -70,7 +70,8 @@ var checkType = function(customerId){
 var updateInvoice = function(doc){
   var invoiceId = Session.get('invoiceId');
   var oldPaidAmount = Session.get('paidAmount'); 
-  if(checkType(doc.customerId) == 'general'){
+  customerId = Ice.ListForReportState.get('customer');
+  if(checkType(customerId) == 'general'){
     var oldOrder = Ice.Collection.Order.findOne(invoiceId);
     var newPaidAmount = (oldPaidAmount > doc.paidAmount) ? oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount)  : (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
     var outstandingAmount = (oldPaidAmount > doc.paidAmount) ? (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount : (doc.paidAmount - oldPaidAmount) - oldOrder.outstandingAmount;
@@ -85,9 +86,9 @@ var updateInvoice = function(doc){
     
   }else{
     var oldOrder = Ice.Collection.OrderGroup.findOne(invoiceId);
-    var oldOrder = Ice.Collection.Order.findOne(invoiceId);
     var newPaidAmount = (oldPaidAmount > doc.paidAmount) ? oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount)  : (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
     var outstandingAmount = (oldPaidAmount > doc.paidAmount) ? (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount : (doc.paidAmount - oldPaidAmount) - oldOrder.outstandingAmount;
+    var closing = (outstandingAmount == 0) ? true : false;
     Ice.Collection.OrderGroup.update({_id: invoiceId}, 
       {$set: 
         {paidAmount: newPaidAmount, 
@@ -106,7 +107,7 @@ AutoForm.hooks({
         prefix = "" + (Session.get('currentBranch')) + "-";
         doc._id = idGenerator.genWithPrefix(Ice.Collection.Payment, prefix, 12);
         doc.cpanel_branchId = Session.get('currentBranch');
-        if (doc.customerId && doc.orderId_orderGroupId !== void 0) {
+        if (doc.customerId && doc.orderId_orderGroupId && doc.paymentDate !== undefined) {
           invoiceUpdate(doc);
         }
         return doc;
@@ -125,7 +126,9 @@ AutoForm.hooks({
   ice_paymentUpdateTemplate: {
     before:{
       update: function(doc){
-        updateInvoice(doc.$set);
+        if(doc.$set.paymentDate != undefined){
+          updateInvoice(doc.$set);
+        }
         return doc;
       }
     },

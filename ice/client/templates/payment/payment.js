@@ -29,15 +29,16 @@ Template.ice_payment.events({
   },
   'click .update': function(){
   	var flag = checkAvailablity(this);
+    doc = this;
   	if(flag) {
-  		Ice.ListForReportState.set('customer', this.customerId)
+  		Ice.ListForReportState.set('customer', doc.customerId)
   		Session.set('checkIfUpdate', true);
-  		Session.set('paidAmount', this.paidAmount);
-  		Session.set('invoiceId', this.orderId_orderGroupId);
+  		Session.set('paidAmount', doc.paidAmount);
+  		Session.set('invoiceId', doc.orderId_orderGroupId);
   		alertify.paymentForm(fa('money', 'Update Payment'), renderTemplate(Template.ice_paymentUpdateTemplate, this)).maximize(); 
   		
   	}else{
-  		alertify.warning('Sorry! invoice ' + this._id + ' is not a last record :( ')
+  		alertify.warning('Sorry! invoice ' + doc._id + ' is not a last record :( ')
   	}
   }
 });
@@ -56,6 +57,7 @@ Template.ice_paymentInsertTemplate.events({
   'change [name="orderId_orderGroupId"]': function(e) {
     var currentInvoice, currentInvoiceId, type;
     currentInvoiceId = $(e.currentTarget).val();
+    datePicker(currentInvoiceId);    
     type = Ice.ListForReportState.get('type');
     if (type === 'general') {
       currentInvoice = Ice.Collection.Order.findOne(currentInvoiceId);
@@ -70,7 +72,6 @@ Template.ice_paymentInsertTemplate.events({
       $('[name="paidAmount"]').val(currentInvoice.outstandingAmount);
       return $('[name="outstandingAmount"]').val(0);
     }
-    datePicker(currentInvoiceId);    
   },
   'keyup [name="paidAmount"]': function() {
     var dueAmount, paidAmount;
@@ -105,6 +106,7 @@ Template.ice_paymentShowTemplate.helpers({
   }
 });
 
+//functions
 var findCustomer = function(id) {
   var name;
   name = Ice.Collection.Customer.findOne(id).name;
@@ -119,21 +121,10 @@ var removeDoc = function(id) {
   			}, null);
 } 
 
-var checkType = function(customerId){
+var checkType = function(customer){
+  customerId = customer.customerId
 	return Ice.Collection.Customer.findOne(customerId).customerType;
 }
-
-var updateInvoice = function(doc){
-	if(checkType(doc.customerId) == 'general'){
-  				var oldOrder = Ice.Collection.Order.findOne(doc.orderId_orderGroupId);
-  				Ice.Collection.Order.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false}});
-  			}else{
-  				var oldOrder = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId);
-  				Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false}});
-  			}
-  			removeDoc(doc._id);
-}
-
 
 var checkAvailablity = function(doc){
   	var currentPayment = doc.paymentDate;
@@ -145,8 +136,28 @@ var checkAvailablity = function(doc){
   	return flag;
 } 
 
+var updateInvoice = function(doc){
+  if(checkType(doc) == 'general'){
+          var oldOrder = Ice.Collection.Order.findOne(doc.orderId_orderGroupId);
+          Ice.Collection.Order.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false}});
+        }else{
+          var oldOrder = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId);
+          Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false}});
+        }
+        removeDoc(doc._id);
+}
+
+
+
 var datePicker = function(currentInvoiceId){
-  payments = Ice.Collection.Payment.find(currentInvoiceId);
+  maxDate = '';
+  payments = Ice.Collection.Payment.find({orderId_orderGroupId: currentInvoiceId});
+  if(payments != undefined){
+    payments.forEach(function (payment) {
+      maxDate = maxDate > payment.paymentDate ? maxDate : payment.paymentDate
+    });
+    maxDate;
+  }
   var paymentDate = $('[name="paymentDate"]')
-  DateTimePicker.dateTime(paymentDate);
+  return maxDate == '' ? DateTimePicker.dateTime(paymentDate) : paymentDate.data('DateTimePicker').minDate(maxDate);
 }

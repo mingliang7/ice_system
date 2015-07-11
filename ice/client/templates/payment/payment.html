@@ -42,29 +42,20 @@
 <template name="ice_paymentUpdateTemplate">
 	{{#autoForm collection=Ice.Collection.Payment id="ice_paymentUpdateTemplate" type="update" doc=this}}
 		<div class="row">
-			<div class="col-sm-4"> 
-				{{> afQuickField name="customerId" }}
-			</div>
-			<div class="col-sm-5"> 
-				{{> afQuickField name="orderId_orderGroupId" disabled="true"}}
-			</div>
-			<div class="col-sm-3"> 
-				{{> afQuickField name="staffId"}}
-			</div>
+		<div class="col-md-7">
+					{{> afQuickField name="customerId" disabled="true"}}
+					{{> afQuickField name="orderId_orderGroupId" disabled="true"}}
+					{{> afQuickField name="paymentDate"}}
 		</div>
-		<div class="row">
-			<div class="col-sm-4"> 
-				{{> afQuickField name="dueAmount" readonly='true'}}
-			</div>
-			<div class="col-sm-4"> 
-				{{> afQuickField name="paidAmount"}}
-			</div>
-			<div class="col-sm-4"> 
-				{{> afQuickField name="outstandingAmount" readonly='true'}}
-			</div>
+		<div class="col-md-5">
+					{{> afQuickField name="staffId"}}
+					{{> afQuickField name="dueAmount" readonly='true'}}
+					{{> afQuickField name="paidAmount"}}
+					{{> afQuickField name="outstandingAmount" readonly='true'}}
 		</div>
 		<button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
 		<button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+	</div>
 	{{/autoForm}}
 </template>
 <template name="ice_paymentShowTemplate">
