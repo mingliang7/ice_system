@@ -4,7 +4,7 @@ class @OrderGroup
 	whenNoActiveDate: (id, startDate, endDate) =>
 		doc = @doc
 		groupBy = {}
-		groupBy["day#{startDate}"]=
+		groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]=
 			items:
 				findItem(doc)
 			total: doc.total
@@ -24,29 +24,29 @@ class @OrderGroup
 			updatedAt: new Date()   
 		})
 		doc.iceOrderGroupId = orderGroupId		
-	whenActiveDate: (orderGroup, startDate, endDate) =>
+	whenActiveDate: (orderGroup) =>
 		doc = @doc
 		dueAmount = 0
 		total = 0
 		totalInDollar = 0
 		groupBy = orderGroup.groupBy
 
-		if _.has(groupBy, "day#{startDate}")
+		if _.has(groupBy, "day#{moment(doc.orderDate).format('YYYY-MM-DD')}")
 			doc.iceOrderDetail.forEach (item) ->
 				{name: name, price: price} = findItemName(item.iceItemId)
-				itemObj = groupBy["day#{startDate}"]['items']["#{item.iceItemId}"]
+				itemObj = groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['items']["#{item.iceItemId}"]
 				itemObj['price'] = item.price  
 				itemObj['qty'] += item.qty  
 				itemObj['amount'] += item.amount
 		else
-			groupBy["day#{startDate}"] = 
+			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"] = 
 				items:
 					findItem(doc)
 				total: 0
 				totalInDollar: 0		
-		if _.has(groupBy, "day#{startDate}")
-			groupBy["day#{startDate}"]['total'] = groupBy["day#{startDate}"]['total'] + doc.total		
-			groupBy["day#{startDate}"]['totalInDollar'] = groupBy["day#{startDate}"]['totalInDollar'] + doc.totalInDollar
+		if _.has(groupBy, "day#{moment(doc.orderDate).format('YYYY-MM-DD')}")
+			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['total'] = groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['total'] + doc.total		
+			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['totalInDollar'] = groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['totalInDollar'] + doc.totalInDollar
 
 		for i of groupBy
 			dueAmount += groupBy[i]['total']
