@@ -24,5 +24,5 @@ Router.route('ice/invoiceReportGen', function () {
         data: function () {
             return q;
         }
-    });
+    },{name: 'ice.invoiceReportGen'});
 });
