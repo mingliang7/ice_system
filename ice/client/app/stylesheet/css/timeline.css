@@ -70,6 +70,7 @@ img
     .timeline-centered .timeline-entry {
         position: relative;
         width: 50%;
+        height: 150px;
         float: right;
         margin-bottom: 70px;
         clear: both;

@@ -19,7 +19,7 @@ Template.general_invoices.events
 Template.general_invoices.helpers
 	invoices: ->
 		today = moment(new Date()).format('YYYY-MM-DD')
-		invoices = Ice.Collection.Order.find({closing: false}).fetch()
+		invoices = Ice.Collection.Order.find({closing: false}, {sort: {orderDate: -1 }}).fetch()
 		console.log(invoices)
 		$.each invoices, (index, invoice) ->
 			invoice.index = index
