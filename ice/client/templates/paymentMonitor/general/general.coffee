@@ -10,9 +10,7 @@ Template.general_invoices.events
 	# 	Meteor.call('updatePaid', id, value)
 	"click .i-print": (e) ->
 		id = $(e.currentTarget).parents('.order-info').find('.order-id').text()
-		doc = Ice.Collection.OrderGroup.findOne(id)
-		url = "invoiceGroupReportGen?id=#{id}&customerId=#{doc.iceCustomerId}&date=#{moment(doc.startDate).format('YYYY-MM-DD hh:mm:ss a')}&endDate=#{moment(doc.endDate).format('YYYY-MM-DD hh:mm:ss a')}"
-		window.open(url, '_blank')
+		GenReport(id)
 	"click .p-print": (e) ->
 		id = $(e.currentTarget).parents('.order-info').find('.order-id').text()
 		doc = Ice.Collection.OrderGroup.findOne(id)
