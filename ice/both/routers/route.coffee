@@ -56,3 +56,17 @@ Router.route 'ice/payments',
 		sub: ''
 	icon: 'payment'
 	title: 'payment'
+
+Router.route 'ice/payment_url',
+	->
+		q = @params.query
+		@render 'ice_payment_url',
+			data: () ->
+				q
+
+	name: 'ice.payment_url'
+	header:
+		title: 'payment'
+		sub: ''
+	icon: 'payment'
+	title: 'payment'

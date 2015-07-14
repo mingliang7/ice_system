@@ -13,8 +13,8 @@ Template.general_invoices.events
 		GenReport(id)
 	"click .p-print": (e) ->
 		id = $(e.currentTarget).parents('.order-info').find('.order-id').text()
-		doc = Ice.Collection.OrderGroup.findOne(id)
-		url = "payments?id=#{id}&customerId=#{doc.iceCustomerId}&date=#{moment(doc.createdAt).format('YYYY-MM-DD hh:mm:ss a')}"
+		doc = Ice.Collection.Order.findOne(id)
+		url = "payment_url?id=#{id}&customerId=#{doc.iceCustomerId}&paidAmount=#{doc.paidAmount}&outstandingAmount=#{doc.outstandingAmount}&dueAmount=#{doc.outstandingAmount}"
 		window.open(url)
 Template.general_invoices.helpers
 	invoices: ->
