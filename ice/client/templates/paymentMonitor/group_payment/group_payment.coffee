@@ -41,6 +41,9 @@ Template.list_invoices.helpers
 	format: (createdAt) ->
 		moment(createdAt).format('hh:mm a')
 
+	formatKH: (value) ->
+		numeral(value).format('0,0')
+
 #	progress: (id) ->
 #		#unCooked = Restuarant.Collection.Invoice.find({_id: id, 'product.cooked': false}).count()
 #		cooked = Restuarant.Collection.Invoice.findOne({_id: id})
