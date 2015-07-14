@@ -54,7 +54,12 @@
 		list
 	staff: (selecOne) ->
 		list = []
+		if !_.isEqual(selecOne, false)
+			list.push {label: "(Select One)", value: "" }
 
+		list.push {label: 'li', value: '001'}
+		list.push {label: 'ki', value: '002'}
+		list
 	item: (selectOne) ->
 		list = []
 		items = Ice.Collection.Item.find()

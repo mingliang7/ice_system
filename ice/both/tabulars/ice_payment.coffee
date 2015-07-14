@@ -22,6 +22,10 @@ Ice.TabularTable.Payment = new (Tabular.Table)(
       title: 'ID'
     }
     {
+      data: 'paymentDate'
+      title: 'Payment Date'
+    }
+    {
       data: 'customerId'
       title: 'Customer ID'
     }
@@ -46,8 +50,12 @@ Ice.TabularTable.Payment = new (Tabular.Table)(
         format(value)
     }
     {
-    	data: 'paymentDate'
-    	title: 'Payment Date'
+      data: 'status'
+      title: 'Status', render: (val) ->
+        if val is 'Partial'
+          "<p class='label label-warning'>Partial</p>"
+        else
+          "<p class='label label-success'>Close</p>"
     }
   ])
 
