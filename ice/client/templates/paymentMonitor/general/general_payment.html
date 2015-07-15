@@ -1,0 +1,88 @@
+<template name="ice_paymentGeneralMonitor">
+{{> general_invoices}}
+</template>
+
+<template name="general_invoices">
+  <div class="container">
+  	<div class="row">
+  		<div class="timeline-centered">
+    {{#each invoices}}
+      {{#if isEven index}}
+      	<article class="timeline-entry left-aligned">
+
+          <div class="timeline-entry-inner">
+            <time class="timeline-time"><p class='label label-warning circle'>{{{type iceCustomerId}}}</p> <span><!-- {{livestamp createdAt}} --></span></time>
+
+            <div class="timeline-icon bg-secondary">
+              <i class="entypo-feather"></i>
+            </div>
+
+            <div class="timeline-label">
+              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}</a>
+              <br>
+              <a href="#" class="i-print {{#if closing}} not-active{{/if}}"><i class="fa fa-print"></i></a>
+              <a href="#" class="p-print {{#if closing}} not-active{{/if}}"><i class="fa fa-money"></i></a>
+              <span class="bg-blue pull-right {{#if closing}} delete-mark{{/if}}"> Date:{{orderDate}}</span>&nbsp;<!-- <input type="checkbox" name="closing" class="closing" checked="{{closing}}"> --> </h2>
+        <!--       <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{progress closing}}%;">
+                  60%
+                </div>
+              </div> -->
+
+              <p class="invoiceId">
+                <input type="hidden" class="id" value="{{_id}}">
+                <ul class="nav">
+                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
+                </ul>
+              </p>
+              
+              <p style="font-size: 15px;">
+                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> | 
+                ប្រាក់ជំពាក់: <span style="font-size: 15px;" class="label label-success">{{formatKH outstandingAmount}}</span>
+              </p>
+            </div>
+          </div>
+      	</article> <!-- end article -->
+
+      {{else}}
+
+       <article class="timeline-entry ">
+
+          <div class="timeline-entry-inner">
+            <time class="timeline-time"><p class="label label-info circle">{{{type iceCustomerId}}}</p> <span><!-- {{livestamp createdAt}} --></span></time>
+
+            <div class="timeline-icon bg-info">
+              <i class="entypo-feather"></i>
+            </div>
+
+            <div class="timeline-label">
+              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}</a>
+              <br>
+              <a href="#" class="i-print {{#if closing}} not-active{{/if}}"><i class="fa fa-print"></i></a>
+              <a href="#" class="p-print {{#if closing}} not-active{{/if}}"><i class="fa fa-money"></i></a>
+              <span class="bg-info pull-right {{#if closing}} delete-mark{{/if}}"> Date:{{orderDate}}</span>&nbsp;<!-- <input type="checkbox" name="closing" class="closing" checked="{{closing}}"> --> </h2>
+              <!-- <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{progress _id}}%;">
+                  60%
+                </div>
+              </div> -->
+
+              <p class="invoiceId">
+                <input type="hidden" class="id" value="{{_id}}">
+                <ul class="nav">
+                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
+                </ul>
+              </p>
+              <p style="font-size: 15px;">
+                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> | 
+                ប្រាក់ជំពាក់: <span style="font-size: 15px;" class="label label-success">{{formatKH outstandingAmount}}</span>
+              </p>
+            </div>
+          </div>
+        </article> <!-- end article -->
+      {{/if}}
+    {{/each}}
+  </div>
+  	</div>
+  </div>
+</template>

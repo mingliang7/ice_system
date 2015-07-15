@@ -1,4 +1,4 @@
-<template name="ice_paymentMonitor">
+<template name="ice_paymentGroupMonitor">
   {{> list_invoices}}
 </template>
 <template name="list_invoices">
@@ -34,10 +34,10 @@
                   <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
                 </ul>
               </p>
-              <!-- 
-              <p>
-                Order by: {{createdBy}}
-              </p> -->
+              <p style="font-size: 15px;">
+                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> | 
+                ប្រាក់ជំពាក់: <span style="font-size: 15px;" class="label label-success">{{formatKH outstandingAmount}}</span>
+              </p>
             </div>
           </div>
       	</article> <!-- end article -->
@@ -71,10 +71,10 @@
                   <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
                 </ul>
               </p>
-              <!-- 
-              <p>
-                Order by: {{createdBy}}
-              </p> -->
+              <p style="font-size: 15px;">
+                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> | 
+                ប្រាក់ជំពាក់: <span style="font-size: 15px;" class="label label-success">{{formatKH outstandingAmount}}</span>
+              </p>
             </div>
           </div>
         </article> <!-- end article -->

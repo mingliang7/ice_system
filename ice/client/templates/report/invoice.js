@@ -64,8 +64,8 @@ Template.ice_invoiceReportGen.helpers({
         var getOrder = Ice.Collection.Order.findOne(self.orderId);
         var itemsDetail = getOrder.iceOrderDetail
         itemsDetail.forEach(function (item) {
-        	item.price = formatNum(item.price);
-        	item.amount = formatNum(item.amount);
+        	item.price = formatKH(item.price);
+        	item.amount = formatDollar(item.amount);
             item.discount = item.discount == undefined ? '' : item.discount + '%'
         	content.push(item);
         });
@@ -73,10 +73,12 @@ Template.ice_invoiceReportGen.helpers({
         if (content.length > 0) {
             data.content = content;
             data.footer = {
-            	subtotal: formatNum(getOrder.subtotal),
+            	subtotal: formatKH(getOrder.subtotal),
             	discount: getOrder.discount == undefined ? '' : getOrder.discount + '%',
-            	total: formatNum(getOrder.total),
-                totalInDollar: formatNum(getOrder.totalInDollar)
+            	total: formatKH(getOrder.total),
+                totalInDollar: formatDollar(getOrder.totalInDollar),
+                paidAmount: formatKH(getOrder.paidAmount),
+                outstandingAmount: formatKH(getOrder.outstandingAmount)
             }
             return data;
         } else {
@@ -98,6 +100,9 @@ Template.ice_invoiceReportGen.helpers({
     }
 });
 
-var formatNum = function(value){
+var formatDollar = function(value){
 	return numeral(value).format('0,0.00');
+}
+var formatKH = function(value){
+    return numeral(value).format('0,0');
 }

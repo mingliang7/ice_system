@@ -9,8 +9,12 @@ generateReport = function(id) {
   return window.open(url, '_blank');
 };
 
+generatePayment = function(id){
+  doc = Ice.Collection.Order.findOne(id)
+  url = "payment_url?id=" + id + "&customerId=" + doc.iceCustomerId + "&paidAmount=" + doc.paidAmount + "&outstandingAmount=" + doc.outstandingAmount + "&dueAmount=" + doc.outstandingAmount;
+  window.open(url)
+}
 this.GenReport = generateReport;
-
 getRank = function(date, type) {
 	obj = {}
   var day, now, range;
@@ -104,15 +108,19 @@ AutoForm.hooks({
         return doc;
       }
     },
-    after: {
+    after: { // generate report or payment 
       insert: function(err, id) {
-        var print;
         if (err) {
-          return Print.set('print', false);
+          Print.set('print', false);
+          Print.set('pay', false)
         } else {
           print = Print.get('print');
+          pay = Print.get('pay')
           if (print === true) {
             generateReport(id);
+            return Print.set('print', false);
+          }else if (pay == true){
+            generatePayment(id);
             return Print.set('print', false);
           }
         }
