@@ -20,3 +20,8 @@ Ice.Collection.Payment.permit([
 	'update'
 	'remove'
 ]).ice_ifGeneral().apply()
+Ice.Collection.UserStaffs.permit([
+	'insert'
+	'update'
+	'remove'
+]).ice_ifGeneral().apply()
