@@ -75,13 +75,12 @@
 		exchanges.forEach (exchange) ->
 			list.push {label: "#{exchange.base}: #{JSON.stringify(exchange.rates)}", value: exchange._id}
 		list
-
-  getStaffListByBranchId:(selectOne)->
+	getStaffListByBranchId:(selectOne)->
     list = []
     if !_.isEqual(selectOne, false)
       list.push {label: '(Select One)', value: ''}
     branchId = Session.get('currentBranch');
-    staffs = Ice.Collection.Staff.find({branchId:branchId})
+    staffs = Ice.Collection.Staffs.find({cpanel_branchId:branchId})
     staffs.forEach (staff) ->
       list.push {label: staff._id + ' : ' + staff.name, value: staff._id}
     list

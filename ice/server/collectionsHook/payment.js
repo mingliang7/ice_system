@@ -4,7 +4,7 @@ Ice.Collection.Payment.before.insert(function (userId, doc) {
         doc.status = "Partial";
     } else {
         doc.status = "Close";
-    }s
+    }
 });
 
 Ice.Collection.Payment.before.update(function (userId, doc, fieldNames, modifier, options) {

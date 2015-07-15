@@ -25,3 +25,8 @@ Ice.Collection.UserStaffs.permit([
 	'update'
 	'remove'
 ]).ice_ifGeneral().apply()
+Ice.Collection.Staffs.permit([
+	'insert'
+	'update'
+	'remove'
+]).ice_ifGeneral().apply()

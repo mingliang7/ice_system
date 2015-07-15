@@ -68,8 +68,8 @@ Template.ice_userStaffInsert.helpers({
     userIds: function () {
         var list = [{label: "(Select One)", value: ""}];
         var branchId = Session.get('currentBranch');
-        var userIds = Ice.Collection.UserStaffs.find().map(function (us) {
-            return us.userId;
+        var userIds = Ice.Collection.UserStaffs.find().map(function (user) {
+            return user.userId;
         });
         var user = Meteor.users.find({_id: {$not: {$in: userIds}}, username: {$ne: 'super'}});
         user.forEach(function (u) {

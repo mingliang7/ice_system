@@ -4,8 +4,5 @@ Router.route('ice/userStaff', function () {
 }, {
     name: 'ice.userStaff',
     header: {title: 'User Staff Mapping', sub: '', icon: 'list-alt'},
-    waitOn: function () {
-        return Meteor.subscribe('posUserStaff');
-    },
-    title:'pos-user-staff'
+    title:'ice-user-staff'
 });

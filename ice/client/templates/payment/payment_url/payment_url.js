@@ -1,7 +1,7 @@
 var datePicker, fillInDetail, selectCustomer, selectInvoice;
 
 Template.ice_paymentUrlInsertTemplate.onRendered(function() {
-  return selectCustomer(this.data);
+  selectCustomer(this.data);
 });
 
 Template.ice_paymentUrlInsertTemplate.events({
