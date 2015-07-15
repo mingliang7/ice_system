@@ -10,12 +10,17 @@ Template.ice_order.events
     alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderInsertTemplate))
     .maximize()
     $('[name="total"]').attr('readonly', true)
-
   "click .print": ->
     GenReport(@_id) #generateReport alias function in order_autoform_hook
 
 # insert form event
-Template.ice_orderInsertTemplate.events 
+Template.ice_orderInsertTemplate.events
+  'change [name="iceCustomerId"]': (e) ->
+    id = $(e.currentTarget).val()
+    if checkType(id) == 'general'
+      $('.pay').removeClass('hidden')
+    else
+      $('.pay').addClass('hidden')
   'change .item': (event) ->
     current = $(event.currentTarget)
     item = Ice.Collection.Item.findOne(current.val())
@@ -45,6 +50,8 @@ Template.ice_orderInsertTemplate.events
     200)
   'click .print': ->
     Print.set 'print', true
+  'click .pay': ->
+    Print.set 'pay', true
 
   'change [name="exchange"]': (event) ->
     val = findExchange($(event.currentTarget).val())
@@ -117,3 +124,7 @@ displayTotalInDollar = (total, exchange) ->
   else 
     if exchange.base is 'KHR'
       totalInDollar.val(total * exchange.rates["USD"])
+
+checkType = (id) ->
+  {customerType: type } = Ice.Collection.Customer.findOne(id)
+  type

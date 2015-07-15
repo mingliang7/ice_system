@@ -82,7 +82,11 @@ AutoForm.hooks({
       }
     },
     onSuccess: function(formType, result) {
-      return alertify.success('successfully');
+      alertify.success('Successfully');
+      Meteor.setTimeout(function(){
+        window.close();
+        }, 1000
+      );
     },
     onError: function(formType, error) {
       return alertify.error(error.message);

@@ -16,7 +16,7 @@ Template.list_invoices.events
 	"click .p-print": (e) ->
 		id = $(e.currentTarget).parents('.order-info').find('.order-id').text()
 		doc = Ice.Collection.OrderGroup.findOne(id)
-		url = "payments?id=#{id}&customerId=#{doc.iceCustomerId}&date=#{moment(doc.createdAt).format('YYYY-MM-DD hh:mm:ss a')}"
+		url = "payment_url?id=#{id}&customerId=#{doc.iceCustomerId}&paidAmount=#{doc.paidAmount}&outstandingAmount=#{doc.outstandingAmount}&dueAmount=#{doc.outstandingAmount}"
 		window.open(url)
 Template.list_invoices.helpers
 	invoices: ->
