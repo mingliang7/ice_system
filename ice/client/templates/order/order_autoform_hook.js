@@ -116,6 +116,7 @@ AutoForm.hooks({
         } else {
           print = Print.get('print');
           pay = Print.get('pay')
+          debugger
           if (print === true) {
             generateReport(id);
             return Print.set('print', false);

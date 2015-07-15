@@ -48,8 +48,10 @@ Template.ice_orderInsertTemplate.events
   'click .btnRemove' : ->
     setTimeout(-> totalAmount()
     200)
+    
   'click .print': ->
     Print.set 'print', true
+
   'click .pay': ->
     Print.set 'pay', true
 
