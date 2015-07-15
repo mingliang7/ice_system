@@ -10,4 +10,8 @@ Meteor.publish 'ice_order', ->
 Meteor.publish 'ice_orderGroup', ->
 	Ice.Collection.OrderGroup.find() if @userId 
 Meteor.publish 'ice_payments', ->
-	Ice.Collection.Payment.find() if @userId 
+	Ice.Collection.Payment.find() if @userId
+Meteor.publish 'ice_userStaff', ->
+	Ice.Collection.UserStaffs.find() if @userId
+Meteor.publish 'ice_staff', ->
+	Ice.Collection.Staffs.find() if @userId

@@ -70,3 +70,14 @@ Router.route 'ice/payment_url',
 		sub: ''
 	icon: 'payment'
 	title: 'payment'
+
+Router.route 'ice/staffs',
+	->
+		@render 'ice_staff'
+
+	name: 'ice.staff'
+	header:
+		title: 'staff'
+		sub: ''
+	icon: 'staff'
+	title: 'staff'
