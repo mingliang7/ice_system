@@ -1,10 +1,13 @@
 var datePicker, fillInDetail, selectCustomer, selectInvoice;
 
 Template.ice_paymentUrlInsertTemplate.onRendered(function() {
-  return selectCustomer(this.data);
+  selectCustomer(this.data);
 });
 
 Template.ice_paymentUrlInsertTemplate.events({
+  'click .close': function() {
+    window.close()
+  },
   'change [name="customerId"]': function(e) {
     var customer;
     customer = $(e.currentTarget).val();
@@ -72,7 +75,7 @@ datePicker = function(currentInvoiceId) {
 
 selectCustomer = function(self) {
   self = self;
-  Meteor.setTimeout(function() {
+  return Meteor.setTimeout(function() {
     $('[name="customerId"]').select2('val', self.customerId);
     Ice.ListForReportState.set('customer', self.customerId);
     selectInvoice(self.id);
@@ -82,7 +85,7 @@ selectCustomer = function(self) {
 };
 
 selectInvoice = function(invoiceId) {
-  Meteor.setTimeout(function() {
+  return Meteor.setTimeout(function() {
     $('[name="orderId_orderGroupId"]').select2('val', invoiceId);
   }, 500);
 

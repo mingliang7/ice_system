@@ -1,0 +1,38 @@
+<template name="ice_staff">
+	{{> ice_staffTabular}}
+</template>
+<!--Index-->
+<template name="ice_staffTabular">
+    <p>
+        <button type="button" class="btn btn-primary insert"><i class="fa fa-plus"></i> Add New Staff</button>
+    </p>
+
+    {{> tabular table=Ice.TabularTable.Staffs class="table table-striped table-bordered table-condensed table-hover"}}
+</template>
+
+<!--Action-->
+<template name="ice_staffAction">
+    {{#tabularAction}}
+        <li><a href="#" class="update"><i class="fa fa-pencil"></i> Update</a></li>
+        <li><a href="#" class="remove"><i class="fa fa-remove"></i> Remove</a></li>
+        <li><a href="#" class="show"><i class="fa fa-eye"></i> Show</a></li>
+    {{/tabularAction}}
+</template>
+<template name="ice_staffInsertTemplate">
+    {{#autoForm collection=Ice.Collection.Staffs id="ice_staffInsertTemplate" type="insert"}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name='name' }}
+                {{> afQuickField name='gender' }}
+                {{> afQuickField name='position' }}
+            </div>
+            <div class="col-md-6">
+                {{> afQuickField name='address'}}
+                {{> afQuickField name='telephone'}}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="reset" class="btn btn-default">Reset</button>
+    {{/autoForm}}
+</template>

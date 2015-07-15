@@ -20,7 +20,8 @@ Template.list_invoices.events
 		window.open(url)
 Template.list_invoices.helpers
 	invoices: ->
-		today = moment(new Date()).format('YYYY-MM-DD')
+		date = new Date().getDate() - 1 
+		today = moment(new Date(new Date().setDate(date))).format('YYYY-MM-DD')
 		invoices = Ice.Collection.OrderGroup.find({endDate: today}).fetch()
 		console.log(invoices)
 		$.each invoices, (index, invoice) ->
