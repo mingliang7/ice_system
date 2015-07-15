@@ -5,6 +5,9 @@ Template.ice_paymentUrlInsertTemplate.onRendered(function() {
 });
 
 Template.ice_paymentUrlInsertTemplate.events({
+  'click .close': function() {
+    window.close()
+  },
   'change [name="customerId"]': function(e) {
     var customer;
     customer = $(e.currentTarget).val();
