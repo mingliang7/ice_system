@@ -10,6 +10,23 @@ Template.ice_order.events
     alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderInsertTemplate))
     .maximize()
     $('[name="total"]').attr('readonly', true)
+  "click .update": ->
+    data = Ice.Collection.Order.findOne(this._id);
+    alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
+    .maximize()
+    $('[name="total"]').attr('readonly', true)
+  "click .remove": ->
+    id = @_id
+    alertify.confirm(
+      fa('remove', 'Remove order'),
+      "Are you sure to delete "+id+" ?",
+      ->
+        Ice.Collection.Order.remove id, (error) ->
+          if error is 'undefined' then alertify.error error.message else alertify.warning 'Successfully Remove'
+      null
+    )
+  'click .show': () ->
+    alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, @))    
   "click .print": ->
     GenReport(@_id) #generateReport alias function in order_autoform_hook
 
@@ -61,6 +78,23 @@ Template.ice_orderInsertTemplate.events
 
 
 
+#show
+Template.ice_orderShowTemplate.helpers
+  iceOrderDetail: () ->
+    orderDetail = this.iceOrderDetail
+    items = []
+    orderDetail.forEach (item) ->
+     items.push itemQuery.detail(item.iceItemId, item.qty, item.discount, format(item.amount))
+    items
+  customerType: () ->
+    customerDoc = Ice.Collection.Customer.findOne(this.iceCustomerId);
+    customerDoc.customerType
+  discount: () ->
+    discount = this.discount
+    if discount isnt undefined
+      "<p class='label label-success'>"+discount+"%</p>" 
+    else
+      "<p class='label label-success'>None</p>"
 
 # functions
 datePicker = ->
@@ -128,3 +162,17 @@ displayTotalInDollar = (total, exchange) ->
 checkType = (id) ->
   {customerType: type } = Ice.Collection.Customer.findOne(id)
   type
+
+#item query
+itemQuery = 
+  detail: (itemId, qty, discount = '0', amount) ->
+    {name, price} = Ice.Collection.Item.findOne(itemId)
+    "<small>
+    {Name:#{name}, 
+    Price: #{price}, 
+    Qty:#{qty},
+    Discount:#{discount},
+    Amount: #{amount}}</small>"
+
+format = (value) ->
+  numeral(value).format('0,0')
