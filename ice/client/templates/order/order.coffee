@@ -12,8 +12,13 @@ Template.ice_order.events
     $('[name="total"]').attr('readonly', true)
   "click .update": ->
     data = Ice.Collection.Order.findOne(this._id);
-    alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
-    .maximize()
+    id = this.iceCustomerId
+    if checkType(id) == 'general'
+      alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
+      .maximize()
+    else
+      alertify.warning('Sorry , Customer ' + id + ' is not General :( ')
+
     $('[name="total"]').attr('readonly', true)
   "click .remove": ->
     id = @_id
