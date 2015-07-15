@@ -7,7 +7,13 @@ Ice.TabularTable.UserStaffs = new Tabular.Table({
             tmpl: Meteor.isClient && Template.ice_userStaffAction
         },
         {data: "_id", title: "ID"},
-        {data: "userId", title: "User"},
+        {
+            data: "userId", 
+            title: "User",
+            render: function(val) {
+                return findUser(val);
+            }
+        },
         {
             data: "staffIds", title: "Staffs",
             render: function (val, type, doc) {
@@ -24,3 +30,9 @@ Ice.TabularTable.UserStaffs = new Tabular.Table({
     pagingType: "full_numbers",
     autoWidth: false
 });
+
+findUser = function(id) {
+    debugger
+    user = Meteor.users.findOne(id);
+    return user.username;
+}
