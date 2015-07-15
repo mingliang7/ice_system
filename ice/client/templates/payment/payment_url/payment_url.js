@@ -72,7 +72,7 @@ datePicker = function(currentInvoiceId) {
 
 selectCustomer = function(self) {
   self = self;
-  Meteor.setTimeout(function() {
+  return Meteor.setTimeout(function() {
     $('[name="customerId"]').select2('val', self.customerId);
     Ice.ListForReportState.set('customer', self.customerId);
     selectInvoice(self.id);
@@ -82,7 +82,7 @@ selectCustomer = function(self) {
 };
 
 selectInvoice = function(invoiceId) {
-  Meteor.setTimeout(function() {
+  return Meteor.setTimeout(function() {
     $('[name="orderId_orderGroupId"]').select2('val', invoiceId);
   }, 500);
 
