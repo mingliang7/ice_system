@@ -75,22 +75,47 @@
 
 <!-- update -->
 <template name="ice_orderUpdateTemplate">
-    {{#autoForm collection=Ice.Collection.Customer doc=this id="updateTemplate" type="update"}}
-        <div class="row">
-            <div class="col-md-6">
-                {{> afQuickField name='name'}}
-                {{> afQuickField name='gender'}}
-                {{> afQuickField name='customerType'}}
+    {{#autoForm collection=Ice.Collection.Order doc=this id="ice_orderUpdateTemplate" type="update"}}
+ <div class="row">
+            <div class="col-md-3">
+                {{> afQuickField name='orderDate' class='input-sm'}}
+                <!-- {{> afQuickField name='customerType'}} -->
+            </div>
+            <div class="col-md-3">
+                {{> afQuickField name='iceCustomerId' class='input-sm'}}
+            </div>
+            <div class="col-md-3">
+                {{> afQuickField name='exchange' class='input-sm'}}
+            </div>
+            <div class="col-md-3">
+                {{> afQuickField name= 'description' class='input-sm'}}
             </div>
 
-            <div class="col-md-6">
-                {{> afQuickField name='telephone'}}
-                {{> afQuickField name= 'address' rows=3}}
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                {{> afArrayField name="iceOrderDetail" id="order" template="customArrayFieldInvoice" subtemplate="customObjectFieldInvoice"}}
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6">
 
-        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} update</button>
+            </div>
+            <div class="col-md-3">
+                {{> afQuickField name="subtotal" class='input-sm' readonly="true"}}
+                {{> afQuickField name='discount' class='input-sm'}}
+            </div>
+            <div class="col-md-3">
+                {{> afQuickField name= 'total' class='input-sm'}}
+                {{> afQuickField name= 'totalInDollar' class='input-sm' readonly="true"}}
+            </div>
+        </div>
+    <div class="pull-right">
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+        <button type="submit" class="btn btn-primary pay hidden">{{fa "money"}} Save & Pay</button>
+        <button type="submit" class="btn btn-primary print">{{fa "print"}} Save & print</button>
         <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    </div>
     {{/autoForm}}
 </template>
 
@@ -99,16 +124,16 @@
     <dl class="dl-horizontal">
         <dt>Id</dt>
         <dd>{{_id}}</dd>
-        <dt>Name</dt>
-        <dd>{{name}}</dd>
-        <dt>Gender</dt>
-        <dd>{{gender}}</dd>
+        <dt>Customer</dt>
+        <dd>{{iceCustomerId}}</dd>
         <dt>Type</dt>
         <dd>{{customerType}}</dd>
-        <dt>Address</dt>
-        <dd>{{address}}</dd>
-        <dt>Telephone</dt>
-        <dd>{{telephone}}</dd>
+        <dt>Item</dt>
+        <dd>{{{iceOrderDetail}}}</dd>
+        <dt>Discount</dt>
+        <dd>{{{discount}}}</dd>
+         <dt>Total</dt>
+        <dd>{{total}}</dd>
     </dl>
 </template>
 
