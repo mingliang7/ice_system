@@ -3,7 +3,7 @@ Template.ice_orderInsertTemplate.onRendered ->
   $('[name="orderDate"]').val(today)
   datePicker()
 Template.ice_order.onRendered ->
-  createNewAlertify('order')
+  createNewAlertify(['order','staffAddOn','customerAddOn'])
 
 Template.ice_order.events
   "click .insert": ->
@@ -37,6 +37,11 @@ Template.ice_order.events
 
 # insert form event
 Template.ice_orderInsertTemplate.events
+  'click .staffAddon': () ->
+      alertify.staffAddOn(fa('plus', 'Staff'), renderTemplate(Template.ice_staffInsertTemplate))
+  'click .customerAddon': () ->
+      alertify.customerAddOn(fa('plus', 'Customer'), renderTemplate(Template.ice_insertTemplate))
+    
   'change [name="iceCustomerId"]': (e) ->
     id = $(e.currentTarget).val()
     if checkType(id) == 'general'
@@ -85,6 +90,11 @@ Template.ice_orderInsertTemplate.events
 
 # Update form event
 Template.ice_orderUpdateTemplate.events
+  'click .staffAddon': () ->
+      alertify.staffAddOn(fa('plus', 'Staff'), renderTemplate(Template.ice_staffInsertTemplate))
+  'click .customerAddon': () ->
+      alertify.customerAddOn(fa('plus', 'Customer'), renderTemplate(Template.ice_insertTemplate))
+
   'change [name="iceCustomerId"]': (e) ->
     id = $(e.currentTarget).val()
     if checkType(id) == 'general'
