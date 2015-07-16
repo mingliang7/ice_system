@@ -57,7 +57,10 @@ Ice.Schema.Order = new SimpleSchema(
   iceStaffId:
     type: String
     max: 10
-    optional: true
+    autoform:
+      type: 'select2'
+      options: ->
+        Ice.List.staff()
   iceOrderGroupId:
     type: String
     max: 10

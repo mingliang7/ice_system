@@ -19,11 +19,10 @@ Ice.Schema.Payment = new SimpleSchema(
 	staffId: 
 		type: String
 		label: 'Staff'
-		optional: true
 		autoform:
 			type: 'select2'
 			options: ->
-				''
+				Ice.List.staff()
 	dueAmount:
 		type: Number
 		decimal: true

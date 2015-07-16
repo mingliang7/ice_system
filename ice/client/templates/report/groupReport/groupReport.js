@@ -71,7 +71,9 @@ Template.ice_invoiceGroupReportGen.helpers({
                 // subtotal: formatNum(groupOrder.subtotal),
                 // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
                 total: formatKhmerCurrency(groupOrder.total),
-                totalInDollar: formatNum(groupOrder.totalInDollar)
+                totalInDollar: formatNum(groupOrder.totalInDollar),
+                paidAmount: formatKhmerCurrency(groupOrder.paidAmount),
+                outstandingAmount: formatKhmerCurrency(groupOrder.outstandingAmount)
             }
             data.totalDetail = {
                 qty: extractTotalQty(totalItem),

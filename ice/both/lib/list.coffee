@@ -53,11 +53,11 @@
 		list
 	staff: (selecOne) ->
 		list = []
+		userId = Meteor.userId()
+		staffIds = Ice.Collection.UserStaffs.findOne({userId: userId}).staffIds
 		if !_.isEqual(selecOne, false)
 			list.push {label: "(Select One)", value: "" }
-
-		list.push {label: 'li', value: '001'}
-		list.push {label: 'ki', value: '002'}
+		findStaff(list, staffIds)	
 		list
 	item: (selectOne) ->
 		list = []
@@ -86,3 +86,13 @@
     list
 
 
+# functions 
+staffName = (id) ->
+	{name} = Ice.Collection.Staffs.findOne(id)
+	name
+findStaff = (list, staffIds) ->
+	i = 0
+	while i < staffIds.length
+		list.push {label: staffName(staffIds[i]), value: staffIds[i]}
+		i++ 
+	list
