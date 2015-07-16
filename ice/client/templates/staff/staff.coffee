@@ -14,7 +14,7 @@ AutoForm.hooks
 		before:
 			insert: (doc) ->
 				prefix = "" + (Session.get('currentBranch')) + "-"
-				doc._id = idGenerator.genWithPrefix(Ice.Collection.Order, prefix, 4)
+				doc._id = idGenerator.genWithPrefix(Ice.Collection.Staffs, prefix, 4)
 				doc.cpanel_branchId = Session.get('currentBranch')
 				doc
 
