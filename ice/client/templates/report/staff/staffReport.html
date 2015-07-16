@@ -2,7 +2,7 @@
 {{> ice_staffReportInsertTemplate}}
 </template>
 <template name="ice_staffReportInsertTemplate">
-	{{#autoForm schema=Ice.Schema.StaffReport id="ice_paymentUrlInsertTemplate" type="insert"}}
+	{{#autoForm schema=Ice.Schema.StaffReport id="ice_staffReportInsertTemplate" action="staffReportGen"}}
 	<div class="row">
 		<div class="col-md-6">
 					{{> afQuickField name="staffId" }}
@@ -14,7 +14,109 @@
 					{{> afQuickField name="exchange" readonly='true'}}
 		</div>
 	</div>
-		<button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+		<button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
 		<button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
 	{{/autoForm}}
+</template>
+
+
+<!--Generate-->
+<template name="ice_staffReportGen">
+    {{#with data}}
+        <!--Title-->
+        <div class="report-title">
+            <div class="company-name-kh">ទឹកកកអនាម័យ បេង ភី</div>
+            <div class="report-name">Order Staff Report</div>
+        </div>
+
+        <!--Header-->
+        <div style="width: 100%">
+            {{#with header}}
+                <div style="width: 50%; float: left">
+                    <ul class="list-unstyled">
+                        <li><strong>Staff:</strong> {{staff}}</li>
+                        <li><strong>customerType:</strong> {{type}}</li>
+                    </ul>
+                </div>
+                <div style="width: 50%; float: right">
+                    <ul class="list-unstyled">
+                        <li><strong>Date:</strong> {{date}}</li>
+                        <li><strong>Customer:</strong> {{customer}}</li>
+                    </ul>
+                </div>
+            {{/with}}
+        </div>
+
+        <!--Content-->
+        <table class="report-content">
+            <thead class="report-content-header">
+            <tr>
+                <th rowspan="2">No</th>
+                <th rowspan="2">Invoice #</th>
+                <th rowspan="2">Date</th>
+                <th rowspan="2">Customer</th>
+                <th colspan="3">ទឹកកកកិន</th>
+                <th colspan="3">ទឹកកកកិន</th>
+                <th colspan="3">ទឹកកកកិន</th>
+                <th colspan="3">ទឹកកកកិន</th>
+                <th colspan="3">ទឹកកកកិន</th>
+                <th rowspan="2">សរុបមិនជំពាក់</th>
+                <th rowspan="2">សរុបជំពាក់</th>
+            </tr>
+            <tr> 
+                <th>Q</th>
+                <th>P</th>
+                <th>A</th>  
+                <th>Q</th>
+                <th>P</th>
+                <th>A</th> 
+                <th>Q</th>
+                <th>P</th>
+                <th>A</th>   
+                <th>Q</th>
+                <th>P</th>
+                <th>A</th>
+                <th>Q</th>
+                <th>P</th>
+                <th>A</th>        
+            </tr>
+            </thead>
+
+            <tbody class="report-content-body">
+            {{#each content}}
+                <tr>
+                    <td>{{index}}</td>
+                    <td>{{name}}</td>
+                    <td>{{gender}}</td>
+                    <td>{{dob}}</td>                  
+                    <td>q</td>
+                    <td>p</td>
+                    <td>a</td>                
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    <td>{{telephone}}</td>
+                    
+
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+
+        <!--Footer-->
+
+    {{/with}}
+
+    <!--Sign-->
+    {{> signFooter}}
 </template>

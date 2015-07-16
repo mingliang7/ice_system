@@ -82,25 +82,25 @@ Ice.ListForReport = {
       var list = [];
       var customerType = Ice.ListForReportState.get('customerType');
       var dateRange = Ice.ListForReportState.get('dateRange');
-      debugger
       customerType = customerType == undefined ? '' : customerType;
       customers = findCustomerByType(customerType); 
       if(!_.isEqual(all, false)){
          list.push({label: "All", value: ""});
       }
-      if(dateRange != undefined) {
+      if(dateRange != undefined ) {
          var startDate = dateRange[0];
          var endDate = dateRange[1];
-         for(var i = 0 ; i < customers.length; i++){
-            orders = Ice.Collection.Order.find({iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}})
-            orders.forEach(function (order) {
-               list.push({label: '' + order._id + ' | ' + order.orderDate, value: order._id}); 
-            });
+         if(customerType != ''){
+            for(var i = 0 ; i < customers.length; i++){
+               orders = Ice.Collection.Order.find({iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}})
+               orders.forEach(function (order) {
+                  list.push({label: '' + order._id + ' | ' + order.orderDate, value: order._id}); 
+               });
+            }
          }
       }
       return list;
-   } 
-
+   }
 }
 
 var findCustomerByType = function(type){

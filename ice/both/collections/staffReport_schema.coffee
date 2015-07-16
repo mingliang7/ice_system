@@ -9,6 +9,7 @@ Ice.Schema.StaffReport = new SimpleSchema(
 	customerType: 
 		type: String
 		label: 'Customer Type'
+		optional: true
 		autoform:
 			type: 'select2'
 			options: ->
@@ -16,6 +17,7 @@ Ice.Schema.StaffReport = new SimpleSchema(
 	customerId:
 		type:String
 		label: 'Customer'
+		optional: true
 		autoform:
 			type: 'select2'
 			options: ->
@@ -30,5 +32,5 @@ Ice.Schema.StaffReport = new SimpleSchema(
 		autoform:
 			type: 'select2'
 			options: ->
-				''
+				Ice.List.exchange()
 )
