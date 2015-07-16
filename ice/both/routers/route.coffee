@@ -81,3 +81,14 @@ Router.route 'ice/staffs',
 		sub: ''
 	icon: 'staff'
 	title: 'staff'
+
+Router.route 'ice/staff_reports',
+	->
+		@render 'ice_staffReport'
+
+	name: 'ice.staffReport'
+	header:
+		title: 'staffReport'
+		sub: ''
+	icon: 'staff'
+	title: 'staffReport'
