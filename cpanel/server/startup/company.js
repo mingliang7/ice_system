@@ -6,8 +6,8 @@ Meteor.startup(function () {
                 khShortName: 'មបរ',
                 enName: 'Rabbit Training Center',
                 enShortName: 'RTC',
-                khAddress: 'បាត់ដំបង',
-                enAddress: 'Battambang',
+                khAddress: 'ភូមិរំចេក ៤ សង្កាត់រតនៈ ក្រុងបាត់ដំបង ខេត្តបាត់ដំបង',
+                enAddress: 'Romchek 4 Village, Sangkat Rottanak, Krong Battamang, Battambang Province',
                 telephone: '053 50 66 777',
                 email: '',
                 website: ''

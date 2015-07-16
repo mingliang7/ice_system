@@ -4,6 +4,7 @@ Router.route('cpanel/home', function () {
 
 }, {
     name: 'cpanel.home',
+    title: "Home",
     header: {title: 'home', sub: '', icon: 'home'},
-    title: "Home"
+    breadcrumb: {title: 'Home', parent: 'cpanel.welcome'}
 });

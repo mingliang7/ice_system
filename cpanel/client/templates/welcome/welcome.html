@@ -1,4 +1,10 @@
 <template name="cpanel_welcome">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p class="bg-info" id="clock" style="padding: 10px"></p>
+        </div>
+    </div>
+
     {{#if currentUser}}
         {{#if role}}
             {{> cpanel_welcomeConfig}}

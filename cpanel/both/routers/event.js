@@ -2,8 +2,9 @@ Router.route('cpanel/eventReport', function () {
     this.render('cpanel_eventReport');
 }, {
     name: 'capnel.eventReport',
+    title: "Event Report",
     header: {title: 'Event Report', sub: '', icon: 'file-text-o'},
-    title: "Event Report"
+    breadcrumb: {title: 'Event Report', parent: 'cpanel.welcome'}
 });
 
 Router.route('cpanel/eventReportGen', function () {

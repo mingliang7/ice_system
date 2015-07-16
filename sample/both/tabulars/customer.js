@@ -1,6 +1,6 @@
 // Customer
 Sample.TabularTable.Customer = new Tabular.Table({
-    name: "sampleCustomerList",
+    name: "sample_customerList",
     collection: Sample.Collection.Customer,
     pagingType: "full_numbers",
     autoWidth: false,
@@ -14,7 +14,14 @@ Sample.TabularTable.Customer = new Tabular.Table({
         {data: "name", title: "Name"},
         {data: "gender", title: "Gender"},
         {data: "dob", title: "Date of Birth"},
-        {data: "_address.name", title: "Address"},
+        {data: "addressId", title: "Address ID"},
+        {
+            data: "_address",
+            title: "Address Info",
+            render: function (val, type, doc) {
+                return JSON.stringify(val, null, ' ');
+            }
+        },
         {data: "telephone", title: "Telephone"},
         {data: "email", title: "Email"},
         {
@@ -25,7 +32,7 @@ Sample.TabularTable.Customer = new Tabular.Table({
                     return null;
                 } else {
                     var img = Files.findOne(val);
-                    return '<img src="' + img.url() + '" class="img-thumbnail" width="50px" height="50px">';
+                    return lightbox(img.url(), doc._id, doc.name);
                 }
             }
         }

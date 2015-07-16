@@ -17,6 +17,11 @@ Sample.Schema.Customer = new SimpleSchema({
             options: function () {
                 return Sample.List.gender();
             }
+            //type: "selectize",
+            //afFieldInput: {
+            //    multiple: true,
+            //    selectizeOptions: {}
+            //}
         }
     },
     dob: {
@@ -27,6 +32,7 @@ Sample.Schema.Customer = new SimpleSchema({
         type: String,
         label: "Address",
         autoform: {
+            type: "select2",
             type: "select2",
             options: function () {
                 return Sample.List.address();
@@ -63,3 +69,6 @@ Sample.Schema.Customer = new SimpleSchema({
 
 // Attach schema
 Sample.Collection.Customer.attachSchema(Sample.Schema.Customer);
+
+// Attach soft remove
+// Sample.Collection.Customer.attachBehaviour('softRemovable');

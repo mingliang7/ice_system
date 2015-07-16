@@ -8,6 +8,7 @@ Router.route('cpanel/setting', function () {
 
 }, {
     name: 'cpanel.setting',
+    title: "Setting",
     header: {title: 'setting', icon: 'cogs'},
-    title: "Setting"
+    breadcrumb: {title: 'Setting', parent: 'cpanel.welcome'}
 });

@@ -39,7 +39,7 @@ indexTpl.events({
             fa("remove", "Customer"),
             "Are you sure to delete [" + self._id + "]?",
             function () {
-                Sample.Collection.Customer.remove(self._id, function (error) {
+                Sample.Collection.Customer.softRemove(self._id, function (error) {
                     if (error) {
                         alertify.error(error.message);
                     } else {
@@ -69,7 +69,7 @@ indexTpl.onDestroyed(function () {
 
 // Insert
 insertTpl.onRendered(function () {
-    datePicker();
+    configOnRender();
 });
 
 insertTpl.events({
@@ -80,7 +80,7 @@ insertTpl.events({
 
 // Update
 updateTpl.onRendered(function () {
-    datePicker();
+    configOnRender();
 });
 
 updateTpl.events({
@@ -136,7 +136,7 @@ AutoForm.hooks({
 });
 
 // Config date picker
-var datePicker = function () {
+var configOnRender = function () {
     var dob = $('[name="dob"]');
     DateTimePicker.date(dob);
 };

@@ -23,3 +23,6 @@ Sample.Schema.Order = new SimpleSchema({
 
 // Attach schema
 Sample.Collection.Order.attachSchema(Sample.Schema.Order);
+
+// Attach soft remove
+// Sample.Collection.Order.attachBehaviour('softRemovable');

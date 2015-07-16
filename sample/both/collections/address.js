@@ -13,3 +13,6 @@ Sample.Schema.Address = new SimpleSchema({
 
 // Attach schema
 Sample.Collection.Address.attachSchema(Sample.Schema.Address);
+
+// Attach soft remove
+// Sample.Collection.Address.attachBehaviour('softRemovable');

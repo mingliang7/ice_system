@@ -2,7 +2,8 @@
 Meteor Cpanel for Rabbit Training Center.
 
 ## Usage
-- Copy the sample module and rename
+- Copy the sample module and rename `rabbit`
+
 ```js
 // Structure
 |_rabbit
@@ -16,11 +17,13 @@ Meteor Cpanel for Rabbit Training Center.
             |_config    // configuration file
                 module.js
                 namespace.js
-            list.js // list view for select box
+            list.js     // list view for select box
+            listForReport.js    // list view for select box of report form
         |_routers
             |_reports
                 myReport.js
             home.js
+            myRouter.js
         |_tabulars
             myTabular.js
     |_client
@@ -30,7 +33,8 @@ Meteor Cpanel for Rabbit Training Center.
             |_methods
             |_startup
             |_subscriptions
-        |_compatibility // other external js libraries
+                mySub.js
+        |_compatibility     // other external js libraries
         |_css
         |_templates
             |_layout    // menu bar
@@ -43,18 +47,19 @@ Meteor Cpanel for Rabbit Training Center.
                 myReprot.js
     |_server
         |_app   // other file or libraries load first on server
-            security.js // create security method like config in Module
-        |-collectionsHook  // create hook to tract events
+            security.js     // create security method like config in Module
+        |-collectionsHook   // create hook to tract events
         |_methods
         |_publications
-            publications.js
+            myPub.js
         |_security
-            security.js
+            mySec.js
         |_startup
             startup.js
 ```
 
 - Config new module and set roles in `rabbit/both/lib/config/module.js`
+
 ```js
 // Module
 Module = typeof Module === 'undefined' ? {} : Module;
@@ -73,6 +78,7 @@ Module.Rabbit = {
 ```
 
 - Config namespace in `rabbit/both/lib/config/namespace.js` to use collection, schema, tabular and other libraries
+
 ```js
 // Namespace
 Rabbit = {};
@@ -90,9 +96,10 @@ Rabbit.TabularTable = {};
 ```
 
 - Create security method in `rabbit/server/app/security.js`
+
 ```js
 // Admin
-Security.defineMethod("rabbitIfAdmin", {
+Security.defineMethod("rabbit_ifAdmin", {
     fetch: [],
     transform: null,
     deny: function (type, arg, userId) {
@@ -101,7 +108,7 @@ Security.defineMethod("rabbitIfAdmin", {
 });
 
 // General
-Security.defineMethod("rabbitIfGeneral", {
+Security.defineMethod("rabbit_ifGeneral", {
     fetch: [],
     transform: null,
     deny: function (type, arg, userId) {
@@ -110,7 +117,7 @@ Security.defineMethod("rabbitIfGeneral", {
 });
 
 // Reporter
-Security.defineMethod("rabbitIfReporter", {
+Security.defineMethod("rabbit_ifReporter", {
     fetch: [],
     transform: null,
     deny: function (type, arg, userId) {
@@ -121,13 +128,33 @@ Security.defineMethod("rabbitIfReporter", {
 
 - Create home page (router, template)
 - Config menu bar in `rabbit/client/templates/layout/navbar.html`
+
 ```js
 <template name="rabbit_navbar">
+    <ul class="nav navbar-nav">
+        <li class="{{isActiveRoute name='rabbit.home'}}">
+            <a href="{{pathFor 'rabbit.home'}}">Home</a>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                Data <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li class="{{isActiveRoute name='rabbit.customer'}}">
+                    <a href="{{pathFor 'rabbit.customer'}}">Customer</a>
+                </li>
+                <li class="{{isActiveRoute name='rabbit.order'}}">
+                    <a href="{{pathFor 'rabbit.order'}}">Order</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
     ...
 </template>
 ```
 
 - Create list view of select options in `rabbit/both/lib/methods/list.js`
+
 ```js
 // List
 Rabbit.List = {
@@ -170,63 +197,9 @@ Rabbit.ListForReport = {
 - Create any methods (server, client or both)
 - Create `Test CRUD`: collection, security in `rabbit/server/security/security.js`, publish/sub, tabular, router, template...
 
-## Packages
-- jquery
-- underscore
-- underscorestring:underscore.string
-- coffeescript
-- markdown
-- twbs:bootstrap
-- fortawesome:fontawesome
-- accounts-password
-- ian:accounts-ui-bootstrap-3
-- iron:router
-- zimme:iron-router-active
-- rainhaven:iron-seo
-- multiply:iron-router-progress
-- francocatena:status
-- aldeed:collection2
-- dburles:collection-helpers
-- aldeed:simple-schema
-- aldeed:autoform
-- natestrauser:select2
-- zimme:select2-bootstrap3-css
-- aldeed:autoform-select2
-- momentjs:moment
-- rajit:bootstrap3-datepicker
-- aldeed:autoform-bs-datepicker
-- tsega:bootstrap3-datetimepicker
-- aldeed:autoform-bs-datetimepicker
-- loftsteinn:bootstrap3-daterangepicker
-- aldeed:tabular
-- mizzao:bootboxjs
-- ovcharik:alertifyjs
-- u2622:persistent-session
-- ongoworks:security
-- alanning:roles
-- meteorhacks:fast-render
-- reywood:publish-composite
-- meteorhacks:subs-manager
-- dburles:spacebars-tohtml
-- raix:handlebar-helpers
-- netanelgilad:excel
-- pcel:accounting
-- bigdsk:inputmask
-- manuelschoebel:wait-on-lib
-- risul:chance
-- simple:reactive-method
-- theara:id-generator
-- theara:relation-exist
-- theara:moneyjs
-- theara:fa-helpers
-- reactive-var
-- numeral:numeral
-- theara:events
-- xamfoo:reactive-obj
-- frozeman:template-var
-
 ## Internal libraries
 - DateTimePicker in `rabbit/client/app/methods`
+
 ```js
 Template.templateName.onRendered(function(){
     var name = $('[name="date"]');
@@ -237,6 +210,7 @@ Template.templateName.onRendered(function(){
 ```
 
 - Render Template in `rabbit/client/app/methods`
+
 ```js
 // Use with bootbox
 var data = {name: value, gender: value};
@@ -247,6 +221,7 @@ bootbox.dialog({
 ```
 
 - Modal Template in `rabbit/client/app/methods`
+
 ```js
 // Template
 <template name="sample_testInsert">
@@ -298,6 +273,7 @@ bootbox.dialog({
 ```
 
 - Modal Max Height in `rabbit/client/app/methods`
+
 ```js
 // Use with bootbox
 'click .show': function (e, t) {
@@ -310,6 +286,7 @@ bootbox.dialog({
 ```
 
 - Alertify in `rabbit/client/app/methods`
+
 ```js
 // How to use custom
 createNewAlertify("customer"); // Call in template create
@@ -329,6 +306,7 @@ alert($customers.find("#name"));
 ```
 
 - Get current datetime from server
+
 ```js
 // Default call
 Meteor.call('currentDate', function (error, result) {
@@ -346,6 +324,7 @@ var currentDate = ReactiveMethod.call("currentDate"); // 'YYYY-MM-DD H:mm:ss'
 ## Namespace
 - Router: `rabbit.routerName` (name), `rabbit/routerName` (url)
 - Router for report: rabbit.routerName`Report` (name), rabbit/routerName`Report` and rabbit/routerName`ReportGen` (url)
+- Tabular: `rabbit_customerList`
 - Template: `rabbit_templateName`
 - Template for report: rabbit_templateName`Report`, rabbit_templateName`ReportGen`
 - Method: `rabbit_methodName`
@@ -361,4 +340,4 @@ var currentDate = ReactiveMethod.call("currentDate"); // 'YYYY-MM-DD H:mm:ss'
     - Cpanel.Collection.Currency()
     - Cpanel.Collection.User()
     - Cpanel.Collection.Exchange()
-    - Files() for manage file upload like images, .pdf ...
+    - Files() Collection for manage file upload like images, pdf ...

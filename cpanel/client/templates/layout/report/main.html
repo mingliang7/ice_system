@@ -4,7 +4,7 @@
 </head>
 
 <template name="reportLayout">
-    <body class="report-body">
+    <body class="report-body{{#if fontBody}}-{{fontBody}}{{/if}}">
     <div class="report-{{pageSize}}-{{orientation}}">
 
         {{> yield}}

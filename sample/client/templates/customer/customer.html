@@ -25,7 +25,7 @@
                 {{> afQuickField name='gender'}}
                 {{> afQuickField name='dob'}}
 
-                <div class="form-group{{#if afFieldIsInvalid name='addressId'}} has-error{{/if}}">
+                <div class="form-group{{#if afFieldIsInvalid name='addressId'}} has-error{{/if}}" data-required="true">
                     <label class="control-label" for="addressId">Address</label>
 
                     <div class="input-group select2-bootstrap-append">
@@ -63,7 +63,7 @@
                 {{> afQuickField name='gender'}}
                 {{> afQuickField name='dob'}}
 
-                <div class="form-group{{#if afFieldIsInvalid name='addressId'}} has-error{{/if}}">
+                <div class="form-group{{#if afFieldIsInvalid name='addressId'}} has-error{{/if}}" data-required="true">
                     <label class="control-label" for="addressId">Address</label>
 
                     <div class="input-group  select2-bootstrap-append">
@@ -110,6 +110,6 @@
         <dt>Email</dt>
         <dd>{{email}}</dd>
         <dt>Photo</dt>
-        <dd><img src="{{photoUrl}}" class="img-thumbnail" width="50px" height="50px"></dd>
+        <dd>{{lightbox url=photoUrl title=name}}</dd>
     </dl>
 </template>

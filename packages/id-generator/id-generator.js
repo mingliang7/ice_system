@@ -4,7 +4,9 @@ idGenerator = {
         var newId = s.lpad(1, length, '0');
         var sortBy = {};
         sortBy[field] = -1;
+
         var obj = collection.findOne({}, {sort: sortBy});
+
         if (obj != null) {
             var tmpId = parseInt(obj[field]) + 1;
             // Check length
@@ -14,6 +16,7 @@ idGenerator = {
                 newId = s.lpad(tmpId, length, '0');
             }
         }
+
         return newId;
     },
     genWithPrefix: function (collection, prefix, length, field) {
@@ -23,7 +26,9 @@ idGenerator = {
         reg[field] = new RegExp("^" + prefix, "m");
         var sortBy = {};
         sortBy[field] = -1;
+
         var obj = collection.findOne(reg, {sort: sortBy});
+
         if (obj != null) {
             var currentId = s(obj[field]).slice(-length).value();
             var tmpId = parseInt(currentId) + 1;
@@ -36,6 +41,7 @@ idGenerator = {
                 newId = prefix + tmpId;
             }
         }
+
         return newId;
     }
 };

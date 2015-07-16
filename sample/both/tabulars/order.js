@@ -1,6 +1,6 @@
 // Order
 Sample.TabularTable.Order = new Tabular.Table({
-    name: "sampleOrderList",
+    name: "sample_orderList",
     collection: Sample.Collection.Order,
     pagingType: "full_numbers",
     autoWidth: false,
@@ -17,7 +17,7 @@ Sample.TabularTable.Order = new Tabular.Table({
             data: "_customer",
             title: "Customer Info",
             render: function (val, type, doc) {
-                return JSON.stringify(val, null, '\t');
+                return JSON.stringify(val, null, ' ');
             }
         }
     ]

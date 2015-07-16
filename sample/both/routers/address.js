@@ -4,6 +4,7 @@ Router.route('sample/address', function () {
 
 }, {
     name: 'sample.address',
+    title: "Address",
     header: {title: 'Address', sub: '', icon: 'list'},
-    title: "Address"
+    breadcrumb: {title: 'Address', parent: 'sample.home'}
 });

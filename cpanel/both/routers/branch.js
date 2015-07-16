@@ -4,6 +4,7 @@ Router.route('cpanel/branch', function () {
 
 }, {
     name: 'cpanel.branch',
+    title: "Branch",
     header: {title: 'branch', sub: '', icon: 'sitemap'},
-    title: "Branch"
+    breadcrumb: {title: 'Branch', parent: 'cpanel.welcome'}
 });

@@ -15,13 +15,15 @@ var id = idGenerator.genWithPrefix(CustomerCollection, '001-', 3); // 001-0001, 
 var id = idGenerator.genWithPrefix(CustomerCollection, '001-', 3, 'otherField'); // 001-0001, 001-0002 (BranchOffice-ID)
 ```
 ### Changelog
-- v 0.0.5 (2014-05-17)
+- v 0.0.6 (2015-07-13)
+    - fix
+- v 0.0.5 (2015-05-17)
     - fix max length (return null)
-- v 0.0.4 (2014-04-24)
+- v 0.0.4 (2015-04-24)
     - fix with prefix method
-- v 0.0.3 (2014-04-23)
+- v 0.0.3 (2015-04-23)
     - fix field param
-- v 0.0.2 (2014-04-23)
+- v 0.0.2 (2015-04-23)
     - fix generate with prefix
-- v 0.0.1 (2014-04-21)
+- v 0.0.1 (2015-04-21)
     - init

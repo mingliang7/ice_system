@@ -23,17 +23,3 @@ Template.headerLayout.helpers({
         return {show: true, title: title};
     }
 });
-
-/**
- * Server clock
- */
-Template.headerLayout.onRendered(function () {
-    Meteor.setInterval(serverClock, 1000);
-});
-
-/* Clock function */
-function serverClock() {
-    Meteor.call('currentDate', function (error, result) {
-        $('#clock').html('<i class="fa fa-calendar"></i> ' + moment(result, 'YYYY-MM-DD H:mm:ss').format('ddd D, MMM YYYY H:mm:ss'));
-    });
-}

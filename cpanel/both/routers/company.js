@@ -8,6 +8,7 @@ Router.route('cpanel/company', function () {
 
 }, {
     name: 'cpanel.company',
+    title: "Company",
     header: {title: 'company', icon: 'briefcase'},
-    title: "Company"
+    breadcrumb: {title: 'Company', parent: 'cpanel.welcome'}
 });

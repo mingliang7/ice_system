@@ -1,11 +1,8 @@
-Router.route('sample/home', function() {
+Router.route('sample/home', function () {
     this.render('sample_home');
 }, {
     name: 'sample.home',
-    header: {
-        title: 'home',
-        sub: '',
-        icon: 'home'
-    },
-    title: "Home"
+    title: "Home",
+    header: {title: 'Home', sub: '', icon: 'home'},
+    breadcrumb: {title: 'Home', parent: 'cpanel.welcome'}
 });

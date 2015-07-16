@@ -3,6 +3,8 @@ var indexTpl = Template.sample_address,
     updateTpl = Template.sample_addressUpdate,
     showTpl = Template.sample_addressShow;
 
+var softRemove = new ReactiveVar(false);
+
 // Index
 indexTpl.onCreated(function () {
     // Create new  alertify
@@ -14,7 +16,9 @@ indexTpl.onRendered(function () {
 });
 
 indexTpl.helpers({
-    //
+    selector: function () {
+        return {};
+    }
 });
 
 indexTpl.events({
@@ -32,7 +36,7 @@ indexTpl.events({
             fa("remove", "Address"),
             "Are you sure to delete [" + self._id + "]?",
             function () {
-                Sample.Collection.Address.remove(self._id, function (error) {
+                Sample.Collection.Address.softRemove(self._id, function (error) {
                     if (error) {
                         alertify.error(error.message);
                     } else {
@@ -47,6 +51,9 @@ indexTpl.events({
     'click .show': function (e, t) {
         var data = Sample.Collection.Address.findOne({_id: this._id});
         alertify.alert(fa("eye", "Address"), renderTemplate(showTpl, data));
+    },
+    'click .softRemove': function (e, t) {
+        softRemove.set(true);
     }
 });
 

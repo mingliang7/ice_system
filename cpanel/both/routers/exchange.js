@@ -4,6 +4,7 @@ Router.route('cpanel/exchange', function () {
 
 }, {
     name: 'cpanel.exchange',
+    title: "Exchange",
     header: {title: 'exchange', icon: 'exchange'},
-    title: "Exchange"
+    breadcrumb: {title: 'Exchange', parent: 'cpanel.welcome'}
 });

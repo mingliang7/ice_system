@@ -6,6 +6,48 @@ Meteor Cpanel for Rabbit Training Center.
 - create backup/restore package
 - create sample report on excel file
 
+## v0.5.6, 2014-07-14
+- create local breadcrumb package
+- update sample module
+
+## v0.5.6, 2014-07-13
+- add aggregate, fullcalendar, animated css, lightbox package
+- fix sample module
+
+## v0.5.5, 2014-07-09
+- update packages
+
+## v0.5.4, 2014-07-09
+- custom css for fieldset legend
+
+## v0.5.3, 2014-07-01
+- update package
+
+## v0.5.2, 2014-07-01
+- fix `theara:collection-cache`
+
+## v0.5.1, 2014-07-01
+- create new `theara:collection-cache`
+- add `zimme:collection-softremovable`
+
+## v0.5.0, 2014-06-29
+- custom css of `selectize` for active selected 
+
+## v0.4.9, 2014-06-26
+- custom css of `selectize` for input-sm (add more) 
+
+## v0.4.8, 2014-06-25
+- add `selectize` package
+
+## v0.4.7, 2014-06-25
+- add more css font-size for reports
+
+## v0.4.6, 2014-06-25
+- add `icon` parm in tabularAction
+
+## v0.4.5, 2014-06-23
+- update packages
+
 ## v0.4.4, 2014-06-20
 - add `ecwyne:mathjs` package
 - add `theara:round-khr` package

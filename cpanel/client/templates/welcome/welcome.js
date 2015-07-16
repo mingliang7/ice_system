@@ -1,12 +1,18 @@
 /**
  * Welcome
  */
+// Server clock
+Template.cpanel_welcome.onRendered(function () {
+    Meteor.setInterval(serverClock, 1000);
+});
+
 Template.cpanel_welcome.helpers({
     role: function () {
         var role = Roles.getGroupsForUser(Meteor.userId());
         if (role.length > 0) {
             return true;
         }
+
         return false;
     }
 });
@@ -38,3 +44,17 @@ AutoForm.hooks({
         }
     }
 });
+
+/* Clock function */
+function serverClock() {
+    Meteor.call('currentDate', function (error, result) {
+        var dateTime = moment(result, 'YYYY-MM-DD H:mm:ss');
+        var cssClass = 'bg-info';
+        if (dateTime.day == 0 || dateTime.day() == 6) {
+            cssClass = 'bg-warning';
+        }
+
+        $('#clock').html(dateTime.format('dddd D, MMMM YYYY H:mm:ss'));
+        $('#clock').attr('class', cssClass);
+    });
+}

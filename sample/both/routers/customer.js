@@ -4,6 +4,7 @@ Router.route('sample/customer', function () {
 
 }, {
     name: 'sample.customer',
-    header: {title: 'customer', sub: '', icon: 'list'},
-    title: "Customer"
+    title: "Customer",
+    header: {title: 'Customer', sub: '', icon: 'list'},
+    breadcrumb: {title: 'Customer', parent: 'sample.home'}
 });
