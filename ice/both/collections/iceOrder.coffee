@@ -117,6 +117,10 @@ Ice.Schema.Order = new SimpleSchema(
   closing:
     type: Boolean
     optional: true
+
+  branchId:
+    type: String
+    optional: true
     
 )
 

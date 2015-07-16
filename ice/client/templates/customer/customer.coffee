@@ -32,7 +32,7 @@ AutoForm.hooks
 			insert: (doc) ->
 				prefix = "#{Session.get('currentBranch')}-"
 				doc._id = idGenerator.genWithPrefix(Ice.Collection.Customer, prefix, 6);
-				doc.cpanel_branchId = Session.get('currentBranch')
+				doc.branchId = Session.get('currentBranch')
 				doc
 
 		onSuccess: (formType, result) ->

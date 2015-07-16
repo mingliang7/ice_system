@@ -83,7 +83,53 @@ Template.ice_orderInsertTemplate.events
     if val.base is 'KHR'
       $('[name="totalInDollar"]').val(total * val.rates["USD"])
 
+# Update form event
+Template.ice_orderUpdateTemplate.events
+  'change [name="iceCustomerId"]': (e) ->
+    id = $(e.currentTarget).val()
+    if checkType(id) == 'general'
+      $('.pay').removeClass('hidden')
+    else
+      $('.pay').addClass('hidden')
+  'change .item': (event) ->
+    current = $(event.currentTarget)
+    item = Ice.Collection.Item.findOne(current.val())
+    item.qty = 1 
+    item.amount = item.price * item.qty 
+    current.parents('.array-item').find('.price').val(item.price)
+    current.parents('.array-item').find('.qty').val(item.qty)
+    current.parents('.array-item').find('.amount').val(item.amount)
+    current.parents('.array-item').find('.discount').val('')
+    totalAmount()
+  'keyup .qty , change .qty': (event) ->
+    current = $(event.currentTarget)
+    itemQty(current)
 
+  'keyup .price , change .price': (event) ->
+    current = $(event.currentTarget)
+    itemPrice(current)
+    
+
+  'keyup .discount , change .discount': (event) ->
+    current = $(event.currentTarget)
+    itemDiscount(current)
+  'keyup [name="discount"]': (event) ->
+    totalAmount()
+  'click .btnRemove' : ->
+    setTimeout(-> totalAmount()
+    200)
+    
+  'click .print': ->
+    Print.set 'print', true
+
+  'click .pay': ->
+    Print.set 'pay', true
+
+  'change [name="exchange"]': (event) ->
+    val = findExchange($(event.currentTarget).val())
+    total = parseInt $('[name="total"]').val()
+    if val.base is 'KHR'
+      $('[name="totalInDollar"]').val(total * val.rates["USD"])
 
 #show
 Template.ice_orderShowTemplate.helpers
@@ -102,6 +148,30 @@ Template.ice_orderShowTemplate.helpers
       "<p class='label label-success'>"+discount+"%</p>" 
     else
       "<p class='label label-success'>None</p>"
+
+# autoForm hook
+AutoForm.hooks
+  ice_orderInsertTemplate:
+    before:
+      insert: (doc) ->
+        prefix = Session.get('currentBranch')
+        doc._id = idGenerator.genWithPrefix(Ice.Collection.Order, prefix, 6);
+        doc.branchId = Session.get('currentBranch')
+        doc
+
+    onSuccess: (formType, result) ->
+      alertify.success 'Successfully created'
+
+    onError: (formType, error) ->
+      alertify.error error.message
+
+  ice_orderUpdateTemplate:
+    onSuccess: (formType, result) ->
+      alertify.success 'Successfully Updated'
+      alertify.order().close()
+
+    onError: (formType, error) ->
+      alertify.error error.message
 
 # functions
 datePicker = ->
