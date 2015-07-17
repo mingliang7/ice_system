@@ -11,7 +11,6 @@ Template.ice_paymentUrlInsertTemplate.events({
   'change [name="customerId"]': function(e) {
     var customer;
     customer = $(e.currentTarget).val();
-  
     return Ice.ListForReportState.set('customer', customer);
   },
   'change [name="orderId_orderGroupId"]': function(e) {
