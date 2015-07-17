@@ -75,7 +75,7 @@ AutoForm.hooks({
         prefix = "" + (Session.get('currentBranch')) + "-";
         doc._id = idGenerator.genWithPrefix(Ice.Collection.Payment, prefix, 12);
         doc.cpanel_branchId = Session.get('currentBranch');
-        if (doc.customerId && doc.orderId_orderGroupId && doc.paymentDate !== undefined) {
+        if (doc.staffId != undefined && doc.customerId != undefined && doc.orderId_orderGroupId != undefined && doc.paymentDate !== undefined) {
           invoiceUpdate(doc);
         }
         return doc;
