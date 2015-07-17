@@ -8,9 +8,6 @@ Template.ice_staff.events
             })
             .maximize()
 
-Template.searchBox.helpers
-	names: () ->
-		Ice.Collection.Staffs.find()
 AutoForm.hooks
 	ice_staffInsertTemplate:
 		before:

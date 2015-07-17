@@ -2,7 +2,7 @@
 {{> ice_staffReportInsertTemplate}}
 </template>
 <template name="ice_staffReportInsertTemplate">
-	{{#autoForm schema=Ice.Schema.StaffReport id="ice_staffReportInsertTemplate" action="staffReportGen"}}
+	{{#autoForm schema=Ice.Schema.StaffReport id="ice_staffReportInsertTemplate" action="staffReportGen" target="_blank"}}
 	<div class="row">
 		<div class="col-md-6">
 					{{> afQuickField name="staffId" }}
@@ -35,7 +35,7 @@
                 <div style="width: 50%; float: left">
                     <ul class="list-unstyled">
                         <li><strong>Staff:</strong> {{staff}}</li>
-                        <li><strong>customerType:</strong> {{type}}</li>
+                        <li><strong>customerType:</strong> {{customerType}}</li>
                     </ul>
                 </div>
                 <div style="width: 50%; float: right">
@@ -56,10 +56,10 @@
                 <th rowspan="2">Date</th>
                 <th rowspan="2">Customer</th>
                 <th colspan="3">ទឹកកកកិន</th>
-                <th colspan="3">ទឹកកកកិន</th>
-                <th colspan="3">ទឹកកកកិន</th>
-                <th colspan="3">ទឹកកកកិន</th>
-                <th colspan="3">ទឹកកកកិន</th>
+                <th colspan="3">ទឹកកកម៉ត់</th>
+                <th colspan="3">អនាម័យតូច</th>
+                <th colspan="3">អនាម័យធំ</th>
+                <th colspan="3">ទឹកកកដើម</th>
                 <th rowspan="2">សរុបមិនជំពាក់</th>
                 <th rowspan="2">សរុបជំពាក់</th>
             </tr>
@@ -86,28 +86,14 @@
             {{#each content}}
                 <tr>
                     <td>{{index}}</td>
-                    <td>{{name}}</td>
-                    <td>{{gender}}</td>
-                    <td>{{dob}}</td>                  
-                    <td>q</td>
-                    <td>p</td>
-                    <td>a</td>                
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    <td>{{telephone}}</td>
-                    
-
+                    <td>{{_id}}</td>
+                    <td>{{orderDate}}</td>
+                    <td>{{name iceCustomerId}}</td>
+                    {{{itemDetail iceOrderDetail}}}
+                    {{#if iceOrderDetail}}
+                    <td>{{check paidAmount}}</td>
+                    <td>{{check outstandingAmount}}</td>
+                    {{/if}}
                 </tr>
             {{/each}}
             </tbody>
@@ -120,3 +106,4 @@
     <!--Sign-->
     {{> signFooter}}
 </template>
+

@@ -80,6 +80,7 @@ Ice.ListForReport = {
    },
    orderInvoice: function(all){
       var list = [];
+      var staffId = Ice.ListForReportState.get('staffId');
       var customerType = Ice.ListForReportState.get('customerType');
       var dateRange = Ice.ListForReportState.get('dateRange');
       customerType = customerType == undefined ? '' : customerType;
@@ -92,7 +93,8 @@ Ice.ListForReport = {
          var endDate = dateRange[1];
          if(customerType != ''){
             for(var i = 0 ; i < customers.length; i++){
-               orders = Ice.Collection.Order.find({iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}})
+               orders = Ice.Collection.Order.find({iceStaffId: staffId, iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}})
+               debugger
                orders.forEach(function (order) {
                   list.push({label: '' + order._id + ' | ' + order.orderDate, value: order._id}); 
                });

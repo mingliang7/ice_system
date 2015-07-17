@@ -11,11 +11,7 @@ Template.ice_paymentUrlInsertTemplate.events({
   'change [name="customerId"]': function(e) {
     var customer;
     customer = $(e.currentTarget).val();
-    if (customer !== '') {
-      $('[name="orderId_orderGroupId"]').attr('disabled', false);
-    } else {
-      $('[name="orderId_orderGroupId"]').attr('disabled', true);
-    }
+  
     return Ice.ListForReportState.set('customer', customer);
   },
   'change [name="orderId_orderGroupId"]': function(e) {
