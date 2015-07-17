@@ -8,7 +8,6 @@ Template.ice_staff.events
             })
             .maximize()
 
-
 AutoForm.hooks
 	ice_staffInsertTemplate:
 		before:

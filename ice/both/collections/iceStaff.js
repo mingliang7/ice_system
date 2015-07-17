@@ -1,5 +1,5 @@
 Ice.Collection.Staffs = new Mongo.Collection('staffs');
-
+Ice.Collection.Staffs.initEasySearch('name');
 Ice.Schema.Staffs = new SimpleSchema({
   name: {
     type: String

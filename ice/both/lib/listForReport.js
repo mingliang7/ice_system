@@ -17,6 +17,19 @@ Ice.ListForReport = {
    	});
    	return list;
    },
+   customerType: function(all){ 
+      list = []
+      if(!_.isEqual(all, false)){
+         list.push({label: "All", value: ""})
+      }
+      list.push({label: 'General', value: 'general'})
+      list.push({label: '5 days', value: '5'})
+      list.push({label: '10 days', value: '10'})
+      list.push({label : '15 days', value: '15'})
+      list.push({label: '20 days', value: '20'})
+      list.push({label: '30 days', value: '30'})
+      return list;
+   },
    invoice: function(selectOne){
    	var list = [];
    	var customerId = Ice.ListForReportState.get('customer');
@@ -53,5 +66,55 @@ Ice.ListForReport = {
        }
       }
       return list;
+   },
+   staff: function(selectOne){
+      var list = [];
+      var staffs = Ice.Collection.Staffs.find()
+      if(!_.isEqual(selectOne, false)){
+         list.push({label: "(Select One)", value: ""});
+      }
+      staffs.forEach(function (staff) {
+         list.push({label: staff.name, value: staff._id})
+      });
+      return list;
+   },
+   orderInvoice: function(all){
+      var list = [];
+      var staffId = Ice.ListForReportState.get('staffId');
+      var customerType = Ice.ListForReportState.get('customerType');
+      var dateRange = Ice.ListForReportState.get('dateRange');
+      customerType = customerType == undefined ? '' : customerType;
+      customers = findCustomerByType(customerType); 
+      if(!_.isEqual(all, false)){
+         list.push({label: "All", value: ""});
+      }
+      if(dateRange != undefined ) {
+         var startDate = dateRange[0];
+         var endDate = dateRange[1];
+         if(customerType != ''){
+            for(var i = 0 ; i < customers.length; i++){
+               orders = Ice.Collection.Order.find({iceStaffId: staffId, iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}})
+               debugger
+               orders.forEach(function (order) {
+                  list.push({label: '' + order._id + ' | ' + order.orderDate, value: order._id}); 
+               });
+            }
+         }
+      }
+      return list;
    }
+}
+
+var findCustomerByType = function(type){
+   arr = [] 
+   customers = undefined;
+   if(type != ''){
+      customers = Ice.Collection.Customer.find({customerType: type})
+   }else{
+      customers = Ice.Collection.Customer.find()
+   }
+   customers.forEach(function (customer) {
+      arr.push(customer._id);
+   });
+   return arr;
 }
