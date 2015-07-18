@@ -1,7 +1,8 @@
-Ice.Schema.StaffReport = new SimpleSchema(
+Ice.Schema.paymentReport = new SimpleSchema(
 	staffId:
 		type: String
 		label: 'Staff'
+		optional: true
 		autoform:
 			type: 'select2'
 			options: ->
@@ -21,7 +22,7 @@ Ice.Schema.StaffReport = new SimpleSchema(
 		autoform:
 			type: 'select2'
 			options: ->
-				Ice.ListForReport.orderInvoice()
+				Ice.ListForReport.customerByType()
 	date:
 		label: 'Date'
 		type: String

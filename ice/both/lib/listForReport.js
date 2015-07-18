@@ -67,40 +67,29 @@ Ice.ListForReport = {
       }
       return list;
    },
-   staff: function(selectOne){
+   staff: function(selectAll){
       var list = [];
       var staffs = Ice.Collection.Staffs.find()
-      if(!_.isEqual(selectOne, false)){
-         list.push({label: "(Select One)", value: ""});
+      if(!_.isEqual(selectAll, false)){
+         list.push({label: "All", value: ""});
       }
       staffs.forEach(function (staff) {
          list.push({label: staff.name, value: staff._id})
       });
       return list;
    },
-   orderInvoice: function(all){
+   customerByType: function(all){
       var list = [];
-      var staffId = Ice.ListForReportState.get('staffId');
       var customerType = Ice.ListForReportState.get('customerType');
-      var dateRange = Ice.ListForReportState.get('dateRange');
       customerType = customerType == undefined ? '' : customerType;
       customers = findCustomerByType(customerType); 
       if(!_.isEqual(all, false)){
          list.push({label: "All", value: ""});
       }
-      if(dateRange != undefined ) {
-         var startDate = dateRange[0];
-         var endDate = dateRange[1];
-         if(customerType != ''){
-            for(var i = 0 ; i < customers.length; i++){
-               orders = Ice.Collection.Order.find({iceStaffId: staffId, iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}})
-               debugger
-               orders.forEach(function (order) {
-                  list.push({label: '' + order._id + ' | ' + order.orderDate, value: order._id}); 
-               });
-            }
-         }
+      if(customerType != ''){
+        list = customers;
       }
+
       return list;
    }
 }
@@ -113,8 +102,9 @@ var findCustomerByType = function(type){
    }else{
       customers = Ice.Collection.Customer.find()
    }
+   arr.push({label: 'All', value:''});
    customers.forEach(function (customer) {
-      arr.push(customer._id);
+      arr.push({label: '' + customer._id + ' | ' + customer.name, value: customer._id});
    });
    return arr;
 }

@@ -1,8 +1,8 @@
-<template name="ice_staffReport">
-{{> ice_staffReportInsertTemplate}}
+<template name="ice_orderReport">
+{{> ice_orderReportInsertTemplate}}
 </template>
-<template name="ice_staffReportInsertTemplate">
-	{{#autoForm schema=Ice.Schema.StaffReport id="ice_staffReportInsertTemplate" action="staffReportGen" target="_blank"}}
+<template name="ice_orderReportInsertTemplate">
+	{{#autoForm schema=Ice.Schema.OrderReport id="ice_staffReportInsertTemplate" action="orderReportGen" target="_blank"}}
 	<div class="row">
 		<div class="col-md-6">
 					{{> afQuickField name="staffId" }}
@@ -21,12 +21,12 @@
 
 
 <!--Generate-->
-<template name="ice_staffReportGen">
+<template name="ice_orderReportGen">
     {{#with data}}
         <!--Title-->
         <div class="report-title">
             <div class="company-name-kh">ទឹកកកអនាម័យ បេង ភី</div>
-            <div class="report-name">Order by Staff Report</div>
+            <div class="report-name">Order Report</div>
         </div>
 
         <!--Header-->

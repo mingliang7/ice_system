@@ -1,9 +1,9 @@
 
-Template.ice_staffReport.onRendered(function() {
+Template.ice_paymentReport.onRendered(function() {
   datePicker();
 });
 
-Template.ice_staffReport.events({
+Template.ice_paymentReport.events({
   'change [name="staffId"]': function(e){
     value = $(e.currentTarget).val();
     return Ice.ListForReportState.set('staffId', value);
@@ -29,7 +29,7 @@ datePicker = function() {
 };
 
 /***** Generate ******/
-Template.ice_staffReportGen.helpers({
+Template.ice_paymentReportGen.helpers({
     data: function () {
         var self = this;
         var data = {
@@ -43,8 +43,9 @@ Template.ice_staffReportGen.helpers({
         /********* Header ********/
         customerType = self.customerType == '' ? 'All' : self.customerType
         customer = self.customerId == '' ? 'All' : self.customerId 
+        staff = self.staffId == '' ? 'All' : self.staffId 
         data.header = {
-            staff: findStaff(self.staffId),
+            staff: staff == 'All' ? staff : findStaff(self.staffId),
             customerType: customerType,
             customer: customer,
             date: self.date,
@@ -57,9 +58,9 @@ Template.ice_staffReportGen.helpers({
         date = self.date.split(' To ');
         startDate = date[0];
         endDate = date[1];
-        if(customerType == 'All' && customer == 'All'){
-            selector = {iceStaffId: self.staffId, orderDate: {$gte: startDate, $lte: endDate}}
-            var getOrder = Ice.Collection.Order.find(selector);
+        if(staff != 'All' && customerType == 'All' && customer == 'All'){
+            selector = {staffId: self.staffId, paymentDate: {$gte: startDate, $lte: endDate}}
+            var getOrder = Ice.Collection.Payment.find(selector);
             var index = 1;
             getOrder.forEach(function (obj) {
                 // Do something
@@ -67,12 +68,12 @@ Template.ice_staffReportGen.helpers({
                 content.push(obj);
                 index++;
             });
-        }else if (customerType !== 'All' && customer == 'All'){
+        }else if (staff == 'All' && customerType == 'All' && customer == 'All'){
             customers = findCustomerByType(customerType);
+            var index = 1;
             for(var i = 0 ; i < customers.length; i++){
-               selector = {iceStaffId: self.staffId, iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Order.find(selector);
-                var index = 1;
+               selector = {customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
+                var getOrder = Ice.Collection.Payment.find(selector);
                 getOrder.forEach(function (obj) {
                     // Do something
                     obj.index = index;
@@ -80,19 +81,52 @@ Template.ice_staffReportGen.helpers({
                     index++;
                 });
             }
-        }else{
+        }else if (staff != 'All' && customerType !== 'All' && customer == 'All'){
             customers = findCustomerByType(customerType);
-            getOrder = undefined;
             var index = 1;
             for(var i = 0 ; i < customers.length; i++){
-               selector = {_id: self.customerId, iceStaffId: self.staffId, iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}};
-                getOrder = Ice.Collection.Order.findOne(selector);
-                if(getOrder != undefined){
-                    break;
-                    getOrder['index'] = index; 
-                }
+               selector = {staffId: self.staffId, customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
+                var getOrder = Ice.Collection.Payment.find(selector);
+                getOrder.forEach(function (obj) {
+                    // Do something
+                    obj.index = index;
+                    content.push(obj);
+                    index++;
+                });
             }
-            content.push(getOrder);
+        }else if (staff == 'All' && customerType !== 'All' && customer == 'All'){
+            var index = 1;
+            customers = findCustomerByType(customerType);
+            for(var i = 0 ; i < customers.length; i++){
+               selector = {customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
+                var getOrder = Ice.Collection.Payment.find(selector);
+                getOrder.forEach(function (obj) {
+                    // Do something
+                    obj.index = index;
+                    content.push(obj);
+                    index++;
+                });
+            }
+        }else if (staff == 'All' && customerType !== 'All' && customer != 'All'){
+               selector = {customerId: self.customerId, paymentDate: {$gte: startDate, $lte: endDate}}
+                var getOrder = Ice.Collection.Payment.find(selector);
+                var index = 1;
+                getOrder.forEach(function (obj) {
+                    // Do something
+                    obj.index = index;
+                    content.push(obj);
+                    index++;
+                });
+        }else{
+                index = 1 ;
+                selector = {staffId: self.staffId, customerId: self.customerId, paymentDate: {$gte: startDate, $lte: endDate}};
+                getOrder = Ice.Collection.Payment.find(selector);
+                getOrder.forEach(function (obj) {
+                    // Do something
+                    obj.index = index;
+                    content.push(obj);
+                    index++;
+                });
         }
         if (content.length > 0) {
             data.content = content;
@@ -114,43 +148,33 @@ Template.ice_staffReportGen.helpers({
     },
     sumTotal: function(content){
         td = ''
-        total = 0 ;
+        dueAmount = 0 ;
         outstandingAmount = 0;
         paidAmount = 0 
         content.forEach(function (item) {
-            if(item.paidAmount == undefined ){
-                paidAmount += 0
-                outstandingAmount += item.total
-                total += item.total
-            }else{
-                total += item.total
+                dueAmount += item.dueAmount
                 paidAmount += item.paidAmount
                 outstandingAmount += item.outstandingAmount
-            }
         });
-        return '<td>' + '<strong>' + formatKh(total) + '</strong' + '</td>' + '<td>' + '<strong>' + formatKh(paidAmount) + '</strong' + '</td>' + '<td>' +'<strong>' + formatKh(outstandingAmount) + '</strong>' + '</td>';
+        return '<td>' + '<strong>' + formatKh(dueAmount) + '</strong' + '</td>' + '<td>' + '<strong>' + formatKh(paidAmount) + '</strong' + '</td>' + '<td>' +'<strong>' + formatKh(outstandingAmount) + '</strong>' + '</td>';
     },
     formatCurrency: function(value){
         return formatKh(value);
     },
     totalInDollar: function(content){
         td = ''
-        total = 0 ;
+        dueAmount = 0 ;
         outstandingAmount = 0;
         paidAmount = 0
+        dollar = undefined
+        exchange = Cpanel.Collection.Exchange.find().fetch()
+        currency = exchange[0].base == 'KHR' ? JSON.parse(formatEx(exchange[0]._id)).USD : JSON.parse(formatEx(exchange[0]._id)).KHR;
         content.forEach(function (item) {
-            dollar = JSON.parse(formatEx(item.exchange)).USD;
-            if(item.paidAmount == undefined ){
-                paidAmount += 0
-                outstandingAmount += (item.total * parseFloat(dollar))
-                 total += (item.total * parseFloat(dollar))
-            }else{
-                total += (item.total * parseFloat(dollar))
-                paidAmount += (item.paidAmount * parseFloat(dollar))
-                outstandingAmount += (item.outstandingAmount * parseFloat(dollar))
-            }
+            dueAmount += (item.dueAmount * parseFloat(currency))
+            paidAmount += (item.paidAmount * parseFloat(currency))
+            outstandingAmount += (item.outstandingAmount * parseFloat(currency))
         });
-        return '<td>' + '<strong>' + formatUS(total) + '</strong>'+'</td>' + '<td>' + '<strong>' + formatUS(paidAmount) + '</strong>'+'</td>' + '<td>' + '<strong>' + formatUS(outstandingAmount) + '</td>';
+        return '<td>' + '<strong>' + formatUS(dueAmount) + '</strong>'+'</td>' + '<td>' + '<strong>' + formatUS(paidAmount) + '</strong>'+'</td>' + '<td>' + '<strong>' + formatUS(outstandingAmount) + '</td>';
     }
 });
 
@@ -188,7 +212,7 @@ formatUS = function(val){
 }
 formatEx = function(id){
     exchange = Cpanel.Collection.Exchange.findOne(id)
-    return exchange.base == 'KHR' ? JSON.stringify(exchange.rates) : '';
+    return  JSON.stringify(exchange.rates) ;
 }
 
 formatQty = function(val){
@@ -197,7 +221,7 @@ formatQty = function(val){
 findCustomerByType = function(type){
    arr = [] 
    customers = undefined;
-   if(type != ''){
+   if(type != 'All'){
       customers = Ice.Collection.Customer.find({customerType: type})
    }else{
       customers = Ice.Collection.Customer.find()

@@ -1,4 +1,4 @@
-Router.route('ice/staffReportGen', function () {
+Router.route('ice/paymentReportGen', function () {
     // Config layout
     this.layout('reportLayout', {
         // Page size: a4, a5, mini
@@ -12,9 +12,9 @@ Router.route('ice/staffReportGen', function () {
     });
 
     var q = this.params.query;
-    this.render('ice_staffReportGen', {
+    this.render('ice_paymentReportGen', {
         data: function () {
             return q;
         }
-    },{name: 'ice_staffReportGen'});
+    },{name: 'ice_paymentReportGen'});
 });
