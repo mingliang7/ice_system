@@ -31,14 +31,51 @@
 <template name="ice_orderInsertTemplate">
     {{#autoForm collection=Ice.Collection.Order id="ice_orderInsertTemplate" type="insert"}}
         <div class="row">
-            <div class="col-md-6">
+
+            <div class='col-md-4'>
                 {{> afQuickField name='orderDate' class='input-sm'}}
-                {{> afQuickField name='iceCustomerId' class='input-sm'}}
-                {{> afQuickField name='iceStaffId' class='input-sm'}}
-                <!-- {{> afQuickField name='customerType'}} -->
+            </div>
+
+            <div class='col-md-4'>
+                 <div class="form-group{{#if afFieldIsInvalid name='iceCustomerId'}} has-error{{/if}}" data-required="true">
+                    <label class="control-label" for="iceCustomerId">Customer</label>
+
+                    <div class="input-group  select2-bootstrap-append">
+                        {{> afFieldInput name='iceCustomerId' class="iceCustomerId input-sm"}}
+                        <span class="input-group-addon">
+                            <a href="#" class="customerAddon">
+                                {{fa "plus"}}
+                            </a>
+                        </span>
+                    </div>
+                    {{#if afFieldIsInvalid name='iceCustomerId'}}
+                        <span class="help-block">{{afFieldMessage name='iceCustomerId'}}</span>
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class='col-md-4'>
+             <div class="form-group{{#if afFieldIsInvalid name='iceStaffId'}} has-error{{/if}}" data-required="true">
+                    <label class="control-label" for="staffId">Staff</label>
+
+                    <div class="input-group  select2-bootstrap-append">
+                        {{> afFieldInput name='iceStaffId' class="iceStaffId input-sm"}}
+                        <span class="input-group-addon">
+                            <a href="#" class="staffAddon">
+                                {{fa "plus"}}
+                            </a>
+                        </span>
+                    </div>
+                    {{#if afFieldIsInvalid name='iceStaffId'}}
+                        <span class="help-block">{{afFieldMessage name='iceStaffId'}}</span>
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                     {{> afQuickField name='exchange' class='input-sm'}}
             </div>
             <div class="col-md-6">
-                {{> afQuickField name='exchange' class='input-sm'}}
                 {{> afQuickField name= 'description' class='input-sm'}}
             </div>
 
@@ -73,18 +110,52 @@
 <!-- update -->
 <template name="ice_orderUpdateTemplate">
     {{#autoForm collection=Ice.Collection.Order doc=this id="ice_orderUpdateTemplate" type="update"}}
- <div class="row">
-            <div class="col-md-3">
+    <div class="row">
+
+            <div class='col-md-4'>
                 {{> afQuickField name='orderDate' class='input-sm'}}
-                <!-- {{> afQuickField name='customerType'}} -->
             </div>
-            <div class="col-md-3">
-                {{> afQuickField name='iceCustomerId' class='input-sm'}}
+
+            <div class='col-md-4'>
+                 <div class="form-group{{#if afFieldIsInvalid name='iceCustomerId'}} has-error{{/if}}" data-required="true">
+                    <label class="control-label" for="iceCustomerId">Customer</label>
+
+                    <div class="input-group  select2-bootstrap-append">
+                        {{> afFieldInput name='iceCustomerId' class="iceCustomerId input-sm"}}
+                        <span class="input-group-addon">
+                            <a href="#" class="customerAddon">
+                                {{fa "plus"}}
+                            </a>
+                        </span>
+                    </div>
+                    {{#if afFieldIsInvalid name='iceCustomerId'}}
+                        <span class="help-block">{{afFieldMessage name='iceCustomerId'}}</span>
+                    {{/if}}
+                </div>
             </div>
-            <div class="col-md-3">
-                {{> afQuickField name='exchange' class='input-sm'}}
+
+            <div class='col-md-4'>
+             <div class="form-group{{#if afFieldIsInvalid name='iceStaffId'}} has-error{{/if}}" data-required="true">
+                    <label class="control-label" for="staffId">Staff</label>
+
+                    <div class="input-group  select2-bootstrap-append">
+                        {{> afFieldInput name='iceStaffId' class="iceStaffId input-sm"}}
+                        <span class="input-group-addon">
+                            <a href="#" class="staffAddon">
+                                {{fa "plus"}}
+                            </a>
+                        </span>
+                    </div>
+                    {{#if afFieldIsInvalid name='iceStaffId'}}
+                        <span class="help-block">{{afFieldMessage name='iceStaffId'}}</span>
+                    {{/if}}
+                </div>
             </div>
-            <div class="col-md-3">
+
+            <div class="col-md-6">
+                     {{> afQuickField name='exchange' class='input-sm'}}
+            </div>
+            <div class="col-md-6">
                 {{> afQuickField name= 'description' class='input-sm'}}
             </div>
 

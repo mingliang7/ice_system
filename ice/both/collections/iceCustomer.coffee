@@ -28,6 +28,10 @@ Ice.Schema.Customer = new SimpleSchema(
 			type: 'select2'
 			options: ->
 				Ice.List.customerType()
+
+	branchId:
+		type: String
+	  optional: true		
 )
 
 Ice.Collection.Customer.attachSchema Ice.Schema.Customer

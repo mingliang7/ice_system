@@ -1,11 +1,13 @@
 @Ice.List =
+
 	gender: (selectOne) ->
 		list = []
 		if !_.isEqual(selectOne, false)
-      list.push({label: "(Select One)", value: ""})
-    list.push {label: 'Male', value: 'M'}
-    list.push {label: 'Female', value: 'F'}
-    list
+			list.push {label: "(Select One)", value: ""}
+
+		list.push {label: 'Male', value: 'M'}
+		list.push {label: 'Female', value: 'F'}
+		list
 
 	customerType: (selectOne) ->
 		list = []

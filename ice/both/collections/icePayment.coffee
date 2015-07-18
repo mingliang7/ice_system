@@ -8,14 +8,14 @@ Ice.Schema.Payment = new SimpleSchema(
 		autoform:
 			type: 'select2'
 			options: ->
-				Ice.ListForReport.invoice
+				Ice.ListForReport.invoice()
 	customerId: 
 		type: String
 		label: 'Customer'
 		autoform:
 			type: 'select2'
 			options: ->
-				Ice.ListForReport.customer
+				Ice.ListForReport.customer()
 	staffId: 
 		type: String
 		label: 'Staff'

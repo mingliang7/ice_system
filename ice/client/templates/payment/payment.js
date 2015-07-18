@@ -1,6 +1,6 @@
 Session.setDefault('customer', '');
 Template.ice_payment.onRendered(function() {
-  return createNewAlertify('paymentForm');
+  return createNewAlertify(['paymentForm','staffAddOn','invoiceAddOn','customerAddOn']);
 });
 
 
@@ -44,6 +44,15 @@ Template.ice_payment.events({
 });
 
 Template.ice_paymentInsertTemplate.events({
+  'click .customerAddOn': function  () {
+      alertify.customerAddOn(fa('plus', 'Customer'), renderTemplate(Template.ice_insertTemplate));
+  },
+  'click .invoiceAddOn': function  () {
+    alertify.invoiceAddOn(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderInsertTemplate)).maximize();
+  },
+  'click .staffAddOn': function  () {
+    alertify.staffAddOn(fa('plus', 'Staff'), renderTemplate(Template.ice_staffInsertTemplate));
+  },
   'change [name="customerId"]': function(e) {
     var customer;
     customer = $(e.currentTarget).val();
