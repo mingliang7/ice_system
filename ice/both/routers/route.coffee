@@ -82,13 +82,24 @@ Router.route 'ice/staffs',
 	icon: 'staff'
 	title: 'staff'
 
-Router.route 'ice/staff_reports',
+Router.route 'ice/order_reports',
 	->
-		@render 'ice_staffReport'
+		@render 'ice_orderReport'
 
-	name: 'ice.staffReport'
+	name: 'ice.orderReport'
 	header:
-		title: 'staffReport'
+		title: 'Order Report'
 		sub: ''
-	icon: 'staff'
-	title: 'staffReport'
+	icon: 'Order'
+	title: 'Order Report'
+
+Router.route 'ice/payment_reports',
+	->
+		@render 'ice_paymentReport'
+
+	name: 'ice.paymentReport'
+	header:
+		title: 'Payment Report'
+		sub: ''
+	icon: 'payment'
+	title: 'Payment Report'
