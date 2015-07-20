@@ -1,4 +1,5 @@
 Ice.Collection.OrderGroup = new Mongo.Collection('ice_orderGroups')
+Ice.Collection.OrderGroup.initEasySearch('_customer.name')
 Ice.Schema.OrderGroup = new SimpleSchema(
 	startDate:
 		type: String
