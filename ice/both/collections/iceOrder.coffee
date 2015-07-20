@@ -1,5 +1,5 @@
 Ice.Collection.Order = new Mongo.Collection('ice_orders')
-
+Ice.Collection.Order.initEasySearch(['_id', 'iceStaffId', 'orderDate','_customer.name', '_staff.name'])
 Ice.Schema.Order = new SimpleSchema(
 
   orderDate:
