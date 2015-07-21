@@ -209,7 +209,7 @@ itemPrice = (current) ->
     current.parents('.array-item').find('.amount').val(amount - ((currentPrice* qty) * parseFloat discount)/100)
   totalAmount()
 itemQty = (current) ->
-  currentQty = parseInt current.val()
+  currentQty = parseFloat current.val()
   price = parseFloat current.parents('.array-item').find('.price').val()
   discount = current.parents('.array-item').find('.discount').val()
   amount = currentQty * price

@@ -84,6 +84,7 @@ Ice.Schema.Order = new SimpleSchema(
 
   'iceOrderDetail.$.qty':
     type: Number
+    decimal: true
 
   'iceOrderDetail.$.amount':
     type: Number

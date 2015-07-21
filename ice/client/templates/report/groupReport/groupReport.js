@@ -103,9 +103,9 @@ Template.ice_invoiceGroupReportGen.helpers({
         for (var k in items) {
             results += '<tr>' + '<td>' + items[k]['orderDate'] + '</td>';
             for (var j in items[k]) {
-                if (items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម') {
+                if (items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម (ដើម)') {
                     results += '<td>' + +items[k][j].qty + 'kg' + '</td>';
-                } else if (items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម') {
+                } else if (items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម (ដើម)') {
                     results += '<td>' + +items[k][j].qty + 'ដើម' + '</td>';
                 }
             }
