@@ -98,6 +98,8 @@
              </button>
              </span>
              </div><!-- /input-group -->
+             <br>
+             Filter: {{> filteredGroupPayment}}
   </div>
 
 <br>
@@ -155,4 +157,12 @@
         </article> <!-- end article -->
         </div>
         </div>
+</template>
+
+<template name="filteredGroupPayment">
+  <select class="filter-group">
+    <option value="all">All</option>
+    <option value="true">Paid</option>
+    <option value="false">Not Paid</option>
+  </select>
 </template>

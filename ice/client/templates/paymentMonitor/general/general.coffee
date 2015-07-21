@@ -88,3 +88,12 @@ Template.searchResult.events
 		doc = Ice.Collection.Order.findOne(id)
 		url = "payment_url?id=#{id}&customerId=#{doc.iceCustomerId}&paidAmount=#{doc.paidAmount}&outstandingAmount=#{doc.outstandingAmount}&dueAmount=#{doc.outstandingAmount}"
 		window.open(url)
+
+Template.filteredPayment.events
+	'change .filter': (e) ->
+		value = $(e.currentTarget).val()
+		instance = EasySearch.getComponentInstance {index: 'ice_orders'}
+		EasySearch.changeProperty('ice_orders', 'filteredPayment', value)
+		EasySearch.changeLimit('ice_orders', 10)
+		instance.paginate(1)
+		instance.triggerSearch()

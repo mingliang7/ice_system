@@ -135,17 +135,21 @@
 <div class="container">
   <div class="col-lg-2">
             <div class="input-group custom-search-form">
-              {{> esInput index="ice_orders" placeholder="Search..." allDocsOnEmpty=true class='form-control'}}
+              {{> esInput index="ice_orders" placeholder="Search..." allDocsOnEmpty=true class='form-control' convertNumber=true}}
+
               <span class="input-group-btn">
               <button class="btn btn-default" type="button">
               <span class="glyphicon glyphicon-search"></span>
              </button>
              </span>
              </div><!-- /input-group -->
+             <br>
+             Filter: {{> filteredPayment}}
   </div>
 
 <br>
  {{#ifEsIsSearching index="ice_orders"}}
+
         <div class="col-sm-12">
           <div class="col-sm-4"></div>
           <div class="col-sm-4">Loading....<i class="fa fa-spinner fa-pulse"></i></div>
@@ -158,4 +162,12 @@
     {{> esLoadMoreButton index="ice_orders"}}
  {{/ifEsIsSearching}}
 </div>
+</template>
+
+<template name="filteredPayment">
+  <select class="filter">
+    <option value="all">All</option>
+    <option value="true">Paid</option>
+    <option value="false">Not Paid</option>
+  </select>
 </template>
