@@ -90,3 +90,12 @@ Template.searchGroupResult.events
 		doc = Ice.Collection.OrderGroup.findOne(id)
 		url = "payment_url?id=#{id}&customerId=#{doc.iceCustomerId}&paidAmount=#{doc.paidAmount}&outstandingAmount=#{doc.outstandingAmount}&dueAmount=#{doc.outstandingAmount}"
 		window.open(url)
+
+Template.filteredGroupPayment.events
+	'change .filter-group': (e) ->
+		value = $(e.currentTarget).val()
+		instance = EasySearch.getComponentInstance {index: 'ice_orderGroups'}
+		EasySearch.changeProperty('ice_orderGroups', 'filteredGroupPayment', value)
+		EasySearch.changeLimit('ice_orderGroups', 10)
+		instance.paginate(1)
+		instance.triggerSearch()
