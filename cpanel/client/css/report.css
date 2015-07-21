@@ -117,7 +117,8 @@
 
 .report-content-body td {
     padding: 3px;
-    border: 1px solid #555555;
+    font-size: 9px;
+    border-right: 1px solid #000;
 }
 
 .report-page-header-footer {
