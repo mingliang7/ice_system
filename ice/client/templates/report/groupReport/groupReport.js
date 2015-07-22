@@ -33,7 +33,9 @@ Template.ice_invoiceGroupReportGen.helpers({
         /********* Title *********/
         var company = Cpanel.Collection.Company.findOne();
         data.title = {
-            company: company
+            company: company.khName,
+            address: company.khAddress,
+            telephone: company.telephone
         };
 
         /********* Header ********/
@@ -109,7 +111,6 @@ Template.ice_invoiceGroupReportGen.helpers({
                     results += '<td>' + +items[k][j].qty + 'ដើម' + '</td>';
                 }
             }
-            results += '<td>' + formatKhmerCurrency(items[k].total) + '</td>' + '</tr>';
         }
         return results;
     }
@@ -187,6 +188,6 @@ var extractTotalAmount = function (total, totalItem) {
     for (var i in totalItem.amount) {
         amount += '<td>' + formatNum(totalItem.amount[i]) + '</td>';
     }
-    amount += '<td>' + '<strong>' + total + '</strong>' + '</td>'
+    // amount += '<td>' + '<strong>' + total + '</strong>' + '</td>'
     return amount;
 }
