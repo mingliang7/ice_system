@@ -33,7 +33,9 @@ Template.ice_invoiceReportGen.helpers({
         /********* Title *********/
         var company = Cpanel.Collection.Company.findOne();
         data.title = {
-            company: company
+            company: company.khName,
+            address: company.khAddress,
+            telephone: company.telephone
         };
 
         /********* Header ********/
