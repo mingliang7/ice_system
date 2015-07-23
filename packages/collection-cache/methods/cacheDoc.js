@@ -52,12 +52,12 @@ Mongo.Collection.prototype.cacheDoc = function (fieldName, collection, collectio
             };
 
         // Check soft remove is true
-        if (!_.isUndefined(modifier.$set.removed) || !_.isUndefined(modifier.$set.restoredAt)) {
+        if (!_.isUndefined(modifier.$set.removed) || !_.isUndefined(modifier.$set.restoredAt) || _.isUndefined(modifier.$set[refField])) {
             selector._id = doc[refField];
         }
 
         getRefDoc = refCollection.findOne(selector, {fields: fieldsInFind});
-
+        console.log(getRefDoc)
         modifier.$set[cacheField] = getRefDoc;
 
         //console.log('Doc->' + thisCollection._name + '.before.update()');

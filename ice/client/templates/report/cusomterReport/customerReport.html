@@ -1,0 +1,99 @@
+<template name="ice_customerReport">
+{{> ice_customerReportInsertTemplate}}
+</template>
+<template name="ice_customerReportInsertTemplate">
+    {{#autoForm schema=Ice.Schema.customerReport id="ice_customerReportInsertTemplate" action="customerReportGen" target="_blank"}}
+    <div class="row">
+        <div class="col-md-6">
+                    {{> afQuickField name="customerType" }}
+                    {{> afQuickField name="customerId"}}
+        </div>
+        <div class="col-md-6">
+                    {{> afQuickField name="date"}}
+                    {{> afQuickField name="exchange"}}
+        </div>
+    </div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+
+<!--Generate-->
+<template name="ice_customerReportGen">
+    {{#with data}}
+        <!--Title-->
+        <div class="report-title">
+            <div class="company-name-kh">ទឹកកកអនាម័យ បេង ភី</div>
+            <div class="report-name">Payment Report</div>
+        </div>
+
+        <!--Header-->
+        <div style="width: 100%">
+            {{#with header}}
+                <div style="width: 50%; float: left">
+                    <ul class="list-unstyled">
+                        <li><strong>Staff:</strong> {{staff}}</li>
+                        <li><strong>customerType:</strong> {{customerType}}</li>
+                    </ul>
+                </div>
+                <div style="width: 50%; float: right">
+                    <ul class="list-unstyled">
+                        <li><strong>Date:</strong> {{date}}</li>
+                        <li><strong>Customer:</strong> {{customer}}</li>
+                         <li><strong>Exchange Rate:</strong> {{exchange}}</li>
+                    </ul>
+                </div>
+            {{/with}}
+        </div>
+
+        <!--Content-->
+        <table class="report-content">
+            <thead class="report-content-header">
+            <tr>
+                <th>No</th>
+                <th>Invoice #</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Status</th>
+                <th>Due Amount</th>
+                <th>Paid Amount</th>
+                <th>Balance</th>
+             
+            </tr>
+            
+            </thead>
+
+            <tbody class="report-content-body">
+            {{#each content}}
+                <tr>
+                    <td>{{index}}</td>
+                    <td>{{_id}}</td>
+                    <td>{{paymentDate}}</td>
+                    <td>{{name customerId}}</td>
+                    <td>{{status}}</td>
+                    <td>{{formatCurrency dueAmount}}</td>
+                    <td>{{formatCurrency paidAmount}}</td>
+                    <td>{{formatCurrency outstandingAmount}}</td>
+                    
+                </tr>
+            {{/each}}
+                <tr>
+                    <td colspan="5" align="right">Grand Total KHR:</td>
+                    {{{sumTotal content}}}
+                </tr>
+                <tr>
+                    <td colspan="5" align="right">USD:</td>
+                    {{{totalInDollar content}}}
+                </tr>
+            </tbody>
+        </table>
+
+        <!--Footer-->
+
+    {{/with}}
+
+    <!--Sign-->
+    {{> signFooter}}
+</template>
+
