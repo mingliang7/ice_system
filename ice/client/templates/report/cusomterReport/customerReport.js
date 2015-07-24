@@ -43,7 +43,17 @@ Template.ice_customerReportGen.helpers({
         /********* Header ********/
         customerType = self.customerType == '' ? 'All' : self.customerType
         customer = self.customerId == '' ? 'All' : self.customerId 
-
+        var company = Cpanel.Collection.Company.findOne();
+        data.title = {
+            company: company.khName,
+            address: company.khAddress,
+            telephone: company.telephone
+        };
+        data.header = {
+            date: self.date,
+            customerType: customerType,
+            customer: customer
+        }
         /********** Content **********/
         var content = [];
         var selector = {};
@@ -54,7 +64,22 @@ Template.ice_customerReportGen.helpers({
             selector = {orderDate: {$gte: startDate, $lte: endDate}};
             var index = 1;
             var reduceCustomer = groupCustomer(selector);
-            debugger
+            td = ''
+            for(var k in reduceCustomer) {
+                td += '<tr><th colspan="4" align="center">' + k + ' | '+ findCustomerName(k) + '</tr></th>'
+                td += '<tr>' + '<th>' + 'ទំនិញ' + '</th>' + '<th>' + 'ចំនួន' + '</th>' + '<th>' + 'តម្លៃលក់' + '</th>' + '<th>' + 'តម្លៃសរុប' + '</th>' + '</tr>'
+                for(var j in reduceCustomer[k]){
+                    if(reduceCustomer[k][j].name != undefined){
+                        td += '<tr>' + '<td>' + reduceCustomer[k][j].name + '</td>' + '<td>' + reduceCustomer[k][j].qty + '</td>' + '<td>' + formatKh(reduceCustomer[k][j].price) + '</td>' + '<td>' + formatKh(reduceCustomer[k][j].amount) + '</td>' + '</tr>';
+                    }
+                }
+                if(reduceCustomer[k].paidAmount != undefined){
+                    td += '<tr>' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + formatKh(reduceCustomer[k].paidAmount) + '</strong></td>' + '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + formatKh(reduceCustomer[k].outstandingAmount) +'</strong></td>' + '</tr>';
+                }else{
+                    td += '<tr>' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + orderGroupCustomer(k, startDate, endDate);
+                }
+            }
+            content.push({list: td});
         }else if (staff == 'All' && customerType == 'All' && customer == 'All'){
             customers = findCustomerByType(customerType);
             var index = 1;
@@ -217,6 +242,22 @@ var findCustomerByType = function(type){
 var findCustomerName = function(id){
     return Ice.Collection.Customer.findOne(id).name;
 }
+// group all order group invoices by customer
+var orderGroupCustomer = function(id, startDate, endDate) {
+    var startDate = startDate.split(' ');
+    var endDate = endDate.split(' ');
+    var outstandingAmount = 0;
+    var paidAmount = 0; 
+    var groupOrders = Ice.Collection.OrderGroup.find({iceCustomerId: id, startDate:{$gte: startDate[0]}, endDate:{$lte: endDate[0]}})
+    debugger
+    groupOrders.forEach(function (order) {
+        paidAmount += order.paidAmount
+        outstandingAmount += order.outstandingAmount
+    });
+    return '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + formatKh(paidAmount) + '</strong></td>' + '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + outstandingAmount +'</strong></td>' + '</tr>';
+}
+
+
 
 // grouping all customer
 
@@ -227,8 +268,18 @@ var groupCustomer = function(selector) {
     var customerObj = {};
     orders.forEach(function(order){
         var id = order.iceCustomerId;
+        customerObj[id] == undefined ?  customerObj[id] = {}  : customerObj[id];
+        if(order.paidAmount != undefined){
+            if(customerObj[id].paidAmount == undefined && customerObj[id].outstandingAmount == undefined){
+                customerObj[id]['outstandingAmount'] = order.outstandingAmount;
+                customerObj[id]['paidAmount'] = order.paidAmount;
+            }else{
+                customerObj[id]['outstandingAmount'] = customerObj[id]['outstandingAmount'] += order.outstandingAmount;
+                customerObj[id]['paidAmount'] = customerObj[id]['paidAmount'] += order.paidAmount;
+            }
+        }
         order.iceOrderDetail.forEach(function (item){
-            customerObj[id] == undefined ?  customerObj[id] = {}  : customerObj[id];
+            customerObj[id]['total'] == undefined ? customerObj[id]['total'] = item.amount : customerObj[id]['total'] = customerObj[id]['total']+= item.amount;
             if(customerObj[id][item.iceItemId] == undefined){
                 customerObj[id][item.iceItemId] = {};
                 customerObj[id][item.iceItemId] = {
@@ -247,6 +298,7 @@ var groupCustomer = function(selector) {
                     amount: customerObj[id][item.iceItemId].amount += item.amount
                 }
             }
+            
         });
     });
     for(var k in gItems) {

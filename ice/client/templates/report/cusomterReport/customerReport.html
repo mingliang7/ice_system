@@ -7,10 +7,10 @@
         <div class="col-md-6">
                     {{> afQuickField name="customerType" }}
                     {{> afQuickField name="customerId"}}
+                    
         </div>
         <div class="col-md-6">
                     {{> afQuickField name="date"}}
-                    {{> afQuickField name="exchange"}}
         </div>
     </div>
         <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
@@ -24,8 +24,8 @@
     {{#with data}}
         <!--Title-->
         <div class="report-title">
-            <div class="company-name-kh">ទឹកកកអនាម័យ បេង ភី</div>
-            <div class="report-name">Payment Report</div>
+        <span class="report-company-name" style="font-family: 'Khmer OS Muol">{{title.company}}</span><br>
+            <div class="company-name-kh">របាយការណ៍លក់ប្រចាំថ្ងៃសំរាប់ កាលបរិច្ឆេទ {{header.date}}</div>
         </div>
 
         <!--Header-->
@@ -33,7 +33,6 @@
             {{#with header}}
                 <div style="width: 50%; float: left">
                     <ul class="list-unstyled">
-                        <li><strong>Staff:</strong> {{staff}}</li>
                         <li><strong>customerType:</strong> {{customerType}}</li>
                     </ul>
                 </div>
@@ -41,51 +40,17 @@
                     <ul class="list-unstyled">
                         <li><strong>Date:</strong> {{date}}</li>
                         <li><strong>Customer:</strong> {{customer}}</li>
-                         <li><strong>Exchange Rate:</strong> {{exchange}}</li>
                     </ul>
                 </div>
             {{/with}}
         </div>
 
         <!--Content-->
-        <table class="report-content">
-            <thead class="report-content-header">
-            <tr>
-                <th>No</th>
-                <th>Invoice #</th>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Status</th>
-                <th>Due Amount</th>
-                <th>Paid Amount</th>
-                <th>Balance</th>
-             
-            </tr>
-            
-            </thead>
-
-            <tbody class="report-content-body">
+        <table class="table">
+            <tbody>
             {{#each content}}
-                <tr>
-                    <td>{{index}}</td>
-                    <td>{{_id}}</td>
-                    <td>{{paymentDate}}</td>
-                    <td>{{name customerId}}</td>
-                    <td>{{status}}</td>
-                    <td>{{formatCurrency dueAmount}}</td>
-                    <td>{{formatCurrency paidAmount}}</td>
-                    <td>{{formatCurrency outstandingAmount}}</td>
-                    
-                </tr>
+                {{{list}}}
             {{/each}}
-                <tr>
-                    <td colspan="5" align="right">Grand Total KHR:</td>
-                    {{{sumTotal content}}}
-                </tr>
-                <tr>
-                    <td colspan="5" align="right">USD:</td>
-                    {{{totalInDollar content}}}
-                </tr>
             </tbody>
         </table>
 
