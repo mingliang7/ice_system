@@ -18,7 +18,7 @@
             </div>
 
             <div class="timeline-label">
-              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}</a>
+              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}{{customerName iceCustomerId}}</a>
               <br>
               <a href="#" class="i-print {{#if closing}} not-active{{/if}}"><i class="fa fa-print"></i></a>
               <a href="#" class="p-print {{#if closing}} not-active{{/if}}"><i class="fa fa-money"></i></a>
@@ -32,7 +32,7 @@
               <p class="invoiceId">
                 <input type="hidden" class="id" value="{{_id}}">
                 <ul class="nav">
-                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
+                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo total totalInDollar}}}</li>
                 </ul>
               </p>
               <p style="font-size: 15px;">
@@ -55,7 +55,7 @@
             </div>
 
             <div class="timeline-label">
-              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}</a>
+              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}{{customerName iceCustomerId}}</a>
               <br>
               <a href="#" class="i-print {{#if closing}} not-active{{/if}}"><i class="fa fa-print"></i></a>
               <a href="#" class="p-print {{#if closing}} not-active{{/if}}"><i class="fa fa-money"></i></a>
@@ -69,7 +69,7 @@
               <p class="invoiceId">
                 <input type="hidden" class="id" value="{{_id}}">
                 <ul class="nav">
-                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
+                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo total totalInDollar}}}</li>
                 </ul>
               </p>
               <p style="font-size: 15px;">

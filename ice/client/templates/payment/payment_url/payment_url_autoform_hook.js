@@ -83,10 +83,7 @@ AutoForm.hooks({
     },
     onSuccess: function(formType, result) {
       alertify.success('Successfully');
-      Meteor.setTimeout(function(){
-        window.close();
-        }, 1000
-      );
+      alertify.paymentPopUP().close();
     },
     onError: function(formType, error) {
       return alertify.error(error.message);
