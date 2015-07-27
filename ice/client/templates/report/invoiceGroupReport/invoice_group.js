@@ -180,9 +180,9 @@ Template.ice_invoiceGroupGen.helpers({
             results += '<tr>' + '<td>' + items[k]['orderDate'] + '</td>';
             for (var j in items[k]) {
                 if (items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម (ដើម)') {
-                    results += '<td>' + +items[k][j].qty + 'kg' + '</td>';
+                    results += '<td>' + +items[k][j].qty + ' kg' + '</td>';
                 } else if (items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម (ដើម)') {
-                    results += '<td>' + +items[k][j].qty + 'ដើម' + '</td>';
+                    results += '<td>' + +items[k][j].qty + ' ដើម' + '</td>';
                 }
             }
         }
@@ -229,19 +229,19 @@ var findCustomerName = function(id){
     return Ice.Collection.Customer.findOne(id).name;
 }
 
-// function which generate each customer order detail
+// function which generate each customer order detail included footer and header 
 var contentDetail = function (content, itemsDetail, order) {
     var dataItem = {};
     dataItem = {};
     dataItem.invoiceId = order._id; 
     dataItem.customerName = findCustomerName(order.iceCustomerId);
     dataItem.total = itemTotalDetail(itemsDetail);
-    dataItem.totalDetail = {
+    dataItem.totalDetail = { // total each orderGroup for qty, price, amount
         qty: extractTotalQty(itemTotalDetail(itemsDetail)),
         price: extractPrice(itemTotalDetail(itemsDetail)),
         amount: extractTotalAmount(itemTotalDetail(itemsDetail))
-    }
-    dataItem.footer = {
+    } 
+    dataItem.footer = { // footer for total in khmer , dollar , paidAmount , oustandingAmount
         total: formatKh(order.total),
         totalInDollar: formatUS(order.totalInDollar),
         paidAmount: formatKh(order.paidAmount),
