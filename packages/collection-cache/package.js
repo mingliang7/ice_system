@@ -1,6 +1,6 @@
 Package.describe({
     name: 'theara:collection-cache',
-    version: '0.3.4',
+    version: '0.3.7',
     // Brief, one-line summary of the package.
     summary: 'Cache docs for collections',
     // URL to the Git repository containing the source code for this package.

@@ -103,3 +103,14 @@ Router.route 'ice/payment_reports',
 		sub: ''
 	icon: 'payment'
 	title: 'Payment Report'
+
+Router.route 'ice/customer_reports',
+	->
+		@render 'ice_customerReport'
+
+	name: 'ice.customerReport'
+	header:
+		title: 'Customer Report'
+		sub: ''
+	icon: 'customer'
+	title: 'Customer Report'
