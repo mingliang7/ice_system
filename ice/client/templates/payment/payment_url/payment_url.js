@@ -1,6 +1,7 @@
 var datePicker, fillInDetail, selectCustomer, selectInvoice;
 
 Template.ice_paymentUrlInsertTemplate.onRendered(function() {
+  console.log(this.data);
   selectCustomer(this.data);
 });
 
@@ -71,18 +72,18 @@ datePicker = function(currentInvoiceId) {
 selectCustomer = function(self) {
   self = self;
   return Meteor.setTimeout(function() {
-    $('[name="customerId"]').select2('val', self.customerId);
-    Ice.ListForReportState.set('customer', self.customerId);
-    selectInvoice(self.id);
-    fillInDetail(self.dueAmount, self.paidAmount, self.outstandingAmount);
-    datePicker(self.id)
-  }, 500);
+    $('[name="customerId"]').select2('val', self.iceCustomerId);
+    Ice.ListForReportState.set('customer', self.iceCustomerId);
+    selectInvoice(self._id);
+    fillInDetail(self.outstandingAmount, self.paidAmount, self.outstandingAmount);
+    datePicker(self._id)
+  }, 100);
 };
 
 selectInvoice = function(invoiceId) {
   return Meteor.setTimeout(function() {
     $('[name="orderId_orderGroupId"]').select2('val', invoiceId);
-  }, 500);
+  }, 100);
 
 };
 

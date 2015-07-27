@@ -3,7 +3,7 @@ Template.ice_orderInsertTemplate.onRendered ->
   $('[name="orderDate"]').val(today)
   datePicker()
 Template.ice_order.onRendered ->
-  createNewAlertify(['order','staffAddOn','customerAddOn'])
+  createNewAlertify(['order','staffAddOn','customerAddOn', 'paymentPopUP'])
 
 Template.ice_order.events
   "click .insert": ->
@@ -133,7 +133,7 @@ Template.ice_orderUpdateTemplate.events
     Print.set 'print', true
 
   'click .pay': ->
-    Print.set 'pay', true
+    alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, this))
 
   'change [name="exchange"]': (event) ->
     val = findExchange($(event.currentTarget).val())

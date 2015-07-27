@@ -4,20 +4,17 @@
 <template name="ice_paymentUrlInsertTemplate">
 	{{#autoForm collection=Ice.Collection.Payment id="ice_paymentUrlInsertTemplate" type="insert"}}
 	<div class="row">
-		<div class="col-md-7">
+		<div class="col-md-12">
 					{{> afQuickField name="customerId" }}
 					{{> afQuickField name="orderId_orderGroupId" }}
 					{{> afQuickField name="paymentDate"}}
-		</div>
-		<div class="col-md-5">
-					{{> afQuickField name="staffId"}}
 					{{> afQuickField name="dueAmount" readonly='true'}}
 					{{> afQuickField name="paidAmount"}}
 					{{> afQuickField name="outstandingAmount" readonly='true'}}
-		</div>
+					{{> afQuickField name="staffId"}}
 		<button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
 		<button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
-		<a href="#" class="close"><i class="fa fa-times"></i>close</a>
+		</div>
 	</div>
 	{{/autoForm}}
 </template>

@@ -3,12 +3,20 @@ findCustomer = (id) ->
 	{name: name, customerType: type}
 
 Template.ice_paymentGeneralMonitor.onRendered ->
-	createNewAlertify('searchBox')
+	createNewAlertify(['searchBox', 'paymentPopUP'])
+	Session.set 'checked', false
+
+Template.ice_paymentGeneralMonitor.helpers
+	checked: () ->
+		Session.get 'checked'
 
 Template.ice_paymentGeneralMonitor.events
-	'click .allInvoice': (e) ->
-			alertify.searchBox(fa('', 'All General Payment'), renderTemplate(Template.allDocs))
-    	.maximize()
+	'click .checkAll': (e) ->
+		value = $(e.currentTarget).prop('checked')
+		if value == true
+			Session.set 'checked', true
+		else
+			Session.set 'checked', false
 Template.general_invoices.events 
 	# 'change .paid': (event) ->
 	# 	element = $(event.currentTarget)
@@ -16,13 +24,10 @@ Template.general_invoices.events
 	# 	value = element.prop('checked')
 	# 	Meteor.call('updatePaid', id, value)
 	"click .i-print": (e) ->
-		id = $(e.currentTarget).parents('.order-info').find('.order-id').text()
-		GenReport(id)
+		id = $(e.currentTarget).parents('.order-info').find('.order-id').text().split(' | ')
+		GenReport(id[0])
 	"click .p-print": (e) ->
-		id = $(e.currentTarget).parents('.order-info').find('.order-id').text()
-		doc = Ice.Collection.Order.findOne(id)
-		url = "payment_url?id=#{id}&customerId=#{doc.iceCustomerId}&paidAmount=#{doc.paidAmount}&outstandingAmount=#{doc.outstandingAmount}&dueAmount=#{doc.outstandingAmount}"
-		window.open(url)
+		alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, this))
 Template.general_invoices.helpers
 	invoices: ->
 		today = moment(new Date()).format('YYYY-MM-DD')
@@ -32,11 +37,13 @@ Template.general_invoices.helpers
 		invoices
 	type: (id) ->
 		customerType = findCustomer(id).customerType
-	reportInfo: (id, total, totalInDollar) ->
+	customerName: (id) ->
+		name = findCustomer(id).name
+		" | Customer: #{name}"
+	reportInfo: ( total, totalInDollar) ->
 		total = numeral(total).format('0,0')
 		totalInDollar = numeral(totalInDollar).format('0,0.000')
-		name = findCustomer(id).name
-		"Customer: #{name}<br> Total(R): #{total}<br>Total($): #{totalInDollar}"
+		"Total(R): #{total} | Total($): #{totalInDollar}"
 		
 	isEven: (index) ->
 		index % 2 is 0
@@ -47,6 +54,7 @@ Template.general_invoices.helpers
 	formatKH: (value) ->
 		numeral(value).format('0,0')
 
+# payment pop up 
 
 # searching template  
 Template.searchResult.helpers
@@ -59,14 +67,17 @@ Template.searchResult.helpers
 		invoices
 	type: (id) ->
 		customerType = findCustomer(id).customerType
-	reportInfo: (id, total, totalInDollar) ->
+	customerName: (id) ->
+		name = findCustomer(id).name
+		" | Customer: #{name}"
+	reportInfo: (total, totalInDollar) ->
 		total = numeral(total).format('0,0')
 		totalInDollar = numeral(totalInDollar).format('0,0.000')
-		name = findCustomer(id).name
-		"Customer: #{name}<br> Total(R): #{total}<br>Total($): #{totalInDollar}"
+		"Total(R): #{total} | Total($): #{totalInDollar}"
 		
-	isEven: (index) ->
-		index % 2 is 0
+	isEven: (id) ->
+		index = id.slice(15)
+		parseInt(index - 1 ) % 2 is 0
 		
 	format: (createdAt) ->
 		moment(createdAt).format('hh:mm a')
@@ -81,13 +92,10 @@ Template.searchResult.events
 	# 	value = element.prop('checked')
 	# 	Meteor.call('updatePaid', id, value)
 	"click .i-print": (e) ->
-		id = $(e.currentTarget).parents('.order-info').find('.order-id').text()
-		GenReport(id)
+		id = $(e.currentTarget).parents('.order-info').find('.order-id').text().split(' | ')
+		GenReport(id[0])
 	"click .p-print": (e) ->
-		id = $(e.currentTarget).parents('.order-info').find('.order-id').text()
-		doc = Ice.Collection.Order.findOne(id)
-		url = "payment_url?id=#{id}&customerId=#{doc.iceCustomerId}&paidAmount=#{doc.paidAmount}&outstandingAmount=#{doc.outstandingAmount}&dueAmount=#{doc.outstandingAmount}"
-		window.open(url)
+		alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, this))
 
 Template.filteredPayment.events
 	'change .filter': (e) ->

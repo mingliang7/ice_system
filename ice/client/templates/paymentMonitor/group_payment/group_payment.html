@@ -1,7 +1,12 @@
 <template name="ice_paymentGroupMonitor">
-<span><input type="button" value="Show All" class= 'btn btn-default allGroupInvoice' ></span>
+<span><input type="checkbox" class="checkGroup">Show All</span>
+{{#if checked}} 
+  {{> allGroupDocs}}
+{{else}}
   {{> list_invoices}}
+{{/if}}
 </template>
+
 <template name="list_invoices">
   <div class="container">
   	<div class="row">
@@ -18,7 +23,7 @@
             </div>
 
             <div class="timeline-label">
-              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}</a>
+              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}{{customerName iceCustomerId}}</a>
               <br>
               <a href="#" class="i-print {{#if closing}} not-active{{/if}}"><i class="fa fa-print"></i></a>
               <a href="#" class="p-print {{#if closing}} not-active{{/if}}"><i class="fa fa-money"></i></a>
@@ -32,7 +37,7 @@
               <p class="invoiceId">
                 <input type="hidden" class="id" value="{{_id}}">
                 <ul class="nav">
-                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
+                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo total totalInDollar}}}</li>
                 </ul>
               </p>
               <p style="font-size: 15px;">
@@ -55,7 +60,7 @@
             </div>
 
             <div class="timeline-label">
-              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}</a>
+              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}{{customerName iceCustomerId}}</a>
               <br>
               <a href="#" class="i-print {{#if closing}} not-active{{/if}}"><i class="fa fa-print"></i></a>
               <a href="#" class="p-print {{#if closing}} not-active{{/if}}"><i class="fa fa-money"></i></a>
@@ -69,7 +74,7 @@
               <p class="invoiceId">
                 <input type="hidden" class="id" value="{{_id}}">
                 <ul class="nav">
-                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
+                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo total totalInDollar}}}</li>
                 </ul>
               </p>
               <p style="font-size: 15px;">
@@ -89,18 +94,24 @@
 
 <template name="allGroupDocs">
 <div class="container">
-  <div class="col-lg-2">
+  <div class="row">
+  <div class="col-md-10">
             <div class="input-group custom-search-form">
-              {{> esInput index="ice_orderGroups" placeholder="Search..." allDocsOnEmpty=true class='form-control'}}
+              {{> esInput index="ice_orderGroups" placeholder="Search..." allDocsOnEmpty=true class='form-control' convertNumber=true}}
+
               <span class="input-group-btn">
               <button class="btn btn-default" type="button">
-              <span class="glyphicon glyphicon-search"></span>
-             </button>
+                <i class="fa fa-search"></i>
+              </button>
              </span>
              </div><!-- /input-group -->
              <br>
-             Filter: {{> filteredGroupPayment}}
+             
   </div>
+  <div class="col-md-2">
+    {{> filteredGroupPayment}} 
+  </div>
+</div>
 
 <br>
  {{#ifEsIsSearching index="ice_orderGroups"}}
@@ -120,9 +131,12 @@
 
 
 <template name="searchGroupResult">
-        <div class="container">
-         <div class="timeline-centered">
-         <article class="timeline-entry left-aligned">
+         <div class="container">
+    <div class="row">
+      <div class="timeline-centered">
+      {{#if isEven _id}}
+        <article class="timeline-entry left-aligned">
+
           <div class="timeline-entry-inner">
             <time class="timeline-time"><p class='label label-warning circle'>{{{type iceCustomerId}}}</p> <span><!-- {{livestamp createdAt}} --></span></time>
 
@@ -131,7 +145,7 @@
             </div>
 
             <div class="timeline-label">
-              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}</a>
+              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}{{customerName iceCustomerId}}</a>
               <br>
               <a href="#" class="i-print {{#if closing}} not-active{{/if}}"><i class="fa fa-print"></i></a>
               <a href="#" class="p-print {{#if closing}} not-active{{/if}}"><i class="fa fa-money"></i></a>
@@ -145,22 +159,61 @@
               <p class="invoiceId">
                 <input type="hidden" class="id" value="{{_id}}">
                 <ul class="nav">
-                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo iceCustomerId total totalInDollar}}}</li>
+                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo total totalInDollar}}}</li>
                 </ul>
               </p>
               <p style="font-size: 15px;">
                 ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> | 
                 ប្រាក់ជំពាក់: <span style="font-size: 15px;" class="label label-success">{{formatKH outstandingAmount}}</span>
               </p>
-          </div>
+            </div>
           </div>
         </article> <!-- end article -->
-        </div>
-        </div>
+
+      {{else}}
+
+       <article class="timeline-entry ">
+
+          <div class="timeline-entry-inner">
+            <time class="timeline-time"><p class="label label-info circle">{{{type iceCustomerId}}}</p> <span><!-- {{livestamp createdAt}} --></span></time>
+
+            <div class="timeline-icon bg-info">
+              <i class="entypo-feather"></i>
+            </div>
+
+            <div class="timeline-label">
+              <h2 class="order-info">#<a href="#" class="order-id {{#if closing}} delete-mark not-active{{/if}}">{{_id}}{{customerName iceCustomerId}}</a>
+              <br>
+              <a href="#" class="i-print {{#if closing}} not-active{{/if}}"><i class="fa fa-print"></i></a>
+              <a href="#" class="p-print {{#if closing}} not-active{{/if}}"><i class="fa fa-money"></i></a>
+              <span class="bg-info pull-right {{#if closing}} delete-mark{{/if}}"> Date:{{startDate}}-{{endDate}}</span>&nbsp;<!-- <input type="checkbox" name="closing" class="closing" checked="{{closing}}"> --> </h2>
+              <!-- <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{progress _id}}%;">
+                  60%
+                </div>
+              </div> -->
+
+              <p class="invoiceId">
+                <input type="hidden" class="id" value="{{_id}}">
+                <ul class="nav">
+                  <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo total totalInDollar}}}</li>
+                </ul>
+              </p>
+              <p style="font-size: 15px;">
+                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> | 
+                ប្រាក់ជំពាក់: <span style="font-size: 15px;" class="label label-success">{{formatKH outstandingAmount}}</span>
+              </p>
+            </div>
+          </div>
+        </article> <!-- end article -->
+      {{/if}}
+  </div>
+    </div>
+  </div>
 </template>
 
 <template name="filteredGroupPayment">
-  <select class="filter-group">
+  <select class="filter-group form-control">
     <option value="all">All</option>
     <option value="true">Paid</option>
     <option value="false">Not Paid</option>

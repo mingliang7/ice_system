@@ -11,8 +11,7 @@ generateReport = function(id) {
 
 generatePayment = function(id){
   doc = Ice.Collection.Order.findOne(id)
-  url = "payment_url?id=" + id + "&customerId=" + doc.iceCustomerId + "&paidAmount=" + doc.paidAmount + "&outstandingAmount=" + doc.outstandingAmount + "&dueAmount=" + doc.outstandingAmount;
-  window.open(url)
+  alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, doc))
 }
 this.GenReport = generateReport;
 getRank = function(date, type) {
