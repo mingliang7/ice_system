@@ -45,7 +45,7 @@ Template.ice_customerReportGen.helpers({
         customer = self.customerId == '' ? 'All' : self.customerId 
         var company = Cpanel.Collection.Company.findOne();
         data.title = {
-            company: company.khName,
+            company: company.enName,
             address: company.khAddress,
             telephone: company.telephone
         };

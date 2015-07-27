@@ -127,7 +127,9 @@ AutoForm.hooks({
       }
     },
     onSuccess: function(formType, result) {
-      alertify.order().close();
+      $('select').each(function(){
+        $(this).select2('val', '');
+      });
       return alertify.success('Successfully');
     },
     onError: function(formType, error) {

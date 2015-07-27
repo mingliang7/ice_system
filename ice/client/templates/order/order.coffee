@@ -169,12 +169,6 @@ AutoForm.hooks
         doc.branchId = Session.get('currentBranch')
         doc
 
-    onSuccess: (formType, result) ->
-      alertify.success 'Successfully created'
-
-    onError: (formType, error) ->
-      alertify.error error.message
-
   ice_orderUpdateTemplate:
     onSuccess: (formType, result) ->
       alertify.success 'Successfully Updated'
