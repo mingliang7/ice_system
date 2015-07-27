@@ -114,3 +114,14 @@ Router.route 'ice/customer_reports',
 		sub: ''
 	icon: 'customer'
 	title: 'Customer Report'
+
+Router.route 'ice/invoice_groups',
+	->
+		@render 'ice_invoiceGroup'
+
+	name: 'ice.invoiceGroup'
+	header:
+		title: 'Invoice Group'
+		sub: ''
+	icon: 'report'
+	title: 'Invoice Group'
