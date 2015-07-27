@@ -16,10 +16,17 @@ Ice.Schema.Customer = new SimpleSchema(
 	address:
 		type: String
 		max: 500
+		optional: true
 
 	telephone:
 		type: String
 		max: 250
+		optional: true
+
+	description:
+		type: String
+		max: 250
+		optional: true
 
 	customerType:
 		type: String
