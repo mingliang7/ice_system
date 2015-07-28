@@ -7,6 +7,7 @@ Ice.Schema.Order = new SimpleSchema(
 
   discount:
     type: Number
+    label: 'Discount Amount'
     decimal: true
     optional: true
 
