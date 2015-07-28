@@ -1,4 +1,4 @@
-Ice.Collection.Staffs = new Mongo.Collection('staffs');
+Ice.Collection.Staffs = new Mongo.Collection('ice_staffs');
 Ice.Collection.Staffs.initEasySearch('name');
 Ice.Schema.Staffs = new SimpleSchema({
   name: {
@@ -14,7 +14,13 @@ Ice.Schema.Staffs = new SimpleSchema({
     }
   },
   position: {
-    type: String
+    type: String,
+    autoform:{
+      type: 'select2',
+      options: function(){
+        return Ice.List.position();
+      }
+    }
   },
   address: {
     type: String
@@ -28,7 +34,7 @@ Ice.Schema.Staffs = new SimpleSchema({
       return new Date();
     }
   },
-  cpanel_branchId: {
+  branchId: {
     type: String,
     optional: true
   }

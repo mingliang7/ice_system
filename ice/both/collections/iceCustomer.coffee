@@ -38,7 +38,14 @@ Ice.Schema.Customer = new SimpleSchema(
 
 	branchId:
 		type: String
-	  optional: true		
+	  optional: true
+	  
+	status:
+		type: String
+		autoform:
+			type: 'select2'
+			options: ->
+				Ice.List.status()		
 )
 
 Ice.Collection.Customer.attachSchema Ice.Schema.Customer

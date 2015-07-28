@@ -24,11 +24,22 @@
 
 	status: (selectOne) ->
 		list = []
-		if !_.isEqual(selecOne, false)
+		if !_.isEqual(selectOne, false)
 			list.push {label: "(Select One)", value: "" }
 
 		list.push {label: 'Disable', value: 'disable'}
 		list.push {label: 'Enable', value: 'enable'}
+		list
+	position: (selectOne) ->
+		list = []
+		if !_.isEqual(selectOne, false)
+			list.push {label: "(Select One)", value: "" }
+
+		list.push {label: 'Seller', value: 'seller'}
+		list.push {label: 'Cashier', value: 'cashier'}
+		list.push {label: 'Accountant', value: 'accountant'}
+		list.push {label: 'Admin', value: 'admin'}
+		list.push {label: 'Manager', value: 'manager'}
 		list
 
 	unit: (selectOne) ->
@@ -44,7 +55,7 @@
 		if !_.isEqual(selecOne, false)
 			list.push {label: '(Select One)', value: ""}
 
-		customers = Ice.Collection.Customer.find()
+		customers = Ice.Collection.Customer.find({status: 'enable'})
 		customers.forEach (customer) ->
 			type = ''
 			if customer.customerType is 'general'
@@ -82,7 +93,7 @@
     if !_.isEqual(selectOne, false)
       list.push {label: '(Select One)', value: ''}
     branchId = Session.get('currentBranch');
-    staffs = Ice.Collection.Staffs.find({cpanel_branchId:branchId})
+    staffs = Ice.Collection.Staffs.find({branchId:branchId})
     staffs.forEach (staff) ->
       list.push {label: staff._id + ' : ' + staff.name, value: staff._id}
     list
