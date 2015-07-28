@@ -40,6 +40,7 @@ Ice.Schema.Order = new SimpleSchema(
     autoform:
       type: 'select2'
       options: ->
+        debugger
         Ice.List.exchange()
   description:
     type: String

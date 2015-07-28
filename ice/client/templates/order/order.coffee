@@ -36,6 +36,9 @@ Template.ice_order.events
     GenReport(@_id) #generateReport alias function in order_autoform_hook
 
 # insert form event
+Template.ice_orderInsertTemplate.onRendered ->
+  exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
+  $('[name="exchange"]').select2('val', exhchange_date._id)
 Template.ice_orderInsertTemplate.events
   'click .staffAddon': () ->
       alertify.staffAddOn(fa('plus', 'Staff'), renderTemplate(Template.ice_staffInsertTemplate))

@@ -39,8 +39,13 @@ getRank = function(date, type) {
   			}else{
   				debugger
   				if(i + type > 40 ){
-  					endDate = moment(now.setDate(30)).format('YYYY-MM-DD');
+            lastDate = new Date(now.getFullYear(), now.getMonth() +1,0)
+  					endDate = moment(lastDate).format('YYYY-MM-DD');
   					break
+          }else if(i + type >= 26){
+            lastDate = new Date(now.getFullYear(), now.getMonth() +1,0)
+            endDate = moment(lastDate).format('YYYY-MM-DD');
+            break      
   				}else{
   					endDate = moment(now.setDate((i + type) - 1)).format('YYYY-MM-DD');
   					break

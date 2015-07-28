@@ -5,7 +5,7 @@ Router.route('ice/invoiceGroupGen', function () {
         // Orientation: portrait, landscape
         // Font size: fontBody: undefined (10px), bg (12px)
         data: {
-            pageSize: 'a4',
+            pageSize: 'a5',
             orientation: 'portrait',
             fontBody: 'bg'
         }

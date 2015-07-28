@@ -76,7 +76,7 @@ Template.ice_customerReportGen.helpers({
                 if(reduceCustomer[k].paidAmount != undefined){
                     td += '<tr>' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + formatKh(reduceCustomer[k].paidAmount) + '</strong></td>' + '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + formatKh(reduceCustomer[k].outstandingAmount) +'</strong></td>' + '</tr>';
                 }else{
-                    td += '<tr>' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + orderGroupCustomer(k, startDate, endDate);
+                    td += '<tr>' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + orderGroupCustomer(reduceCustomer[k].total, k, startDate, endDate);
                 }
             }
             content.push({list: td});
@@ -243,7 +243,7 @@ var findCustomerName = function(id){
     return Ice.Collection.Customer.findOne(id).name;
 }
 // group all order group invoices by customer
-var orderGroupCustomer = function(id, startDate, endDate) {
+var orderGroupCustomer = function(total,id, startDate, endDate) {
     var startDate = startDate.split(' ');
     var endDate = endDate.split(' ');
     var outstandingAmount = 0;
@@ -252,7 +252,7 @@ var orderGroupCustomer = function(id, startDate, endDate) {
     debugger
     groupOrders.forEach(function (order) {
         paidAmount += order.paidAmount
-        outstandingAmount += order.outstandingAmount
+        outstandingAmount = total - paidAmount
     });
     return '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + formatKh(paidAmount) + '</strong></td>' + '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + outstandingAmount +'</strong></td>' + '</tr>';
 }
@@ -301,19 +301,20 @@ var groupCustomer = function(selector) {
             
         });
     });
-    for(var k in gItems) {
-       for(var j in customerObj){
-            if(customerObj[j][k] == undefined){
-                customerObj[j][k] = {
-                    code: gItems[k].code,
-                    name:  gItems[k].name,
-                    price: gItems[k].price,
-                    qty: 0, 
-                    amount:0 
-                }
-            } 
-       }
-    }
+    // show all item
+    // for(var k in gItems) {   
+    //    for(var j in customerObj){
+    //         if(customerObj[j][k] == undefined){
+    //             customerObj[j][k] = {
+    //                 code: gItems[k].code,
+    //                 name:  gItems[k].name,
+    //                 price: gItems[k].price,
+    //                 qty: 0, 
+    //                 amount:0 
+    //             }
+    //         } 
+    //    }
+    // }
    return customerObj; 
 }    
  
