@@ -55,7 +55,7 @@ Template.ice_orderInsertTemplate.events
     item.amount = item.price * item.qty 
     current.parents('.array-item').find('.price').val(item.price)
     current.parents('.array-item').find('.qty').val(item.qty)
-    current.parents('.array-item').find('.amount').val(item.amount)
+    current.parents('.array-item').find('.amount').val(roundKhr(item.amount))
     current.parents('.array-item').find('.discount').val('')
     totalAmount()
   'keyup .qty , change .qty': (event) ->
@@ -137,9 +137,10 @@ Template.ice_orderUpdateTemplate.events
 
   'change [name="exchange"]': (event) ->
     val = findExchange($(event.currentTarget).val())
-    total = parseInt $('[name="total"]').val()
+    total = parseFloat $('[name="total"]').val()
+    totalInDollar = math.round(total * val.rates["USD"], 2)
     if val.base is 'KHR'
-      $('[name="totalInDollar"]').val(total * val.rates["USD"])
+      $('[name="totalInDollar"]').val(totalInDollar)
 
 #show
 Template.ice_orderShowTemplate.helpers
@@ -186,7 +187,7 @@ itemDiscount = (current) ->
   currentDiscount = current.val()
   price = parseFloat current.parents('.array-item').find('.price').val()
   qty = parseInt current.parents('.array-item').find('.qty').val()
-  amount = price * qty
+  amount = roundKhr(price * qty)
   if currentDiscount is ''
     current.parents('.array-item').find('.amount').val(amount)
   else
@@ -196,7 +197,7 @@ itemPrice = (current) ->
   currentPrice = parseFloat current.val()
   qty = parseInt current.parents('.array-item').find('.qty').val()
   discount = current.parents('.array-item').find('.discount').val()
-  amount = qty * currentPrice
+  amount = roundKhr(qty * currentPrice)
   if discount is ''
     current.parents('.array-item').find('.amount').val(amount)
   else
@@ -206,7 +207,7 @@ itemQty = (current) ->
   currentQty = parseFloat current.val()
   price = parseFloat current.parents('.array-item').find('.price').val()
   discount = current.parents('.array-item').find('.discount').val()
-  amount = currentQty * price
+  amount = roundKhr(currentQty * price)
   if discount is ''
     current.parents('.array-item').find('.amount').val(amount)
   else
@@ -216,15 +217,15 @@ totalAmount = () ->
   total = 0 
   $('.amount').each ->
     total += parseFloat $(this).val()
-  $('[name="subtotal"]').val(total)
+  $('[name="subtotal"]').val(roundKhr(total))
   subtotal = parseFloat $('[name="subtotal"]').val()
   discount = $('[name="discount"]').val()
   if  discount is ''
-    $('[name="total"]').val(total)
+    $('[name="total"]').val(roundKhr(total))
   else
-    discountAmount = (subtotal * parseInt discount)/100
-    $('[name="total"]').val(subtotal - discountAmount)
-  displayTotalInDollar($('[name="total"]').val(),findExchange($('[name="exchange"]').val()))
+    discountAmount = (subtotal - parseFloat discount)
+    $('[name="total"]').val(roundKhr(discountAmount))
+  displayTotalInDollar($('[name="total"]').val(), findExchange($('[name="exchange"]').val()));
 
 findExchange = (id) ->
   if id isnt ''
@@ -232,13 +233,14 @@ findExchange = (id) ->
     {base, rates}
 
 displayTotalInDollar = (total, exchange) ->
-  total = parseInt(total)
+  total = parseFloat(total)
   totalInDollar = $('[name="totalInDollar"]')
   if exchange is undefined
     totalInDollar.val('')
   else 
     if exchange.base is 'KHR'
-      totalInDollar.val(total * exchange.rates["USD"])
+      value = math.round(total * exchange.rates["USD"], 2)
+      totalInDollar.val(value)
 
 checkType = (id) ->
   {customerType: type } = Ice.Collection.Customer.findOne(id)
