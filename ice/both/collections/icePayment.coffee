@@ -22,7 +22,7 @@ Ice.Schema.Payment = new SimpleSchema(
 		autoform:
 			type: 'select2'
 			options: ->
-				Ice.List.staff()
+				Ice.List.paymentStaff()
 	dueAmount:
 		type: Number
 		decimal: true
