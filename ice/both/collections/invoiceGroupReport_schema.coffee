@@ -28,12 +28,4 @@ Ice.Schema.invoiceGroup = new SimpleSchema(
 	date:
 		label: 'Date'
 		type: String
-
-	exchange: 
-		type: String
-		label: 'Exchange'
-		autoform:
-			type: 'select2'
-			options: ->
-				Ice.List.exchange()
 )

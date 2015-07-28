@@ -93,7 +93,7 @@
 		list = []
 		if !_.isEqual(selectOne, false)
 			list.push {label: '(Select One)', value: ''}
-		exchanges = Cpanel.Collection.Exchange.find()
+		exchanges = Cpanel.Collection.Exchange.find({}, {sort: {dateTime: -1}});
 		exchanges.forEach (exchange) ->
 			list.push {label: "#{exchange.base}: #{JSON.stringify(exchange.rates)}", value: exchange._id}
 		list
