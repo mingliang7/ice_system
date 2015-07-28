@@ -1,0 +1,97 @@
+<template name="ice_invoiceGroup">
+{{> ice_invoiceGroupInsertTemplate}}
+</template>
+<template name="ice_invoiceGroupInsertTemplate">
+    {{#autoForm schema=Ice.Schema.invoiceGroup id="ice_invoiceGroupInsertTemplate" action="invoiceGroupGen" target="_blank"}}
+    <div class="row">
+        <div class="col-md-6">
+            {{> afQuickField name="status" }}
+            {{> afQuickField name="customerType" }}
+            {{> afQuickField name="customerId"}}
+                    
+        </div>
+        <div class="col-md-6">
+            {{> afQuickField name="date"}}
+            {{> afQuickField name="exchange"}}
+        </div>
+    </div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+
+<!--Generate-->
+<template name="ice_invoiceGroupGen">
+    {{#with data}}
+        {{#each content}}
+        <!--Title-->
+        <div class="report-title">
+            <span class="report-company-name" style="font-family: 'Khmer OS Muol"></span><br>
+            <span class="report-company-name">{{title.company}}</span><br>
+            <u> វិក្កយបត្រ</u><br>
+            អាស័យដ្ឋាន: {{title.address}}<br>
+            ទូរស័ព្ទ: {{title.telephone}}
+        </div>
+
+        <!--Header-->
+        <table width="100%" border="0">
+            {{#each header}}
+                <tr>
+                    <td width="75%">{{col1}}</td>
+                    <td>{{col2}}</td>
+                </tr>
+            {{/each}}
+        </table>
+
+        <!--Content-->
+        <table class="report-content">
+            <thead class="report-content-header">
+            <tr>
+                <th>កាលបរិច្ឆេទ</th>
+                <th >ទឹកកកកិន</th>
+                <th >ទឹកកកម៉ត់</th>
+                <th >អនាម័យ-តូច</th>
+                <th >អនាម័យ-ធំ</th>
+                <th >ទឹកកកដើម</th>
+            </tr>
+            </thead>
+            <tbody class="report-content-body">
+            
+                {{{listItems items}}}
+                <tr class="dotted">
+                <td>ចំនួន:</td>
+                {{{totalDetail.qty}}}
+            </tr>
+            <tr>
+                <td>តម្លៃ:</td>
+                {{{totalDetail.price}}}
+            </tr>
+            <tr>
+                <td>សរុប:</td>
+                {{{totalDetail.amount}}}
+            </tr>
+            </tbody>
+        </table>
+                <table class="small-table" >
+        <thead>
+
+             <tr >
+                 <th class="pull-right">តម្លៃសរុប(រៀល): </th> <th>{{footer.total}}</th>
+                <th class="pull-right">តម្លៃសរុប(ដុល្លារ):</th> <th>{{footer.totalInDollar}}</th>
+            </tr>
+             <tr>
+                
+                <th class="pull-right">ប្រាក់បង់:</th> <th>{{footer.paidAmount}}</th>
+                 <th class="pull-right">ប្រាក់ជំពាក់: </th> <th>{{footer.outstandingAmount}}</th>
+            </tr> 
+        </thead>
+        </table>
+        <!--Footer-->
+        <p style="page-break-after:always"></p>
+    {{/each}}
+    {{/with}}
+
+    <!--Sign-->
+</template>
+
