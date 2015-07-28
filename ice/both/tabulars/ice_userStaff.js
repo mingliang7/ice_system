@@ -17,7 +17,7 @@ Ice.TabularTable.UserStaffs = new Tabular.Table({
         {
             data: "staffIds", title: "Staffs",
             render: function (val, type, doc) {
-                return JSON.stringify(val);
+                return JSON.stringify(findStaffName(val));
             }
         },
         {data: "branchId", title: "Branch"},
@@ -35,4 +35,12 @@ findUser = function(id) {
     debugger
     user = Meteor.users.findOne(id);
     return user.username;
+}
+
+findStaffName = function(ids){
+    var arr = [];
+    for(var i = 0; i < ids.length; i++){
+        arr.push(Ice.Collection.Staffs.findOne(ids[i]).name);
+    }
+    return arr;
 }
