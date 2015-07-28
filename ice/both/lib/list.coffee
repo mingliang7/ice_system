@@ -72,6 +72,15 @@
 		if staff != undefined
 			findStaff(list, staff.staffIds)	
 		list
+
+	paymentStaff: (selecOne) ->
+		list = []
+		staffs = Ice.Collection.Staffs.find()
+		if !_.isEqual(selecOne, false)
+			list.push {label: "(Select One)", value: "" }
+		staffs.forEach (staff) ->
+			list.push {label: "#{staff._id} | #{staff.name}", value: staff._id}
+		list
 	item: (selectOne) ->
 		list = []
 		items = Ice.Collection.Item.find()
