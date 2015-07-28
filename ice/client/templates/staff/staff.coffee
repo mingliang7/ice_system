@@ -14,11 +14,10 @@ AutoForm.hooks
 			insert: (doc) ->
 				prefix = "" + (Session.get('currentBranch')) + "-"
 				doc._id = idGenerator.genWithPrefix(Ice.Collection.Staffs, prefix, 4)
-				doc.cpanel_branchId = Session.get('currentBranch')
+				doc.branchId = Session.get('currentBranch')
 				doc
 
 		onSuccess: (formType, result) ->
 			alertify.success 'successfully'
-			alertify.staff().close()
 		onError: (formType, error) ->
 			alertify.error error.message

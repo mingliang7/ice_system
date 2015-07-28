@@ -100,7 +100,7 @@ AutoForm.hooks({
         doc.createdAt = new Date();
         prefix = "" + (Session.get('currentBranch')) + "-";
         doc._id = idGenerator.genWithPrefix(Ice.Collection.Order, prefix, 12);
-        doc.cpanel_branchId = Session.get('currentBranch');
+        doc.branchId = Session.get('currentBranch');
         if ((doc.orderDate && doc.iceCustomerId && doc.iceOrderDetail) !== void 0) {
           setOrderGroup(doc);
         }

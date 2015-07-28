@@ -26,7 +26,8 @@
             <div class="col-md-6">
                 {{> afQuickField name='name'}}
                 {{> afQuickField name='gender'}}
-		            {{> afQuickField name='customerType'}}
+		        {{> afQuickField name='customerType'}}
+                {{> afQuickField name='status'}}
             </div>
 
             <div class="col-md-6">
@@ -48,12 +49,14 @@
             <div class="col-md-6">
                 {{> afQuickField name='name'}}
                 {{> afQuickField name='gender'}}
-		            {{> afQuickField name='customerType'}}
+		        {{> afQuickField name='customerType'}}
+                {{> afQuickField name='status'}}
             </div>
 
             <div class="col-md-6">
                 {{> afQuickField name='telephone'}}
                 {{> afQuickField name= 'address' rows=3}}
+                {{> afQuickField name= 'description' rows=3}}
             </div>
         </div>
 
@@ -73,9 +76,13 @@
         <dd>{{gender}}</dd>
         <dt>Type</dt>
         <dd>{{customerType}}</dd>
+        <dt>Status</dt>
+        <dd>{{status}}</dd>
         <dt>Address</dt>
         <dd>{{address}}</dd>
         <dt>Telephone</dt>
         <dd>{{telephone}}</dd>
+        <dt>Description</dt>
+        <dd>{{Description}}</dd>
     </dl>
 </template>

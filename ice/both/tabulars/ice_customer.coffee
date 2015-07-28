@@ -38,6 +38,14 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
           "<p class='label label-warning'>#{val} days</p>"
 		}
     {
+      data: 'status'
+      title: 'Status', render: (val) ->
+        if(val == 'enable')
+          "<p class='label label-success'>#{val.capitalize()}</p>"
+        else
+          "<p class='label label-warning'>#{val.capitalize()}</p>"
+    } 
+    {
       data: 'address'
       title: 'Address'
     }
@@ -46,3 +54,8 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
       title: 'Telephone'
     }
   ])
+
+
+String.prototype.capitalize = ->
+    this.charAt(0).toUpperCase() + this.slice(1)
+
