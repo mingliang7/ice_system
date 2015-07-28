@@ -22,10 +22,10 @@ Template.ice_invoiceGroup.events({
   }
 });
 
-datePicker = function() {
+var datePicker = function() {
   var date;
   date = $('[name="date"]');
-  return DateTimePicker.dateTimeRange(date);
+  DateTimePicker.dateRange(date);
 };
 
 /***** Generate ******/
@@ -56,41 +56,12 @@ Template.ice_invoiceGroupGen.helpers({
         startDate = date[0];
         endDate = date[1];
         if(status != 'All' && customerType == 'All' && customer == 'All'){
-            var selector = {orderDate: {$gte: startDate, $lte: endDate}};
+            status = status == 'closed' ? true : false
+            var selector = {closing: eval(status), startDate: {$gte: startDate}, endDate: {$lte: endDate}};
             var groupOrder = Ice.Collection.OrderGroup.find(selector);
             groupOrder.forEach(function (itemsDetail) {
                 contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
             });
-            debugger
-            if (content.length > 0) {
-                data.content = content;
-
-                data.footer = {
-                    // subtotal: formatNum(groupOrder.subtotal),
-                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
-                    total: formatKhmerCurrency(groupOrder.total),
-                    totalInDollar: formatNum(groupOrder.totalInDollar),
-                    paidAmount: formatKhmerCurrency(groupOrder.paidAmount),
-                    outstandingAmount: formatKhmerCurrency(groupOrder.outstandingAmount)
-                }
-                data.totalDetail = {
-                    qty: extractTotalQty(totalItem),
-                    price: extractPrice(totalItem),
-                    amount: extractTotalAmount(data.footer.total, totalItem)
-                }
-            return data;
-            } else {
-                data.content.push({index: 'no results'});
-                return data;
-            }
-
-        }else if (status == 'All' && customerType == 'All' && customer == 'All'){
-            var selector = {startDate: {$gte: startDate}, endDate: {$lte: endDate}};
-            var groupOrder = Ice.Collection.OrderGroup.find(selector);
-            groupOrder.forEach(function (itemsDetail) {
-                contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
-            });
-            debugger
             if (content.length > 0) {
                 data.content = content;
                 data.footer = {
@@ -107,52 +78,136 @@ Template.ice_invoiceGroupGen.helpers({
                 data.content.push({index: 'no results'});
                 return data;
             }
-        }else if (staff != 'All' && customerType !== 'All' && customer == 'All'){
+
+        }else if (status == 'All' && customerType == 'All' && customer == 'All'){
+            var selector = {startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+            debugger
+            var groupOrder = Ice.Collection.OrderGroup.find(selector);
+            groupOrder.forEach(function (itemsDetail) {
+                contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+            });
+            if (content.length > 0) {
+                data.content = content;
+                data.footer = {
+                    // subtotal: formatNum(groupOrder.subtotal),
+                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
+                    total: formatKh(groupOrder.total),
+                    totalInDollar: formatUS(groupOrder.totalInDollar),
+                    paidAmount: formatKh(groupOrder.paidAmount),
+                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
+                }
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
+            }
+        }else if (status != 'All' && customerType !== 'All' && customer == 'All'){
+            status = status == 'closed' ? true : false
             customers = findCustomerByType(customerType);
             var index = 1;
             for(var i = 0 ; i < customers.length; i++){
-               selector = {staffId: self.staffId, customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    obj.index = index;
-                    content.push(obj);
-                    index++;
-                });
+                status = status == 'closed' ? true : false
+                var selector = {iceCustomerId: customers[i], closing: eval(status), startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+                var groupOrder = Ice.Collection.OrderGroup.find(selector);
+                if(groupOrder.count() > 0) {
+                    groupOrder.forEach(function (itemsDetail) {
+                        contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+                    });
+                }
+                
             }
-        }else if (staff == 'All' && customerType !== 'All' && customer == 'All'){
-            var index = 1;
+            if (content.length > 0) {
+                data.content = content;
+                data.footer = {
+                    // subtotal: formatNum(groupOrder.subtotal),
+                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
+                    total: formatKh(groupOrder.total),
+                    totalInDollar: formatUS(groupOrder.totalInDollar),
+                    paidAmount: formatKh(groupOrder.paidAmount),
+                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
+                }
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
+            }
+        }else if (status == 'All' && customerType !== 'All' && customer == 'All'){
             customers = findCustomerByType(customerType);
             for(var i = 0 ; i < customers.length; i++){
-               selector = {customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    obj.index = index;
-                    content.push(obj);
-                    index++;
-                });
+                status = status == 'closed' ? true : false
+                var selector = {iceCustomerId: customers[i], startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+                var groupOrder = Ice.Collection.OrderGroup.find(selector);
+                if(groupOrder.count() > 0) {
+                    groupOrder.forEach(function (itemsDetail) {
+                        contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+                    });
+                }
+                
             }
-        }else if (staff == 'All' && customerType !== 'All' && customer != 'All'){
-               selector = {customerId: self.customerId, paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Payment.find(selector);
-                var index = 1;
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    obj.index = index;
-                    content.push(obj);
-                    index++;
-                });
+            if (content.length > 0) {
+                data.content = content;
+                data.footer = {
+                    // subtotal: formatNum(groupOrder.subtotal),
+                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
+                    total: formatKh(groupOrder.total),
+                    totalInDollar: formatUS(groupOrder.totalInDollar),
+                    paidAmount: formatKh(groupOrder.paidAmount),
+                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
+                }
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
+            }
+        }else if (status == 'All' && customerType !== 'All' && customer != 'All'){
+            var selector = {iceCustomerId: customer, startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+            var groupOrder = Ice.Collection.OrderGroup.find(selector);
+            groupOrder.forEach(function (itemsDetail) {
+                contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+            });
+            if (content.length > 0) {
+                data.content = content;
+                data.footer = {
+                    // subtotal: formatNum(groupOrder.subtotal),
+                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
+                    total: formatKh(groupOrder.total),
+                    totalInDollar: formatUS(groupOrder.totalInDollar),
+                    paidAmount: formatKh(groupOrder.paidAmount),
+                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
+                }
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
+            }
+
         }else{
-                index = 1 ;
-                selector = {staffId: self.staffId, customerId: self.customerId, paymentDate: {$gte: startDate, $lte: endDate}};
-                getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    obj.index = index;
-                    content.push(obj);
-                    index++;
-                });
+            status = status == 'closed' ? true : false
+            var selector = {closing: eval(status), iceCustomerId: customer, startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+            var groupOrder = Ice.Collection.OrderGroup.find(selector);
+            groupOrder.forEach(function (itemsDetail) {
+                contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+            });
+            if (content.length > 0) {
+                data.content = content;
+                data.footer = {
+                    // subtotal: formatNum(groupOrder.subtotal),
+                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
+                    total: formatKh(groupOrder.total),
+                    totalInDollar: formatUS(groupOrder.totalInDollar),
+                    paidAmount: formatKh(groupOrder.paidAmount),
+                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
+                }
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
+            }
         }
         if (content.length > 0) {
             data.content = content;
@@ -301,7 +356,6 @@ var itemTotalDetail = function (itemsDetail) {
 }
 
 var extractTotalQty = function (totalItem) {
-        debugger
     var qty = '';
     for (var i in totalItem.qty) {
         qty += '<td>' + formatUS(totalItem.qty[i]) + '</td>';
