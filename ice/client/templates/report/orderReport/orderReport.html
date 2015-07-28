@@ -56,6 +56,7 @@
                 <th rowspan="2">Invoice #</th>
                 <th rowspan="2">Date</th>
                 <th rowspan="2">Customer</th>
+                <th rowspan="2">Staff</th>
                 <th colspan="3">ទឹកកកកិន</th>
                 <th colspan="3">ទឹកកកម៉ត់</th>
                 <th colspan="3">អនាម័យតូច</th>
@@ -91,6 +92,7 @@
                     <td>{{_id}}</td>
                     <td>{{orderDate}}</td>
                     <td>{{name iceCustomerId}}</td>
+                    <td>{{staffName iceStaffId}}</td>
                     {{{itemDetail iceOrderDetail}}}
                     <td>{{formatCurrency total}}</td>
                     {{#if iceOrderDetail}}
@@ -100,11 +102,11 @@
                 </tr>
             {{/each}}
                 <tr>
-                    <td colspan="19" align="right">Grand Total KHR:</td>
+                    <td colspan="20" align="right">Grand Total KHR:</td>
                     {{{sumTotal content}}}
                 </tr>
                 <tr>
-                    <td colspan="19" align="right">USD:</td>
+                    <td colspan="20" align="right">USD:</td>
                     {{{totalInDollar content}}}
                 </tr>
             </tbody>

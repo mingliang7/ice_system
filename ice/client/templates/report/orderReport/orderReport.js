@@ -146,6 +146,10 @@ Template.ice_orderReportGen.helpers({
         customer = Ice.Collection.Customer.findOne(id);
         return customer.name + ' ('+ customer.customerType + ')'
     },
+    staffName: function(id){
+        console.log(id);
+        return Ice.Collection.Staffs.findOne(id).name;
+    },
     itemDetail: function(orderDetail){
         return sortItems(orderDetail);
     },
