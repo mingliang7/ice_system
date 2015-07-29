@@ -11,13 +11,34 @@ Template.ice_order.events
     .maximize()
     $('[name="total"]').attr('readonly', true)
   "click .update": ->
-    data = Ice.Collection.Order.findOne(this._id);
+    orderId = this._id
+    data = Ice.Collection.Order.findOne(orderId);
     id = this.iceCustomerId
     if checkType(id) == 'general'
-      alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
-      .maximize()
+      if(data.paidAmount == 0)
+        alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
+        .maximize()
+      else
+        alertify.warning('Sorry , invoice ' + id + ' has payment')
     else
-      alertify.warning('Sorry , Customer ' + id + ' is not General :( ')
+      orderGroupId = data.iceOrderGroupId
+      group = Ice.Collection.OrderGroup.findOne(orderGroupId);
+      if(group.paidAmount == 0)
+        order = {}
+        order.items = {};
+        order.total = data.total
+        order.totalInDollar = data.totalInDollar
+        data.iceOrderDetail.forEach (item) ->
+          order.items[item.iceItemId] =
+            qty: item.qty
+            amount:item.amount
+            price: item.price
+        Session.set 'oldOrderGroupValue', order
+        Session.set 'iceOrderGroupId', orderGroupId
+        alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
+        .maximize()
+      else
+        alertify.warning('Sorry , invoice ' + id + ' has payment')
 
     $('[name="total"]').attr('readonly', true)
   "click .remove": ->
@@ -172,15 +193,6 @@ AutoForm.hooks
         doc._id = idGenerator.genWithPrefix(Ice.Collection.Order, prefix, 6);
         doc.branchId = Session.get('currentBranch')
         doc
-
-  ice_orderUpdateTemplate:
-    onSuccess: (formType, result) ->
-      alertify.success 'Successfully Updated'
-      alertify.order().close()
-
-    onError: (formType, error) ->
-      alertify.error error.message
-
 # functions
 datePicker = ->
   orderDate = $('[name="orderDate"]')

@@ -97,6 +97,26 @@ setOrderGroup = function(doc) {
   }
 };
 
+updateOrderGroup = function(doc){
+  var group, id, orderGroup, prefix, type;
+  orderGroup = new OrderGroup(doc);
+  iceOrderGroupId = Session.get('iceOrderGroupId');
+  oldValue = Session.get('oldOrderGroupValue');
+  type = OneRecord.customer(doc.iceCustomerId).customerType;
+  if (type !== 'general') {
+    date = rangeDate(doc.orderDate, type);
+    startDate = date.startDate;
+    endDate = date.endDate;
+    oldOrder = Ice.Collection.OrderGroup.findOne(iceOrderGroupId);
+    doc = checkingOrder(oldOrder, oldValue, doc);
+    Ice.Collection.OrderGroup.update({_id: iceOrderGroupId}, {$set: doc});
+    doc.iceOrderGroupId = doc._id;      
+  } else {
+    doc.paidAmount = 0;
+    doc.outstandingAmount = doc.total;
+    return doc.closing = false;
+  }
+}
 Template.ice_paymentUrlInsertTemplate.events({ // on change for payment popup 
   'click .close': function() {
     window.close()
@@ -183,5 +203,80 @@ AutoForm.hooks({
     onError: function(formType, error) {
       return alertify.error(error.message);
     }
+  },
+  ice_orderUpdateTemplate: {
+    before: {
+      update: function(doc){
+        if ((doc.$set.orderDate && doc.$set.iceCustomerId && doc.$set.iceOrderDetail) !== void 0) {
+          updateOrderGroup(doc.$set);
+        }
+        return doc;
+      }
+    },
+    onSuccess: function(formType, result) {
+      alertify.order().close()
+      return alertify.success('Successfully');
+    },
+    onError: function(formType, error) {
+      return alertify.error(error.message);
+    }
   }
 });
+
+
+var checkingOrder = function (oldDoc, oldValue, newDoc){ // checking oldOrder when update
+  var date = moment(newDoc.orderDate).format('YYYY-MM-DD')
+  var total = 0;
+  var totalInDollar = 0;
+  for(var k in oldDoc.groupBy['day' + date].items){ // remove items 
+    if(oldValue.items[k] != undefined){
+      oldDoc.groupBy['day' + date].items[k] = {
+        name: oldDoc.groupBy['day' + date].items[k].name,
+        price: oldDoc.groupBy['day' + date].items[k].price,
+        qty: oldDoc.groupBy['day' + date].items[k].qty -  oldValue.items[k].qty,
+        amount: oldDoc.groupBy['day' + date].items[k].amount -  oldValue.items[k].amount
+      }
+    }
+  }
+  total =  oldDoc.total - oldValue.total
+  oldDoc.groupBy['day' + date].total = oldDoc.groupBy['day' + date].total - oldValue.total;
+  oldDoc.groupBy['day' + date].totalInDollar = oldDoc.groupBy['day' + date].totalInDollar - oldValue.totalInDollar;
+  oldDoc.total = total;
+  oldDoc.totalInDollar = oldDoc.totalInDollar - oldValue.totalInDollar;
+  oldDoc.outstandingAmount = total;
+  oldDoc.outstandingAmount = total;
+  return insertNewDocToOldOrder(oldDoc, newDoc);
+}
+
+var insertNewDocToOldOrder = function (oldDoc, newDoc){ //insert a new doc to old order
+  order = {};
+  order.items = {};
+  order.totalInDollar = newDoc.totalInDollar;
+  order.total = newDoc.total;
+  order.outstandingAmount = newDoc.total;
+  newDoc.iceOrderDetail.forEach(function (item) {
+    order.items[item.iceItemId] = {
+      qty: item.qty,
+      amount: item.amount,
+      price: item.price
+    }
+  });
+
+  var date = moment(newDoc.orderDate).format('YYYY-MM-DD')
+  for(var k in oldDoc.groupBy['day' + date].items){
+    if(order.items[k] != undefined){
+      oldDoc.groupBy['day' + date].items[k] = {
+        name: oldDoc.groupBy['day' + date].items[k].name,
+        price: order.items[k].price,
+        qty: oldDoc.groupBy['day' + date].items[k].qty + order.items[k].qty,
+        amount: oldDoc.groupBy['day' + date].items[k].amount + order.items[k].amount
+      }
+    }
+  }
+  oldDoc.groupBy['day' + date].total =  oldDoc.groupBy['day' + date].total + order.total;
+  oldDoc.groupBy['day' + date].totalInDollar =  oldDoc.groupBy['day' + date].totalInDollar + order.totalInDollar;
+  oldDoc.total = oldDoc.total + order.total;
+  oldDoc.totalInDollar = oldDoc.totalInDollar + order.totalInDollar;
+  oldDoc.outstandingAmount = oldDoc.outstandingAmount + order.outstandingAmount;
+  return oldDoc;
+} 
