@@ -184,10 +184,28 @@ var extractPrice = function (totalItem) {
     return price;
 }
 var extractTotalAmount = function (total, totalItem) {
+    var totalAmount = 0;
+    var qty = [];
+    var price = [];
+    var index = 0
     var amount = '';
-    for (var i in totalItem.amount) {
-        amount += '<td>' + formatNum(totalItem.amount[i]) + '</td>';
+    for (var i in totalItem.qty) {
+        qty.push(totalItem.qty[i])
     }
-    // amount += '<td>' + '<strong>' + total + '</strong>' + '</td>'
+    for (var i in totalItem.price) {
+        price .push(totalItem.price[i]);
+    }
+    for (var i in totalItem.amount) {
+        if(totalItem.amount[i] != 0){
+            if(qty[index] * price[index] != totalItem.amount[i]){
+                amount += '<td><u>' + formatKh(totalItem.amount[i]) + '</u></td>';
+            }else{
+                amount += '<td>' + formatKh(totalItem.amount[i]) + '</td>';
+            }
+        }else{
+            amount += '<td>' + formatKh(totalItem.amount[i]) + '</td>';
+        }
+        index++;
+    }
     return amount;
 }

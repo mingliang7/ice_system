@@ -81,7 +81,6 @@ Template.ice_invoiceGroupGen.helpers({
 
         }else if (status == 'All' && customerType == 'All' && customer == 'All'){
             var selector = {startDate: {$gte: startDate}, endDate: {$lte: endDate}};
-            debugger
             var groupOrder = Ice.Collection.OrderGroup.find(selector);
             groupOrder.forEach(function (itemsDetail) {
                 contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
@@ -286,14 +285,16 @@ var findCustomerName = function(id){
 
 // function which generate each customer order detail included footer and header 
 var contentDetail = function (content, itemsDetail, order) {
+    var qty = extractTotalQty(itemTotalDetail(itemsDetail));
+    var price = extractPrice(itemTotalDetail(itemsDetail));
     var dataItem = {};
     dataItem = {};
     dataItem.invoiceId = order._id; 
     dataItem.customerName = findCustomerName(order.iceCustomerId);
     dataItem.total = itemTotalDetail(itemsDetail);
     dataItem.totalDetail = { // total each orderGroup for qty, price, amount
-        qty: extractTotalQty(itemTotalDetail(itemsDetail)),
-        price: extractPrice(itemTotalDetail(itemsDetail)),
+        qty: qty,
+        price: price,
         amount: extractTotalAmount(itemTotalDetail(itemsDetail))
     } 
     dataItem.footer = { // footer for total in khmer , dollar , paidAmount , oustandingAmount
@@ -370,10 +371,28 @@ var extractPrice = function (totalItem) {
     return price;
 }
 var extractTotalAmount = function (totalItem) {
+    var totalAmount = 0;
+    var qty = [];
+    var price = [];
+    var index = 0
     var amount = '';
-    for (var i in totalItem.amount) {
-        amount += '<td>' + formatKh(totalItem.amount[i]) + '</td>';
+    for (var i in totalItem.qty) {
+        qty.push(totalItem.qty[i])
     }
-    // amount += '<td>' + '<strong>' + total + '</strong>' + '</td>'
+    for (var i in totalItem.price) {
+        price .push(totalItem.price[i]);
+    }
+    for (var i in totalItem.amount) {
+        if(totalItem.amount[i] != 0){
+            if(qty[index] * price[index] != totalItem.amount[i]){
+                amount += '<td><u>' + formatKh(totalItem.amount[i]) + '</u></td>';
+            }else{
+                amount += '<td>' + formatKh(totalItem.amount[i]) + '</td>';
+            }
+        }else{
+            amount += '<td>' + formatKh(totalItem.amount[i]) + '</td>';
+        }
+        index++;
+    }
     return amount;
 }
