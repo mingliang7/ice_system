@@ -51,7 +51,13 @@ Template.ice_paymentReportGen.helpers({
             date: self.date,
             exchange: formatEx(self.exchange)
         }
-
+        /**********Title**************/
+        var company = Cpanel.Collection.Company.findOne();
+        data.title = {
+            company: company.enName,
+            address: company.khAddress,
+            telephone: company.telephone
+        };
         /********** Content **********/
         var content = [];
         var selector = {};

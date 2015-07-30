@@ -1,0 +1,1 @@
+Ice.Collection.RemoveInvoiceLog = new Mongo.Collection('ice_remove_invoice_logs');

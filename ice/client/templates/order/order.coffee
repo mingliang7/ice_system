@@ -1,3 +1,6 @@
+Template.ice_orderUpdateTemplate.onRendered ->
+  text = $('[name="iceCustomerId"] option:selected').text()
+  $('[name="customer"]').val(text)
 Template.ice_orderInsertTemplate.onRendered ->
   today = moment(new Date()).format('YYYY-MM-DD HH:mm:ss') 
   $('[name="orderDate"]').val(today)
@@ -43,12 +46,25 @@ Template.ice_order.events
     $('[name="total"]').attr('readonly', true)
   "click .remove": ->
     id = @_id
+    data = Ice.Collection.Order.findOne(id)
+    userId = Meteor.userId()
+    userName = Meteor.users.findOne(userId).username;
+    selector = 
+      dateTime: moment().format('YYYY-MM-DD HH:mm:ss')
+      data: data 
+      removedBy: 
+        id: userId 
+        name: userName 
     alertify.confirm(
       fa('remove', 'Remove order'),
       "Are you sure to delete "+id+" ?",
       ->
         Ice.Collection.Order.remove id, (error) ->
-          if error is 'undefined' then alertify.error error.message else alertify.warning 'Successfully Remove'
+          if error is 'undefined' 
+            alertify.error error.message 
+          else
+            Ice.Collection.RemoveInvoiceLog.insert(selector)
+            alertify.warning 'Successfully Remove'
       null
     )
   'click .show': () ->
