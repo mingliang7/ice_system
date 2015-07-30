@@ -25,7 +25,7 @@
     {{#with data}}
         <!--Title-->
         <div class="report-title">
-            <div class="company-name-kh">ទឹកកកអនាម័យ បេង ភី</div>
+            <div class="company-name-en" style="font-size: 20px;">{{title.company}}</div>
             <div class="report-name">Payment Report</div>
         </div>
 
@@ -36,12 +36,12 @@
                     <ul class="list-unstyled">
                         <li><strong>Staff:</strong> {{staff}}</li>
                         <li><strong>customerType:</strong> {{customerType}}</li>
+                        <li><strong>Customer:</strong> {{customer}}</li>
                     </ul>
                 </div>
                 <div style="width: 50%; float: right">
                     <ul class="list-unstyled">
                         <li><strong>Date:</strong> {{date}}</li>
-                        <li><strong>Customer:</strong> {{customer}}</li>
                          <li><strong>Exchange Rate:</strong> {{exchange}}</li>
                     </ul>
                 </div>

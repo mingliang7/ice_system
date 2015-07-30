@@ -1,3 +1,15 @@
+Ice.Collection.Order.before.update(function(userId, doc, fieldNames, modifier,options){
+  modifier.$set = modifier.$set || {};
+  if(modifier.$set.iceOrderDetail){
+    var iceOrderDetail = [];
+    _.each(modifier.$set.iceOrderDetail, function(obj){
+      if (!_.isNull(obj)){
+        iceOrderDetail.push(obj);
+      }
+    });
+    modifier.$set.iceOrderDetail = iceOrderDetail;
+  }
+});
 Ice.Collection.Order.before.remove(function (userId, doc) {
   if(doc.iceOrderGroupId != undefined){
     var order = {};

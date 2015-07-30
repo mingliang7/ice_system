@@ -3,7 +3,7 @@
     {{#with data}}
         <!--Title-->
         <div class="report-title">
-            <span class="report-company-name" style="font-family: 'Khmer OS Muol"></span><br>
+            <span class="report-company-name" style="font-family: 'Khmer OS Muol'"></span><br>
             <span class="report-company-name">{{title.company}}</span><br>
             <u> វិក្កយបត្រ</u><br>
             អាស័យដ្ឋាន: {{title.address}}<br>
@@ -83,12 +83,14 @@
     {{/with}}
 
     <!--Sign-->
-    {{> dental_invoiceReportGenFooterNote}}
+    {{> ice_invoiceReportGenFooterNote}}
 </template>
 <!--footerNote-->
-<template name="dental_invoiceReportGenFooterNote">
+<template name="ice_invoiceReportGenFooterNote">
     <div style="text-align: center">
     <br>
-        <strong><u>Note:</u></strong> សូមអរគុណដែលបានជាវទឹកកកពីហាងយើងខ្ញំុ
+    <strong> សូមអរគុណដែលបានជាវទឹកកកពីហាងយើងខ្ញំុ!</strong>
+    
+    <p style="font-size: 10px;">(Developed by: Rabbit IT Solutions, Tel: 053 50 66 777)</p>
     </div>
 </template>

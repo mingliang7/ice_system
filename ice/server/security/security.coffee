@@ -30,3 +30,8 @@ Ice.Collection.Staffs.permit([
 	'update'
 	'remove'
 ]).ice_ifGeneral().apply()
+Ice.Collection.RemoveInvoiceLog.permit([
+	'insert'
+	'update'
+	'remove'
+]).ice_ifGeneral().apply()
