@@ -26,11 +26,12 @@
         {{#each content}}
         <!--Title-->
         <div class="report-title">
-            <span class="report-company-name" style="font-family: 'Khmer OS Muol"></span><br>
-            <span class="report-company-name">{{title.company}}</span><br>
-            <u> វិក្កយបត្រ</u><br>
-            អាស័យដ្ឋាន: {{title.address}}<br>
-            ទូរស័ព្ទ: {{title.telephone}}
+            <span class="report-company-name" style="font-family: 'Khmer OS Muol';">{{title.company}}</span><br>
+            <u style="font-size: 16px"> វិក្កយបត្រ</u><br>
+            <span  style="font-size: 10px">
+                អាស័យដ្ឋាន: {{title.address}}<br>
+                ទូរស័ព្ទ: {{title.telephone}}
+            </span>
         </div>
 
         <!--Header-->
@@ -94,4 +95,3 @@
     <!--Sign-->
     {{> ice_invoiceReportGenFooterNote}}
 </template>
-

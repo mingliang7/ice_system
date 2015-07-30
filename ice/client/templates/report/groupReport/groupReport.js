@@ -56,9 +56,9 @@ Template.ice_invoiceGroupReportGen.helpers({
             type = 'general';
         }
         data.header = [
-            {col1: '#: ' + self.id, col2: 'បុគ្គលិក: ' + ''},
-            {col1: 'អតិថិជន: ' + customerDoc.name, col2: 'ប្រភេទ: ' + type},
-            {col1: 'កាលបរិច្ឆេទ: ' + date +" ដល់ " + endDate, col2: 'ម៉ោង: ' + time}
+            {col1: '#: ' + self.id, col2: 'ប្រភេទ: ' + type},
+            {col1: 'អតិថិជន: ' + customerDoc.name, col2: 'ម៉ោង: ' + time},
+            {col1: 'កាលបរិច្ឆេទ: ' + date +" ដល់ " + endDate, col2: ''}
         ];
 
         /********* Content & Footer *********/

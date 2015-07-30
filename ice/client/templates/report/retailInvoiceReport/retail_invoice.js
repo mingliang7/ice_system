@@ -50,10 +50,10 @@ Template.ice_invoiceReportGen.helpers({
         // dueDate = '' + getGroup.startDate + '-' + getGroup.endDate;
         
         if(customerDoc.customerType !== 'general'){
-        	type = customerDoc.customerType + ' ថ្ងៃ';
+            type = customerDoc.customerType + ' ថ្ងៃ';
         }
         else{
-        	type = 'general';
+            type = 'general';
         }
         data.header = [
             {col1: '#: ' + self.orderId, col2: 'បុគ្គលិក: ' + '' },
@@ -66,18 +66,18 @@ Template.ice_invoiceReportGen.helpers({
         var getOrder = Ice.Collection.Order.findOne(self.orderId);
         var itemsDetail = getOrder.iceOrderDetail
         itemsDetail.forEach(function (item) {
-        	item.price = formatKH(item.price);
-        	item.amount = formatDollar(item.amount);
+            item.price = formatKH(item.price);
+            item.amount = formatDollar(item.amount);
             item.discount = item.discount == undefined ? '' : item.discount + '%'
-        	content.push(item);
+            content.push(item);
         });
         content.push(itemsDetail);
         if (content.length > 0) {
             data.content = content;
             data.footer = {
-            	subtotal: formatKH(getOrder.subtotal),
-            	discount: getOrder.discount == undefined ? '' : getOrder.discount + '%',
-            	total: formatKH(getOrder.total),
+                subtotal: formatKH(getOrder.subtotal),
+                discount: getOrder.discount == undefined ? '' : getOrder.discount + '%',
+                total: formatKH(getOrder.total),
                 totalInDollar: formatDollar(getOrder.totalInDollar),
                 paidAmount: formatKH(getOrder.paidAmount),
                 outstandingAmount: formatKH(getOrder.outstandingAmount)
@@ -90,20 +90,20 @@ Template.ice_invoiceReportGen.helpers({
     },
 
     itemName: function(id){
-    	var name = Ice.Collection.Item.findOne(id).name;
-    	return name;
+        var name = Ice.Collection.Item.findOne(id).name;
+        return name;
     },
     itemDiscount: function(discount) {
-    	if(discount == undefined){
-   			return '';
-    	}else{
-    		return discount;
-    	}
+        if(discount == undefined){
+            return '';
+        }else{
+            return discount;
+        }
     }
 });
 
 var formatDollar = function(value){
-	return numeral(value).format('0,0.00');
+    return numeral(value).format('0,0.00');
 }
 var formatKH = function(value){
     return numeral(value).format('0,0');
