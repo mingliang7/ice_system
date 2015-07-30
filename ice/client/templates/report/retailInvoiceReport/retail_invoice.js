@@ -75,9 +75,9 @@ Template.ice_invoiceReportGen.helpers({
         if (content.length > 0) {
             data.content = content;
             data.footer = {
-            	subtotal: formatKH(getOrder.subtotal),
-            	discount: getOrder.discount == undefined ? '' : getOrder.discount + '%',
-            	total: formatKH(getOrder.total),
+                subtotal: formatKH(getOrder.subtotal),
+                discount: getOrder.discount == undefined ? '' : getOrder.discount,
+                total: formatKH(getOrder.total),
                 totalInDollar: formatDollar(getOrder.totalInDollar),
                 paidAmount: formatKH(getOrder.paidAmount),
                 outstandingAmount: formatKH(getOrder.outstandingAmount)

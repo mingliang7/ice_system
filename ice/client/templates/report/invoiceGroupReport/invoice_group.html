@@ -58,13 +58,17 @@
             <tbody class="report-content-body">
             
                 {{{listItems items}}}
-                <tr class="dotted">
+            <tr class="dotted">
                 <td>ចំនួន:</td>
                 {{{totalDetail.qty}}}
             </tr>
             <tr>
                 <td>តម្លៃ:</td>
                 {{{totalDetail.price}}}
+            </tr>
+            <tr>
+                <td>បញ្ចុះតម្លៃ:</td>
+                {{{totalDetail.discount}}}
             </tr>
             <tr>
                 <td>សរុប:</td>
@@ -74,7 +78,9 @@
         </table>
                 <table class="small-table" >
         <thead>
-
+            <tr>
+                 <th class="pull-right">បញ្ចុះតម្លៃ(រៀល): </th> <th>{{footer.discount}}</th>
+            </tr>
              <tr >
                  <th class="pull-right">តម្លៃសរុប(រៀល): </th> <th>{{footer.total}}</th>
                 <th class="pull-right">តម្លៃសរុប(ដុល្លារ):</th> <th>{{footer.totalInDollar}}</th>

@@ -70,7 +70,7 @@ Ice.TabularTable.Order = new (Tabular.Table)(
       title: 'Discount'
       render: (val) ->
         if val isnt undefined
-          "<p class='label label-success'>#{val}%</p>" 
+          "<p class='label label-success'>#{val}</p>" 
         else
           "<p class='label label-success'>None</p>" 
     }

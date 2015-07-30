@@ -7,6 +7,10 @@ Ice.Schema.OrderGroup = new SimpleSchema(
 	endDate:
 		type: String
 
+	discount:
+		type: Number
+		decimal: true
+		
 	total:
 		type: Number
 		decimal: true

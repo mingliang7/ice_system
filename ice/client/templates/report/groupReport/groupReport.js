@@ -72,6 +72,7 @@ Template.ice_invoiceGroupReportGen.helpers({
             data.footer = {
                 // subtotal: formatNum(groupOrder.subtotal),
                 // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
+                discount: formatKhmerCurrency(groupOrder.discount),
                 total: formatKhmerCurrency(groupOrder.total),
                 totalInDollar: formatNum(groupOrder.totalInDollar),
                 paidAmount: formatKhmerCurrency(groupOrder.paidAmount),
@@ -80,6 +81,7 @@ Template.ice_invoiceGroupReportGen.helpers({
             data.totalDetail = {
                 qty: extractTotalQty(totalItem),
                 price: extractPrice(totalItem),
+                discount: extractDiscount(totalItem),
                 amount: extractTotalAmount(data.footer.total, totalItem)
             }
             return data;
@@ -152,17 +154,19 @@ var itemTotalDetail = function (itemsDetail) {
     itemSubTotal.qty = {};
     itemSubTotal.price = {}
     itemSubTotal.amount = {};
+    itemSubTotal.discount = {};
     for (var k in itemsDetail) {
         for (var i in itemsDetail[k]['items']) {
             itemSubTotal.qty[i] = 0;
             itemSubTotal.amount[i] = 0;
+            itemSubTotal.discount[i] = 0;
         }
     }
-
     for (var k in itemsDetail) {
         for (var i in itemsDetail[k]['items']) {
             itemSubTotal.qty[i] += itemsDetail[k]['items'][i].qty;
             itemSubTotal.price[i] = itemsDetail[k]['items'][i].price
+            itemSubTotal.discount[i] += itemsDetail[k]['items'][i].discount
             itemSubTotal.amount[i] += itemsDetail[k]['items'][i].amount
         }
     }
@@ -182,6 +186,13 @@ var extractPrice = function (totalItem) {
         price += '<td>' + formatKhmerCurrency(totalItem.price[i]) + '</td>';
     }
     return price;
+}
+var extractDiscount = function (totalItem) {
+    var discount = '';
+    for (var i in totalItem.discount) {
+        discount += '<td>' + totalItem.discount[i] + '%' + '</td>';
+    }
+    return discount;
 }
 var extractTotalAmount = function (total, totalItem) {
     var totalAmount = 0;

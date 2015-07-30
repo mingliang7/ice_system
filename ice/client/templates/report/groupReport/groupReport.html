@@ -47,6 +47,10 @@
                 {{{totalDetail.price}}}
             </tr>
             <tr>
+                <td>បញ្ចុះតម្លៃ:</td>
+                {{{totalDetail.discount}}}
+            </tr>
+            <tr>
                 <td>សរុប:</td>
                 {{{totalDetail.amount}}}
             </tr>
@@ -56,7 +60,6 @@
 
         <!--Footer-->
         <p></p>
-        <br>
         <table class="small-table" >
         <thead>
       <!--       <tr>
@@ -73,7 +76,9 @@
                 <th></th>
                 <th></th>
                 -->
-
+            <tr >
+                 <th class="pull-right">បញ្ចុះតម្លៃ(រៀល): </th> <th>{{footer.discount}}</th>
+            </tr>
              <tr >
                  <th class="pull-right">តម្លៃសរុប(រៀល): </th> <th>{{footer.total}}</th>
                 <th class="pull-right">តម្លៃសរុប(ដុល្លារ):</th> <th>{{footer.totalInDollar}}</th>
