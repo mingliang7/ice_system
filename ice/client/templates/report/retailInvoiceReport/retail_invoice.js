@@ -45,6 +45,7 @@ Template.ice_invoiceReportGen.helpers({
         var date = moment(self.date).format('YYYY-MM-DD');
         var time = moment(self.date).format('hh:mm:ss a');
         var type = '';
+        var getOrder = Ice.Collection.Order.findOne(self.orderId);
          
                 // var getGroup = Ice.Collection.OrderGroup.findOne({_id: self.groupId, iceCustomerId: self.customerId, startDate: {$lt: self.endDate}, endDate:{$gt: self.startDate}});
         // dueDate = '' + getGroup.startDate + '-' + getGroup.endDate;
@@ -56,14 +57,13 @@ Template.ice_invoiceReportGen.helpers({
             type = 'general';
         }
         data.header = [
-            {col1: '#: ' + self.orderId, col2: 'បុគ្គលិក: ' + '' },
+            {col1: '#: ' + self.orderId, col2: 'បុគ្គលិក: ' + getOrder._staff.name },
             {col1: 'អតិថិជន: ' + customerDoc.name, col2: 'ប្រភេទ: ' + type},
             { col1: 'កាលបរិច្ឆេទ: ' + date, col2: 'ម៉ោង: ' + time }
         ];
 
         /********* Content & Footer *********/
         var content = [];
-        var getOrder = Ice.Collection.Order.findOne(self.orderId);
         var itemsDetail = getOrder.iceOrderDetail
         itemsDetail.forEach(function (item) {
             item.price = formatKH(item.price);
