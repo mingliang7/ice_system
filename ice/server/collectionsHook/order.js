@@ -18,11 +18,20 @@ Ice.Collection.Order.before.remove(function (userId, doc) {
     order.items = {};
     order.total = doc.total;
     order.totalInDollar = doc.totalInDollar;
+    order.discount = 0 ; 
+    if(doc.discount != undefined){
+      order.discount = doc.discount;
+    }
     doc.iceOrderDetail.forEach(function(item) {
+      var discount = 0 ;
+      if(item.discount != undefined) {
+        discount = item.discount;
+      }
       order.items[item.iceItemId] = {
         qty: item.qty,
         amount: item.amount,
-        price: item.price
+        price: item.price,
+        discount: discount
       };
     });
     doc = removeOrderGroup(oldDoc, order, orderDate); 
@@ -45,16 +54,21 @@ var removeOrderGroup = function (oldDoc, oldValue, orderDate){ // oldDoc is old 
         name: oldDoc.groupBy['day' + date].items[k].name,
         price: oldDoc.groupBy['day' + date].items[k].price,
         qty: oldDoc.groupBy['day' + date].items[k].qty -  oldValue.items[k].qty,
-        amount: oldDoc.groupBy['day' + date].items[k].amount -  oldValue.items[k].amount
+        amount: oldDoc.groupBy['day' + date].items[k].amount -  oldValue.items[k].amount,
+        discount: oldDoc.groupBy['day' + date].items[k].discount -  oldValue.items[k].discount
       }
     }
   }
   total =  oldDoc.total - oldValue.total
   oldDoc.groupBy['day' + date].total = oldDoc.groupBy['day' + date].total - oldValue.total;
+  oldDoc.groupBy['day' + date].discount = oldDoc.groupBy['day' + date].discount - oldValue.discount;
   oldDoc.groupBy['day' + date].totalInDollar = oldDoc.groupBy['day' + date].totalInDollar - oldValue.totalInDollar;
   oldDoc.total = total;
   oldDoc.totalInDollar = oldDoc.totalInDollar - oldValue.totalInDollar;
+  oldDoc.discount = oldDoc.discount - oldValue.discount;
   oldDoc.outstandingAmount = total;
-  oldDoc.outstandingAmount = total;
+  if(oldDoc.groupBy['day' + date].total == 0 ){
+    delete oldDoc.groupBy['day' + date];
+  }
   return oldDoc;
 }
