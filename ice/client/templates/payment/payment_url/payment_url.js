@@ -37,7 +37,7 @@ Template.ice_paymentUrlInsertTemplate.events({
     var dueAmount, paidAmount;
     dueAmount = parseInt($('[name="dueAmount"]').val());
     paidAmount = $('[name="paidAmount"]').val();
-    if (parseInt(paidAmount) > dueAmount) {
+    if (parseFloat(paidAmount) > dueAmount) {
       $('[name="paidAmount"]').val(dueAmount);
       return $('[name="outstandingAmount"]').val(0);
     } else if (paidAmount === '') {

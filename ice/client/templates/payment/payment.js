@@ -22,7 +22,7 @@ Template.ice_payment.events({
    },
   'click .remove': function() {
   	var flag = checkAvailablity(this);
-  	flag ? updateInvoice(this) : alertify.warning('Sorry! invoice ' + this._id + ' is not a last record :( ');
+  	flag ? onRemoved(this) : alertify.warning('Sorry! invoice ' + this._id + ' is not a last record :( ');
   },
   'click .show': function() {
      return alertify.paymentForm(fa('eye', 'Payment'), renderTemplate(Template.ice_paymentShowTemplate, this));
@@ -33,10 +33,9 @@ Template.ice_payment.events({
   	if(flag) {
   		Ice.ListForReportState.set('customer', doc.customerId)
   		Session.set('checkIfUpdate', true);
-  		Session.set('paidAmount', doc.paidAmount);
-  		Session.set('invoiceId', doc.orderId_orderGroupId);
-  		alertify.paymentForm(fa('money', 'Update Payment'), renderTemplate(Template.ice_paymentUpdateTemplate, this)).maximize(); 
-  		
+  		Session.set('paymentPaidAmount', doc.paidAmount);
+  		Session.set('paymentInvoiceId', doc.orderId_orderGroupId);
+  		alertify.paymentForm(fa('money', 'Update Payment'), renderTemplate(Template.ice_paymentUpdateTemplate, doc)).maximize(); 
   	}else{
   		alertify.warning('Sorry! invoice ' + doc._id + ' is not a last record :( ')
   	}
@@ -99,9 +98,16 @@ Template.ice_paymentInsertTemplate.events({
 
 Template.ice_paymentUpdateTemplate.events({
 	'keyup [name="paidAmount"]': function () {
-		dueAmount = parseInt($('[name="dueAmount"]').val());
-		paidAmount = parseInt($('[name="paidAmount"]').val());
-		$('[name="outstandingAmount"]').val(dueAmount - paidAmount);
+		dueAmount = $('[name="dueAmount"]').val();
+		paidAmount = $('[name="paidAmount"]').val();
+    dueAmount = parseFloat(dueAmount);
+    paidAmount = parseFloat(paidAmount)
+    outstandingAmount = dueAmount - paidAmount
+    console.log(outstandingAmount);
+    setTimeout(function(){
+		  $('[name="outstandingAmount"]').val(outstandingAmount);
+      
+    }, 200);
 	}
 });
 
@@ -145,15 +151,15 @@ var checkAvailablity = function(doc){
   	return flag;
 } 
 
-var updateInvoice = function(doc){
+var onRemoved = function(doc){
   if(checkType(doc) == 'general'){
           var oldOrder = Ice.Collection.Order.findOne(doc.orderId_orderGroupId);
           Ice.Collection.Order.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false}});
-        }else{
+  }else{
           var oldOrder = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId);
           Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false}});
-        }
-        removeDoc(doc._id);
+  }
+  removeDoc(doc._id);
 }
 
 

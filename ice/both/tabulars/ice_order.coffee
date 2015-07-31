@@ -66,6 +66,14 @@ Ice.TabularTable.Order = new (Tabular.Table)(
         items
     }
     {
+      data: 'paidAmount'
+      title: 'Paid Amount' 
+    }
+    {
+      data: 'outstandingAmount'
+      title: 'Outstanding Amount' 
+    }
+    {
       data: 'discount'
       title: 'Discount'
       render: (val) ->
