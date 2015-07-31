@@ -64,76 +64,22 @@ Template.ice_customerReportGen.helpers({
             selector = {orderDate: {$gte: startDate, $lte: endDate}};
             var index = 1;
             var reduceCustomer = groupCustomer(selector);
-            td = ''
-            for(var k in reduceCustomer) {
-                td += '<tr><th colspan="4" align="center">' + k + ' | '+ findCustomerName(k) + '</tr></th>'
-                td += '<tr>' + '<th>' + 'ទំនិញ' + '</th>' + '<th>' + 'ចំនួន' + '</th>' + '<th>' + 'តម្លៃលក់' + '</th>' + '<th>' + 'តម្លៃសរុប' + '</th>' + '</tr>'
-                for(var j in reduceCustomer[k]){
-                    if(reduceCustomer[k][j].name != undefined){
-                        td += '<tr>' + '<td>' + reduceCustomer[k][j].name + '</td>' + '<td>' + reduceCustomer[k][j].qty + '</td>' + '<td>' + formatKh(reduceCustomer[k][j].price) + '</td>' + '<td>' + formatKh(reduceCustomer[k][j].amount) + '</td>' + '</tr>';
-                    }
-                }
-                if(reduceCustomer[k].paidAmount != undefined){
-                    td += '<tr>' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + formatKh(reduceCustomer[k].paidAmount) + '</strong></td>' + '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + formatKh(reduceCustomer[k].outstandingAmount) +'</strong></td>' + '</tr>';
-                }else{
-                    td += '<tr>' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + orderGroupCustomer(reduceCustomer[k].total, k, startDate, endDate);
-                }
-            }
+            var td = listAsTable(reduceCustomer);
             content.push({list: td});
-        }else if (staff == 'All' && customerType == 'All' && customer == 'All'){
-            customers = findCustomerByType(customerType);
-            var index = 1;
-            for(var i = 0 ; i < customers.length; i++){
-               selector = {customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = setTimeout(function(){ Ice.Collection.Payment.find(selector)}, 1000);
-                console.log(getOrder);
-            }
-        }else if (staff != 'All' && customerType !== 'All' && customer == 'All'){
-            customers = findCustomerByType(customerType);
-            var index = 1;
-            for(var i = 0 ; i < customers.length; i++){
-               selector = {staffId: self.staffId, customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    obj.index = index;
-                    content.push(obj);
-                    index++;
-                });
-            }
-        }else if (staff == 'All' && customerType !== 'All' && customer == 'All'){
-            var index = 1;
+        }else if (customerType != 'All' && customer == 'All'){
             customers = findCustomerByType(customerType);
             for(var i = 0 ; i < customers.length; i++){
-               selector = {customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    obj.index = index;
-                    content.push(obj);
-                    index++;
-                });
+                selector = {iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}}
+                var reduceCustomer = groupCustomer(selector);
+                var td = listAsTable(reduceCustomer);
+                content.push({list: td});
             }
-        }else if (staff == 'All' && customerType !== 'All' && customer != 'All'){
-               selector = {customerId: self.customerId, paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Payment.find(selector);
-                var index = 1;
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    obj.index = index;
-                    content.push(obj);
-                    index++;
-                });
         }else{
-                index = 1 ;
-                selector = {staffId: self.staffId, customerId: self.customerId, paymentDate: {$gte: startDate, $lte: endDate}};
-                getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    obj.index = index;
-                    content.push(obj);
-                    index++;
-                });
+            selector = {iceCustomerId: customer, orderDate: {$gte: startDate, $lte: endDate}};
+            var index = 1;
+            var reduceCustomer = groupCustomer(selector);
+            var td = listAsTable(reduceCustomer);
+            content.push({list: td});
         }
         if (content.length > 0) {
             data.content = content;
@@ -249,7 +195,6 @@ var orderGroupCustomer = function(total,id, startDate, endDate) {
     var outstandingAmount = 0;
     var paidAmount = 0; 
     var groupOrders = Ice.Collection.OrderGroup.find({iceCustomerId: id, startDate:{$gte: startDate[0]}, endDate:{$lte: endDate[0]}})
-    debugger
     groupOrders.forEach(function (order) {
         paidAmount += order.paidAmount
         outstandingAmount = total - paidAmount
@@ -357,4 +302,46 @@ var getItems = function(){
             }
     });
     return iceItemObj;
+}
+
+listAsTable = function(reduceCustomer){
+    td = ''
+    var totalItem = {};
+    var outstandingAmount = 0 ;
+    var paidAmount = 0 ;
+    var total = 0;
+    var listTotalItem = '';
+    for(var k in reduceCustomer){
+        for( var j in reduceCustomer[k]){
+            if(reduceCustomer[k][j].name != undefined){
+                if(totalItem[j]){
+                    totalItem[j].qty += reduceCustomer[k][j].qty;
+                    totalItem[j].amount += reduceCustomer[k][j].amount;
+                }else{
+                    totalItem[j] = {
+                        name: reduceCustomer[k][j].name,
+                        qty: reduceCustomer[k][j].qty,
+                        price: reduceCustomer[k][j].price,
+                        amount: reduceCustomer[k][j].amount
+                    }
+                } 
+            }
+        }
+        total += reduceCustomer[k].total;
+    }
+    for(var k in reduceCustomer) {
+        td += '<tr><th colspan="4" align="center"><u>' + k + ' | '+ findCustomerName(k) + '</u></tr></th>'
+        td += '<tr style="border: 1px solid #ddd;">' + '<th style="border: 1px solid #ddd;">' + 'ទំនិញ' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'ចំនួន' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'តម្លៃលក់' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'តម្លៃសរុប' + '</th>' + '</tr>'
+        for(var j in reduceCustomer[k]){
+            if(reduceCustomer[k][j].name != undefined){
+                td += '<tr style="border: 1px solid #ddd;">' + '<td style="border: 1px solid #ddd;">' + reduceCustomer[k][j].name + '</td>' + '<td style="border: 1px solid #ddd;">' + reduceCustomer[k][j].qty + '</td>' + '<td style="border: 1px solid #ddd;">' + formatKh(reduceCustomer[k][j].price) + '</td>' + '<td style="border: 1px solid #ddd;">' + formatKh(reduceCustomer[k][j].amount) + '</td>' + '</tr>';
+            }
+        }
+        if(reduceCustomer[k].paidAmount != undefined){
+            td += '<tr>' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + formatKh(reduceCustomer[k].paidAmount) + '</strong></td>' + '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + formatKh(reduceCustomer[k].outstandingAmount) +'</strong></td>' + '</tr>';
+        }else{
+            td += '<tr style="border: 1px solid #ddd;">' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + orderGroupCustomer(reduceCustomer[k].total, k, startDate, endDate);
+        }
+    }
+    return td;
 }
