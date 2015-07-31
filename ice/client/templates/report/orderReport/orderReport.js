@@ -156,6 +156,15 @@ Template.ice_orderReportGen.helpers({
     check: function(value, total){
         return value == undefined ? total : formatKh(value)
     },
+    totalDiscount: function(content){
+        var discount = 0;
+        content.forEach(function(item){
+            if(item.discount != undefined){
+                discount += item.discount;
+            }
+        });
+        return '<td><strong>' + formatKh(discount) + '</strong></td>' + '<td></td><td></td>';
+    },
     sumTotal: function(content){
         td = ''
         total = 0 ;
@@ -225,6 +234,7 @@ sortItems = function(orderDetail){
 }
 
 formatKh = function(val){
+    debugger
     return numeral(val).format('0,0')
 }
 formatUS = function(val){

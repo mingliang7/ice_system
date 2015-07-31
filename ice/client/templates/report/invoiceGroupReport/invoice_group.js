@@ -64,14 +64,6 @@ Template.ice_invoiceGroupGen.helpers({
             });
             if (content.length > 0) {
                 data.content = content;
-                data.footer = {
-                    // subtotal: formatNum(groupOrder.subtotal),
-                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
-                    total: formatKh(groupOrder.total),
-                    totalInDollar: formatUS(groupOrder.totalInDollar),
-                    paidAmount: formatKh(groupOrder.paidAmount),
-                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
-                }
               
             return data;
             } else {
@@ -87,14 +79,6 @@ Template.ice_invoiceGroupGen.helpers({
             });
             if (content.length > 0) {
                 data.content = content;
-                data.footer = {
-                    // subtotal: formatNum(groupOrder.subtotal),
-                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
-                    total: formatKh(groupOrder.total),
-                    totalInDollar: formatUS(groupOrder.totalInDollar),
-                    paidAmount: formatKh(groupOrder.paidAmount),
-                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
-                }
               
             return data;
             } else {
@@ -118,14 +102,6 @@ Template.ice_invoiceGroupGen.helpers({
             }
             if (content.length > 0) {
                 data.content = content;
-                data.footer = {
-                    // subtotal: formatNum(groupOrder.subtotal),
-                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
-                    total: formatKh(groupOrder.total),
-                    totalInDollar: formatUS(groupOrder.totalInDollar),
-                    paidAmount: formatKh(groupOrder.paidAmount),
-                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
-                }
               
             return data;
             } else {
@@ -147,14 +123,6 @@ Template.ice_invoiceGroupGen.helpers({
             }
             if (content.length > 0) {
                 data.content = content;
-                data.footer = {
-                    // subtotal: formatNum(groupOrder.subtotal),
-                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
-                    total: formatKh(groupOrder.total),
-                    totalInDollar: formatUS(groupOrder.totalInDollar),
-                    paidAmount: formatKh(groupOrder.paidAmount),
-                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
-                }
               
             return data;
             } else {
@@ -169,14 +137,6 @@ Template.ice_invoiceGroupGen.helpers({
             });
             if (content.length > 0) {
                 data.content = content;
-                data.footer = {
-                    // subtotal: formatNum(groupOrder.subtotal),
-                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
-                    total: formatKh(groupOrder.total),
-                    totalInDollar: formatUS(groupOrder.totalInDollar),
-                    paidAmount: formatKh(groupOrder.paidAmount),
-                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
-                }
               
             return data;
             } else {
@@ -193,14 +153,6 @@ Template.ice_invoiceGroupGen.helpers({
             });
             if (content.length > 0) {
                 data.content = content;
-                data.footer = {
-                    // subtotal: formatNum(groupOrder.subtotal),
-                    // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
-                    total: formatKh(groupOrder.total),
-                    totalInDollar: formatUS(groupOrder.totalInDollar),
-                    paidAmount: formatKh(groupOrder.paidAmount),
-                    outstandingAmount: formatKh(groupOrder.outstandingAmount)
-                }
               
             return data;
             } else {
@@ -287,6 +239,7 @@ var findCustomerName = function(id){
 var contentDetail = function (content, itemsDetail, order) {
     var qty = extractTotalQty(itemTotalDetail(itemsDetail));
     var price = extractPrice(itemTotalDetail(itemsDetail));
+    var discount = extractDiscount(itemTotalDetail(itemsDetail))
     var dataItem = {};
     dataItem = {};
     dataItem.invoiceId = order._id; 
@@ -295,12 +248,14 @@ var contentDetail = function (content, itemsDetail, order) {
     dataItem.totalDetail = { // total each orderGroup for qty, price, amount
         qty: qty,
         price: price,
+        discount: discount,
         amount: extractTotalAmount(itemTotalDetail(itemsDetail))
     } 
     dataItem.footer = { // footer for total in khmer , dollar , paidAmount , oustandingAmount
         total: formatKh(order.total),
         totalInDollar: formatUS(order.totalInDollar),
         paidAmount: formatKh(order.paidAmount),
+        discount: formatKh(order.discount),
         outstandingAmount: formatKh(order.outstandingAmount)
     }
     var company = Cpanel.Collection.Company.findOne();
@@ -339,18 +294,21 @@ var itemTotalDetail = function (itemsDetail) {
     itemSubTotal.qty = {};
     itemSubTotal.price = {}
     itemSubTotal.amount = {};
+    itemSubTotal.discount = {};
     for (var k in itemsDetail) {
         for (var i in itemsDetail[k]['items']) {
             itemSubTotal.qty[i] = 0;
             itemSubTotal.amount[i] = 0;
+            itemSubTotal.discount[i] = 0;
         }
     }
 
     for (var k in itemsDetail) {
         for (var i in itemsDetail[k]['items']) {
             itemSubTotal.qty[i] += itemsDetail[k]['items'][i].qty;
-            itemSubTotal.price[i] = itemsDetail[k]['items'][i].price
-            itemSubTotal.amount[i] += itemsDetail[k]['items'][i].amount
+            itemSubTotal.price[i] = itemsDetail[k]['items'][i].price;
+            itemSubTotal.discount[i] += itemsDetail[k]['items'][i].discount;
+            itemSubTotal.amount[i] += itemsDetail[k]['items'][i].amount;
         }
     }
     return itemSubTotal;
@@ -396,3 +354,12 @@ var extractTotalAmount = function (totalItem) {
     }
     return amount;
 }
+
+var extractDiscount = function (totalItem) {
+    var discount = '';
+    for (var i in totalItem.discount) {
+        discount += '<td>' + totalItem.discount[i] + '%' + '</td>';
+    }
+    return discount;
+}
+
