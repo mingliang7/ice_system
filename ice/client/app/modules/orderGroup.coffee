@@ -58,9 +58,12 @@ class @OrderGroup
 				total: 0
 				totalInDollar: 0		
 		if _.has(groupBy, "day#{moment(doc.orderDate).format('YYYY-MM-DD')}")
+			discountDoc = 0
+			if doc.discount != undefined
+				discountDoc = doc.discount
 			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['total'] = groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['total'] + doc.total		
 			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['totalInDollar'] = groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['totalInDollar'] + doc.totalInDollar
-			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['discount'] += doc.discount
+			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['discount'] += discountDoc
 
 		for i of groupBy
 			dueAmount += groupBy[i]['total']

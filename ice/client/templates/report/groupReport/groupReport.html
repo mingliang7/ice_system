@@ -46,18 +46,16 @@
                 <td>តម្លៃ:</td>
                 {{{totalDetail.price}}}
             </tr>
-            <tr>
+            <!-- <tr>
                 <td>បញ្ចុះតម្លៃ:</td>
                 {{{totalDetail.discount}}}
-            </tr>
+            </tr> -->
             <tr>
                 <td>សរុប:</td>
                 {{{totalDetail.amount}}}
             </tr>
             </tbody>
         </table>
-
-
         <!--Footer-->
         <p></p>
         <table class="small-table" >
@@ -76,17 +74,15 @@
                 <th></th>
                 <th></th>
                 -->
-            <tr >
-                 <th class="pull-right">បញ្ចុះតម្លៃ(រៀល): </th> <th>{{footer.discount}}</th>
-            </tr>
              <tr >
-                 <th class="pull-right">តម្លៃសរុប(រៀល): </th> <th>{{footer.total}}</th>
-                <th class="pull-right">តម្លៃសរុប(ដុល្លារ):</th> <th>{{footer.totalInDollar}}</th>
+              <th class="pull-right">បញ្ចុះតម្លៃ(៛): </th> <th>{{footer.discount}}</th>
+                 <th class="pull-right">តម្លៃសរុប(៛): </th> <th>{{footer.total}}</th>
+                <th class="pull-right">តម្លៃសរុប($):</th> <th>{{footer.totalInDollar}}</th>
             </tr>
              <tr>
                 
-                <th class="pull-right">ប្រាក់បង់:</th> <th>{{footer.paidAmount}}</th>
-                 <th class="pull-right">ប្រាក់ជំពាក់: </th> <th>{{footer.outstandingAmount}}</th>
+                <th class="pull-right">ប្រាក់បង់(៛):</th> <th>{{footer.paidAmount}}</th>
+                 <th class="pull-right">ប្រាក់ជំពាក់(៛): </th> <th>{{footer.outstandingAmount}}</th>
             </tr> 
         </thead>
         </table>
