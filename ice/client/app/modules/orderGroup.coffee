@@ -63,7 +63,7 @@ class @OrderGroup
 				discountDoc = doc.discount
 			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['total'] = groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['total'] + doc.total		
 			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['totalInDollar'] = groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['totalInDollar'] + doc.totalInDollar
-			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['discount'] += discountDoc
+			groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['discount'] = groupBy["day#{moment(doc.orderDate).format('YYYY-MM-DD')}"]['discount'] + discountDoc
 
 		for i of groupBy
 			dueAmount += groupBy[i]['total']

@@ -45,31 +45,31 @@ Template.ice_invoiceReportGen.helpers({
         var date = moment(self.date).format('YYYY-MM-DD');
         var time = moment(self.date).format('hh:mm:ss a');
         var type = '';
+        var getOrder = Ice.Collection.Order.findOne(self.orderId);
          
                 // var getGroup = Ice.Collection.OrderGroup.findOne({_id: self.groupId, iceCustomerId: self.customerId, startDate: {$lt: self.endDate}, endDate:{$gt: self.startDate}});
         // dueDate = '' + getGroup.startDate + '-' + getGroup.endDate;
         
         if(customerDoc.customerType !== 'general'){
-        	type = customerDoc.customerType + ' ថ្ងៃ';
+            type = customerDoc.customerType + ' ថ្ងៃ';
         }
         else{
-        	type = 'general';
+            type = 'general';
         }
         data.header = [
-            {col1: '#: ' + self.orderId, col2: 'បុគ្គលិក: ' + '' },
+            {col1: '#: ' + self.orderId, col2: 'បុគ្គលិក: ' + getOrder._staff.name },
             {col1: 'អតិថិជន: ' + customerDoc.name, col2: 'ប្រភេទ: ' + type},
             { col1: 'កាលបរិច្ឆេទ: ' + date, col2: 'ម៉ោង: ' + time }
         ];
 
         /********* Content & Footer *********/
         var content = [];
-        var getOrder = Ice.Collection.Order.findOne(self.orderId);
         var itemsDetail = getOrder.iceOrderDetail
         itemsDetail.forEach(function (item) {
-        	item.price = formatKH(item.price);
-        	item.amount = formatDollar(item.amount);
+            item.price = formatKH(item.price);
+            item.amount = formatDollar(item.amount);
             item.discount = item.discount == undefined ? '' : item.discount + '%'
-        	content.push(item);
+            content.push(item);
         });
         content.push(itemsDetail);
         if (content.length > 0) {
@@ -90,20 +90,20 @@ Template.ice_invoiceReportGen.helpers({
     },
 
     itemName: function(id){
-    	var name = Ice.Collection.Item.findOne(id).name;
-    	return name;
+        var name = Ice.Collection.Item.findOne(id).name;
+        return name;
     },
     itemDiscount: function(discount) {
-    	if(discount == undefined){
-   			return '';
-    	}else{
-    		return discount;
-    	}
+        if(discount == undefined){
+            return '';
+        }else{
+            return discount;
+        }
     }
 });
 
 var formatDollar = function(value){
-	return numeral(value).format('0,0.00');
+    return numeral(value).format('0,0.00');
 }
 var formatKH = function(value){
     return numeral(value).format('0,0');

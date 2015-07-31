@@ -353,6 +353,7 @@ var extractTotalAmount = function (totalItem) {
         index++;
     }
     return amount;
+
 }
 
 var extractDiscount = function (totalItem) {

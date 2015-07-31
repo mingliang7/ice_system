@@ -26,17 +26,24 @@ Template.ice_order.events
     else
       orderGroupId = data.iceOrderGroupId
       group = Ice.Collection.OrderGroup.findOne(orderGroupId);
+      discount = 0 
       if(group.paidAmount == 0)
         order = {}
         order.items = {};
+        order.discount = 0
+        if data.discount isnt undefined
+          order.discount = data.discount
         order.total = data.total
         order.totalInDollar = data.totalInDollar
         data.iceOrderDetail.forEach (item) ->
+          if item.discount isnt undefined
+            discount = item.discount
           order.items[item.iceItemId] =
             qty: item.qty
             amount:item.amount
             price: item.price
-        Session.set 'oldOrderGroupValue', order
+            discount: discount
+        Session.set 'oldOrderValue', order
         Session.set 'iceOrderGroupId', orderGroupId
         alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
         .maximize()
@@ -126,7 +133,8 @@ Template.ice_orderInsertTemplate.events
     val = findExchange($(event.currentTarget).val())
     total = parseInt $('[name="total"]').val()
     if val.base is 'KHR'
-      $('[name="totalInDollar"]').val(total * val.rates["USD"])
+      amount = total * val.rates["USD"]
+      $('[name="totalInDollar"]').val(math.round(amount, 2))
 
 # Update form event
 Template.ice_orderUpdateTemplate.events
