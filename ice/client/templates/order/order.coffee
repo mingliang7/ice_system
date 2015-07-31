@@ -58,7 +58,7 @@ Template.ice_order.events
     userName = Meteor.users.findOne(userId).username;
     selector = 
       dateTime: moment().format('YYYY-MM-DD HH:mm:ss')
-      data: data 
+      invoiceData: data 
       removedBy: 
         id: userId 
         name: userName 

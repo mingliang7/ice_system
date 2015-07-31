@@ -125,3 +125,14 @@ Router.route 'ice/invoice_groups',
 		sub: ''
 	icon: 'report'
 	title: 'Invoice Group'
+
+Router.route 'ice/remove_invoice_reports',
+	->
+		@render 'ice_removeInvoiceReport'
+
+	name: 'ice.removeInvoiceReport'
+	header:
+		title: 'Remove Invoice Report'
+		sub: ''
+	icon: 'report'
+	title: 'Remove Invoice'

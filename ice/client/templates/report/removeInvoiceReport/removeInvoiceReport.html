@@ -1,0 +1,69 @@
+<!--Form-->
+<template name="ice_removeInvoiceReport">
+    {{#autoForm schema=Ice.Schema.RemoveInvoiceReport id="ice_removeInvoiceReport" action="removeInvoiceReportGen" target="_blank"}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name="date"}}
+                <button type="submit" class="btn btn-primary">{{fa "file-text"}} Generate</button>
+                <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+            </div>
+        </div>
+    {{/autoForm}}
+</template>
+
+
+<!--Generate-->
+<template name="ice_removeInvoiceReportGen">
+    {{#with data}}
+        <!--Title-->
+        <div class="report-title">
+            <div class="company-name-kh">{{title.company}}</div>
+            <div class="report-name">Remove Invoice Report</div>
+            <div class="report-address">{{title.company.khAddress}}, {{title.company.telephone}}</div>
+        </div>
+
+        <!--Header-->
+        <div style="width: 100%">
+            {{#with header}}
+                <div style="width: 50%;">
+                    <ul class="list-unstyled">
+                        <li><strong>Date:</strong> {{date}}</li>
+                    </ul>
+                </div>
+            {{/with}}
+        </div>
+
+        <!--Content-->
+        <table class="table">
+            <tbody class="report-content-body">
+            {{#each content}}
+                <tr>
+                    <th>Invoice Id:&nbsp;{{invoiceData._id}}</th>
+                    <th>Removed Date:&nbsp;{{dateTime}}</th>
+                    <th>Removed By:&nbsp;{{removedBy.name}}</th>
+                    
+                </tr>
+                <tr>
+                    <th>Description: </th>
+                </tr>
+                <tr>
+                    {{#each invoiceData.iceOrderDetail}}
+                        <ul style="display: inline">
+                            <li>Item: {{iceItemId}}</li>
+                            <li>Price: {{price}}</li>
+                            <li>Qty: {{qty}}</li>
+                            <li>Amount: {{amount}}</li>
+                        </ul>
+                    {{/each}}
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+
+        <!--Footer-->
+
+    {{/with}}
+
+    <!--Sign-->
+    {{> signFooter}}
+</template>
