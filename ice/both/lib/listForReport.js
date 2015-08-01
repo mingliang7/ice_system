@@ -48,7 +48,7 @@ Ice.ListForReport = {
    invoice: function(selectOne){
    	var list = [];
    	var customerId = Ice.ListForReportState.get('customer');
-      var update = Session.get('checkIfUpdate');
+      var update = Payment.get('checkIfUpdate');
       if(!_.isEqual(selectOne, false)){
          list.push({label: "(Select One)", value: ""});
       }
@@ -59,6 +59,7 @@ Ice.ListForReport = {
                Ice.Collection.Order.find({iceCustomerId: customerId}).forEach(function (invoice) {
                list.push({label: '' + invoice._id + ' | '+ invoice.orderDate  , value: invoice._id})
                });
+               debugger
                Ice.ListForReportState.set('type', type);
             }else{
                Ice.Collection.OrderGroup.find({iceCustomerId: customerId}).forEach(function (invoice) {

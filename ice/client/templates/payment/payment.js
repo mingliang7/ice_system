@@ -33,9 +33,9 @@ Template.ice_payment.events({
     Payment = new ReactiveObj();
   	if(flag) {
   		Ice.ListForReportState.set('customer', doc.customerId)
-  		Payment.set('checkIfUpdate', true);
-  		Payment.set('paymentPaidAmount', doc.paidAmount);
-  		Payment.set('paymentInvoiceId', doc.orderId_orderGroupId);
+  		Payment.set('checkIfUpdate', true); //check if update in listForReport.js
+  		Payment.set('paymentPaidAmount', doc.paidAmount); // parsing old paid amount tot payment_autoform_hook.js
+  		Payment.set('paymentInvoiceId', doc.orderId_orderGroupId);// parsing old paid amount tot payment_autoform_hook.js
   		alertify.paymentForm(fa('money', 'Update Payment'), renderTemplate(Template.ice_paymentUpdateTemplate, doc)).maximize(); 
   	}else{
   		alertify.warning('Sorry! invoice ' + doc._id + ' is not a last record :( ')

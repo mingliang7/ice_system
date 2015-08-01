@@ -120,7 +120,7 @@ Ice.Schema.Order = new SimpleSchema(
     optional: true
   closingDate:
     type: String
-    defaultValue: 'none'
+    optional: true
   branchId:
     type: String
     optional: true

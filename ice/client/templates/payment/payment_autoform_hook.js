@@ -2,14 +2,16 @@
 var invoiceUpdate, orderGroupInvoiceUpdate, orderInvoiceUpdate;
 orderInvoiceUpdate = function(doc) {
   var oldPaidAmount;
+  var newDate = moment().format('YYYY-MM-DD');
   oldPaidAmount = Session.get('oldPaidAmount');
   if (doc.outstandingAmount === 0) {
+    debugger
     return Ice.Collection.Order.update({
       _id: doc.orderId_orderGroupId
     }, {
       $set: {
         closing: true,
-        closingDate: moment().format('YYYY-MM-DD'),
+        closingDate: newDate,
         paidAmount: oldPaidAmount + doc.paidAmount,
         outstandingAmount: doc.outstandingAmount
       }
@@ -28,6 +30,7 @@ orderInvoiceUpdate = function(doc) {
 
 orderGroupInvoiceUpdate = function(doc) {
   var oldPaidAmount;
+  var newDate = moment().format('YYYY-MM-DD');
   oldPaidAmount = Session.get('oldPaidAmount');
   Session.set('oldPaidAmount', null);
   if (doc.outstandingAmount === 0) {
@@ -36,7 +39,7 @@ orderGroupInvoiceUpdate = function(doc) {
     }, {
       $set: {
         closing: true,
-        closingDate: moment().format('YYYY-MM-DD'),
+        closingDate: newDate,
         paidAmount: oldPaidAmount + doc.paidAmount,
         outstandingAmount: doc.outstandingAmount
       }
@@ -140,12 +143,12 @@ AutoForm.hooks({
       });
       Payment.set('paymentInvoiceId', null);
       Payment.set('paymentPaidAmount', null);
-      return alertify.success('successfully');
+      alertify.success('successfully');
     },
     onError: function(formType, error) {
       Payment.set('paymentInvoiceId', null);
       Payment.set('paymentPaidAmount', null);
-      return alertify.error(error.message);
+      alertify.error(error.message);
     }
   }
 });

@@ -1,0 +1,59 @@
+<template name="ice_unpaidGeneral">
+{{> ice_unpaidGeneralInsertTemplate}}
+</template>
+<template name="ice_unpaidGeneralInsertTemplate">
+    {{#autoForm schema=Ice.Schema.UnpaidGeneral id="ice_unpaidGeneralInsertTemplate" action="unpaidGeneralGen" target="_blank"}}
+    <div class="row">
+        <div class="col-md-12">
+           {{> afQuickField name="date"}}
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+        </div>
+    </div>
+    {{/autoForm}}
+</template>
+
+
+<!--Generate-->
+<template name="ice_unpaidGeneralGen">
+    {{#with data}}
+        <!--Title-->
+        <div class="report-title">
+        <span class="report-company-name" style="font-size: 20px;">{{title.company}}</span><br>
+            <div>Order by customer </div>
+        </div>
+
+        <!--Header-->
+        <div style="width: 100%">
+            {{#with header}}
+                <div style="width: 50%; float: left">
+                    <ul class="list-unstyled">
+                        <li><strong>customerType:</strong> {{customerType}}</li>
+                        <li><strong>Customer:</strong> {{customer}}</li>
+                    </ul>
+                </div>
+                <div style="width: 50%; float: right">
+                    <ul class="list-unstyled">
+                        <li><strong>Date:</strong> {{date}}</li>
+                    </ul>
+                </div>
+            {{/with}}
+        </div>
+
+        <!--Content-->
+        <table class="table">
+            <tbody>
+            {{#each content}}
+                {{{list}}}
+            {{/each}}
+            </tbody>
+        </table>
+
+        <!--Footer-->
+
+    {{/with}}
+
+    <!--Sign-->
+    {{> signFooter}}
+</template>
+
