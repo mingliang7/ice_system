@@ -1,8 +1,8 @@
 findRecord = OneRecord #calling from OneRecord in query methods file
 #item query
 itemQuery = 
-  detail: (itemId, qty, discount = '0', amount) ->
-    {name, price} = findRecord.item(itemId)
+  detail: (itemId, price, qty, discount = '0', amount) ->
+    {name} = findRecord.item(itemId)
     "<small>
     {Name:#{name}, 
     Price: #{price}, 
@@ -62,15 +62,23 @@ Ice.TabularTable.Order = new (Tabular.Table)(
 			title: 'Item', render: (val) ->
         items = []
         val.forEach (item) ->
-          items.push itemQuery.detail(item.iceItemId, item.qty, item.discount, format(item.amount))
+          items.push itemQuery.detail(item.iceItemId, item.price, item.qty, item.discount, format(item.amount))
         items
+    }
+    {
+      data: 'paidAmount'
+      title: 'Paid Amount' 
+    }
+    {
+      data: 'outstandingAmount'
+      title: 'Outstanding Amount' 
     }
     {
       data: 'discount'
       title: 'Discount'
       render: (val) ->
         if val isnt undefined
-          "<p class='label label-success'>#{val}%</p>" 
+          "<p class='label label-success'>#{val}</p>" 
         else
           "<p class='label label-success'>None</p>" 
     }
