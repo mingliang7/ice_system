@@ -78,3 +78,4 @@ checkAvailable = (id) ->
 				flag = true
 			i++
 		flag
+DateTimePicker
