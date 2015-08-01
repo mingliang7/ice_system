@@ -67,9 +67,8 @@ var checkType = function(customerId){
 
 // Before update
 var updateInvoice = function(doc){
-  var invoiceId = Session.get('paymentInvoiceId');
-  var oldPaidAmount = Session.get('paymentPaidAmount');
-  debugger
+  var invoiceId = Payment.get('paymentInvoiceId');
+  var oldPaidAmount = Payment.get('paymentPaidAmount');
   customerId = Ice.ListForReportState.get('customer');
   if(checkType(customerId) == 'general'){
     var oldOrder = Ice.Collection.Order.findOne(invoiceId);
@@ -80,7 +79,8 @@ var updateInvoice = function(doc){
       outstandingAmount = (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount
     }else{
       newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
-      outstandingAmount = (doc.paidAmount - oldPaidAmount) - oldOrder.outstandingAmount;
+      outstandingAmount = oldOrder.outstandingAmount - (doc.paidAmount - oldPaidAmount);
+      debugger
     }
     var closing = ( outstandingAmount == 0) ? true : false;
     Ice.Collection.Order.update({_id: invoiceId}, 
@@ -100,7 +100,7 @@ var updateInvoice = function(doc){
       outstandingAmount = (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount
     }else{
       newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
-      outstandingAmount = (doc.paidAmount - oldPaidAmount) - oldOrder.outstandingAmount;
+      outstandingAmount = oldOrder.outstandingAmount - (doc.paidAmount - oldPaidAmount) ;
     }
     var closing = ( outstandingAmount == 0) ? true : false;
     Ice.Collection.OrderGroup.update({_id: invoiceId}, 
@@ -131,13 +131,13 @@ AutoForm.hooks({
       $('select').each(function(){
         $(this).select2('val', '');
       });
-      Session.set('paymentInvoiceId', null);
-      Session.set('paymentPaidAmount', null);
+      Payment.set('paymentInvoiceId', null);
+      Payment.set('paymentPaidAmount', null);
       return alertify.success('successfully');
     },
     onError: function(formType, error) {
-      Session.set('paymentInvoiceId', null);
-      Session.set('paymentPaidAmount', null);
+      Payment.set('paymentInvoiceId', null);
+      Payment.set('paymentPaidAmount', null);
       return alertify.error(error.message);
     }
   }

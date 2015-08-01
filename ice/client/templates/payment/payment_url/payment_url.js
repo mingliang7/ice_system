@@ -1,18 +1,14 @@
 var datePicker, fillInDetail, selectCustomer, selectInvoice;
-
+PaymentUrl = new ReactiveObj(); 
 Template.ice_paymentUrlInsertTemplate.onRendered(function() {
-  console.log(this.data);
   selectCustomer(this.data);
 });
 
 Template.ice_paymentUrlInsertTemplate.events({
-  'click .close': function() {
-    window.close()
-  },
   'change [name="customerId"]': function(e) {
     var customer;
     customer = $(e.currentTarget).val();
-    return Ice.ListForReportState.set('customer', customer);
+    Ice.ListForReportState.set('customer', customer);
   },
   'change [name="orderId_orderGroupId"]': function(e) {
     var currentInvoice, currentInvoiceId, type;
@@ -21,29 +17,30 @@ Template.ice_paymentUrlInsertTemplate.events({
     type = Ice.ListForReportState.get('type');
     if (type === 'general') {
       currentInvoice = Ice.Collection.Order.findOne(currentInvoiceId);
-      Session.set('oldPaidAmount', currentInvoice.paidAmount);
+      PaymentUrl.set('oldPaidAmount', currentInvoice.paidAmount);
       $('[name="dueAmount"]').val(currentInvoice.outstandingAmount);
       $('[name="paidAmount"]').val(currentInvoice.outstandingAmount);
-      return $('[name="outstandingAmount"]').val(0);
+      $('[name="outstandingAmount"]').val(0);
     } else {
       currentInvoice = Ice.Collection.OrderGroup.findOne(currentInvoiceId);
-      Session.set('oldPaidAmount', currentInvoice.paidAmount);
+      PaymentUrl.set('oldPaidAmount', currentInvoice.paidAmount);
       $('[name="dueAmount"]').val(currentInvoice.outstandingAmount);
       $('[name="paidAmount"]').val(currentInvoice.outstandingAmount);
-      return $('[name="outstandingAmount"]').val(0);
+      $('[name="outstandingAmount"]').val(0);
     }
   },
   'keyup [name="paidAmount"]': function() {
     var dueAmount, paidAmount;
     dueAmount = parseInt($('[name="dueAmount"]').val());
     paidAmount = $('[name="paidAmount"]').val();
+    console.log(paidAmount)
     if (parseFloat(paidAmount) > dueAmount) {
       $('[name="paidAmount"]').val(dueAmount);
-      return $('[name="outstandingAmount"]').val(0);
+      $('[name="outstandingAmount"]').val(0);
     } else if (paidAmount === '') {
-      return $('[name="outstandingAmount"]').val(dueAmount);
+      $('[name="outstandingAmount"]').val(dueAmount);
     } else {
-      return $('[name="outstandingAmount"]').val(dueAmount - parseInt(paidAmount));
+      $('[name="outstandingAmount"]').val(dueAmount - parseInt(paidAmount));
     }
   }
 });
@@ -91,5 +88,5 @@ fillInDetail = function(dueAmount, paidAmount, outstandingAmount) {
   $('[name="paidAmount"]').val(outstandingAmount);
   $('[name="dueAmount"]').val(dueAmount);
   $('[name="outstandingAmount"]').val(0);
-  return Session.set('oldPaidAmount', parseInt(paidAmount));
+  return PaymentUrl.set('oldPaidAmount', parseInt(paidAmount));
 };

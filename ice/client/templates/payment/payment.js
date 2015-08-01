@@ -11,30 +11,31 @@ Template.ice_payment.helpers({
       self = this;
       Session.set(customer, findCustomer(self.customerId));
     }
-    return Session.get('customer');
+    Session.get('customer');
   }
 });
 
 Template.ice_payment.events({
   'click .insert': function() {
   	Session.set('checkIfUpdate', false);
-    return alertify.paymentForm(fa('money', 'Payment'), renderTemplate(Template.ice_paymentInsertTemplate)).maximize();
+    alertify.paymentForm(fa('money', 'Payment'), renderTemplate(Template.ice_paymentInsertTemplate)).maximize();
    },
   'click .remove': function() {
   	var flag = checkAvailablity(this);
   	flag ? onRemoved(this) : alertify.warning('Sorry! invoice ' + this._id + ' is not a last record :( ');
   },
   'click .show': function() {
-     return alertify.paymentForm(fa('eye', 'Payment'), renderTemplate(Template.ice_paymentShowTemplate, this));
+     alertify.paymentForm(fa('eye', 'Payment'), renderTemplate(Template.ice_paymentShowTemplate, this));
   },
   'click .update': function(){
   	var flag = checkAvailablity(this);
-    doc = this;
+    doc = Ice.Collection.Payment.findOne(this._id);
+    Payment = new ReactiveObj();
   	if(flag) {
   		Ice.ListForReportState.set('customer', doc.customerId)
-  		Session.set('checkIfUpdate', true);
-  		Session.set('paymentPaidAmount', doc.paidAmount);
-  		Session.set('paymentInvoiceId', doc.orderId_orderGroupId);
+  		Payment.set('checkIfUpdate', true);
+  		Payment.set('paymentPaidAmount', doc.paidAmount);
+  		Payment.set('paymentInvoiceId', doc.orderId_orderGroupId);
   		alertify.paymentForm(fa('money', 'Update Payment'), renderTemplate(Template.ice_paymentUpdateTemplate, doc)).maximize(); 
   	}else{
   		alertify.warning('Sorry! invoice ' + doc._id + ' is not a last record :( ')
@@ -72,13 +73,13 @@ Template.ice_paymentInsertTemplate.events({
       Session.set('oldPaidAmount', currentInvoice.paidAmount);
       $('[name="dueAmount"]').val(currentInvoice.outstandingAmount);
       $('[name="paidAmount"]').val(currentInvoice.outstandingAmount);
-      return $('[name="outstandingAmount"]').val(0);
+      $('[name="outstandingAmount"]').val(0);
     } else {
       currentInvoice = Ice.Collection.OrderGroup.findOne(currentInvoiceId);
       Session.set('oldPaidAmount', currentInvoice.paidAmount);
       $('[name="dueAmount"]').val(currentInvoice.outstandingAmount);
       $('[name="paidAmount"]').val(currentInvoice.outstandingAmount);
-      return $('[name="outstandingAmount"]').val(0);
+      $('[name="outstandingAmount"]').val(0);
     }
   },
   'keyup [name="paidAmount"]': function() {
@@ -87,15 +88,14 @@ Template.ice_paymentInsertTemplate.events({
     paidAmount = $('[name="paidAmount"]').val();
     if (parseInt(paidAmount) > dueAmount) {
       $('[name="paidAmount"]').val(dueAmount);
-      return $('[name="outstandingAmount"]').val(0);
+      $('[name="outstandingAmount"]').val(0);
     } else if (paidAmount === '') {
-      return $('[name="outstandingAmount"]').val(dueAmount);
+      $('[name="outstandingAmount"]').val(dueAmount);
     } else {
-      return $('[name="outstandingAmount"]').val(dueAmount - parseInt(paidAmount));
+      $('[name="outstandingAmount"]').val(dueAmount - parseInt(paidAmount));
     }
   }
 });
-
 Template.ice_paymentUpdateTemplate.events({
 	'keyup [name="paidAmount"]': function () {
 		dueAmount = $('[name="dueAmount"]').val();
@@ -103,11 +103,13 @@ Template.ice_paymentUpdateTemplate.events({
     dueAmount = parseFloat(dueAmount);
     paidAmount = parseFloat(paidAmount)
     outstandingAmount = dueAmount - paidAmount
-    console.log(outstandingAmount);
-    setTimeout(function(){
+    console.log(paidAmount)
+    if(paidAmount > dueAmount){
+      $('[name="paidAmount"]').val(dueAmount);
+      $('[name="outstandingAmount"]').val(0)
+    }else{
 		  $('[name="outstandingAmount"]').val(outstandingAmount);
-      
-    }, 200);
+    }
 	}
 });
 
