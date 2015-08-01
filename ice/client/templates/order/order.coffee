@@ -206,7 +206,7 @@ Template.ice_orderShowTemplate.helpers
     orderDetail = this.iceOrderDetail
     items = []
     orderDetail.forEach (item) ->
-     items.push itemQuery.detail(item.iceItemId, price, item.qty, item.discount, format(item.amount))
+     items.push itemQuery.detail(item.iceItemId, item.price, item.qty, item.discount, format(item.amount))
     items
   customerType: () ->
     customerDoc = Ice.Collection.Customer.findOne(this.iceCustomerId);

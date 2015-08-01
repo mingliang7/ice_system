@@ -156,10 +156,10 @@ var checkAvailablity = function(doc){
 var onRemoved = function(doc){
   if(checkType(doc) == 'general'){
           var oldOrder = Ice.Collection.Order.findOne(doc.orderId_orderGroupId);
-          Ice.Collection.Order.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false}});
+          Ice.Collection.Order.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false, closingDate: 'none'}});
   }else{
           var oldOrder = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId);
-          Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false}});
+          Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false, closingDate: 'none'}});
   }
   removeDoc(doc._id);
 }
