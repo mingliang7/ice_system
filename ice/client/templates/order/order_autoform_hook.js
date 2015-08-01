@@ -188,6 +188,7 @@ AutoForm.hooks({
             return Print.set('print', false);
           }else if (pay == true){
             generatePayment(id);
+            Session.set('invioceReportId', id)
             return Print.set('print', false);
           }
         }

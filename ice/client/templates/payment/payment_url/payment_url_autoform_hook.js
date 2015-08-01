@@ -82,8 +82,13 @@ AutoForm.hooks({
       }
     },
     onSuccess: function(formType, result) {
+      id = Session.get('invioceReportId');
       alertify.success('Successfully');
       alertify.paymentPopUP().close();
+      if(!_.isUndefined(id)){
+        GenReport(id);
+        Session.set('invioceReportId', null)
+      }
     },
     onError: function(formType, error) {
       return alertify.error(error.message);
