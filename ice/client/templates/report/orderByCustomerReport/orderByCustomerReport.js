@@ -64,21 +64,21 @@ Template.ice_customerReportGen.helpers({
             selector = {orderDate: {$gte: startDate, $lte: endDate}};
             var index = 1;
             var reduceCustomer = groupCustomer(selector);
-            var td = listAsTable(reduceCustomer);
+            var td = listCustomerAsTable(reduceCustomer);
             content.push({list: td});
         }else if (customerType != 'All' && customer == 'All'){
             customers = findCustomerByType(customerType);
             for(var i = 0 ; i < customers.length; i++){
                 selector = {iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}}
                 var reduceCustomer = groupCustomer(selector);
-                var td = listAsTable(reduceCustomer);
+                var td = listCustomerAsTable(reduceCustomer);
                 content.push({list: td});
             }
         }else{
             selector = {iceCustomerId: customer, orderDate: {$gte: startDate, $lte: endDate}};
             var index = 1;
             var reduceCustomer = groupCustomer(selector);
-            var td = listAsTable(reduceCustomer);
+            var td = listCustomerAsTable(reduceCustomer);
             content.push({list: td});
         }
         if (content.length > 0) {
@@ -199,7 +199,7 @@ var orderGroupCustomer = function(total,id, startDate, endDate) {
         paidAmount += order.paidAmount
         outstandingAmount = total - paidAmount
     });
-    return '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + formatKh(paidAmount) + '</strong></td>' + '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + outstandingAmount +'</strong></td>' + '</tr>';
+    return { paidAmount: paidAmount, outstandingAmount: outstandingAmount };
 }
 
 
@@ -304,8 +304,36 @@ var getItems = function(){
     return iceItemObj;
 }
 
-listAsTable = function(reduceCustomer){
+listCustomerAsTable = function(reduceCustomer){
     td = ''
+    for(var k in reduceCustomer) {
+        td += '<tr><th colspan="4" align="center"><u>' + k + ' | '+ findCustomerName(k) + '</u></tr></th>'
+        td += '<tr style="border: 1px solid #ddd;">' + '<th style="border: 1px solid #ddd;">' + 'ទំនិញ' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'ចំនួន' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'តម្លៃលក់' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'តម្លៃសរុប' + '</th>' + '</tr>'
+        for(var j in reduceCustomer[k]){
+            if(reduceCustomer[k][j].name != undefined){
+                td += '<tr style="border: 1px solid #ddd;">' + '<td style="border: 1px solid #ddd;">' + reduceCustomer[k][j].name + '</td>' + '<td style="border: 1px solid #ddd;">' + reduceCustomer[k][j].qty + '</td>' + '<td style="border: 1px solid #ddd;">' + formatKh(reduceCustomer[k][j].price) + '</td>' + '<td style="border: 1px solid #ddd;">' + formatKh(reduceCustomer[k][j].amount) + '</td>' + '</tr>';
+            }
+        }
+        if(reduceCustomer[k].paidAmount != undefined){
+            td += '<tr>' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + formatKh(reduceCustomer[k].paidAmount) + '</strong></td>' + '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + formatKh(reduceCustomer[k].outstandingAmount) +'</strong></td>' + '</tr>';
+        }else{
+            var group = orderGroupCustomer(reduceCustomer[k].total, k, startDate, endDate);
+            td += '<tr style="border: 1px solid #ddd;">' + 
+                '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + 
+                formatKh(reduceCustomer[k].total) + 
+                '</strong></td>' + '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + 
+                formatKh(group.paidAmount) + '</strong></td>' + 
+                '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + 
+                formatKh(group.outstandingAmount) +'</strong></td>' + '</tr>';
+        }
+    }
+    td += listTotalSummary(reduceCustomer);
+    return td;
+}
+
+
+var listTotalSummary = function(reduceCustomer) {
+    var td = '';
     var totalItem = {};
     var outstandingAmount = 0 ;
     var paidAmount = 0 ;
@@ -313,7 +341,7 @@ listAsTable = function(reduceCustomer){
     var listTotalItem = '';
     for(var k in reduceCustomer){
         for( var j in reduceCustomer[k]){
-            if(reduceCustomer[k][j].name != undefined){
+            if(reduceCustomer[k][j].name){
                 if(totalItem[j]){
                     totalItem[j].qty += reduceCustomer[k][j].qty;
                     totalItem[j].amount += reduceCustomer[k][j].amount;
@@ -328,20 +356,36 @@ listAsTable = function(reduceCustomer){
             }
         }
         total += reduceCustomer[k].total;
-    }
-    for(var k in reduceCustomer) {
-        td += '<tr><th colspan="4" align="center"><u>' + k + ' | '+ findCustomerName(k) + '</u></tr></th>'
-        td += '<tr style="border: 1px solid #ddd;">' + '<th style="border: 1px solid #ddd;">' + 'ទំនិញ' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'ចំនួន' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'តម្លៃលក់' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'តម្លៃសរុប' + '</th>' + '</tr>'
-        for(var j in reduceCustomer[k]){
-            if(reduceCustomer[k][j].name != undefined){
-                td += '<tr style="border: 1px solid #ddd;">' + '<td style="border: 1px solid #ddd;">' + reduceCustomer[k][j].name + '</td>' + '<td style="border: 1px solid #ddd;">' + reduceCustomer[k][j].qty + '</td>' + '<td style="border: 1px solid #ddd;">' + formatKh(reduceCustomer[k][j].price) + '</td>' + '<td style="border: 1px solid #ddd;">' + formatKh(reduceCustomer[k][j].amount) + '</td>' + '</tr>';
-            }
-        }
-        if(reduceCustomer[k].paidAmount != undefined){
-            td += '<tr>' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + formatKh(reduceCustomer[k].paidAmount) + '</strong></td>' + '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + formatKh(reduceCustomer[k].outstandingAmount) +'</strong></td>' + '</tr>';
+        if(reduceCustomer[k].paidAmount){
+            paidAmount += reduceCustomer[k].paidAmount;
+            outstandingAmount += reduceCustomer[k].oustandingAmount;
         }else{
-            td += '<tr style="border: 1px solid #ddd;">' + '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + formatKh(reduceCustomer[k].total) + '</strong></td>' + orderGroupCustomer(reduceCustomer[k].total, k, startDate, endDate);
+            var group = orderGroupCustomer(reduceCustomer[k].total, k, startDate, endDate);
+            paidAmount += group.paidAmount
+            outstandingAmount += group.outstandingAmount
         }
     }
-    return td;
+    td += '<tr><th colspan="4" align="center"><u>' + 'សរុបទាំងអស់' + '</u></tr></th>';
+    td += '<tr style="border: 1px solid #ddd;">' + '<th style="border: 1px solid #ddd;">' + 'ទំនិញ' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'ចំនួន' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'តម្លៃលក់' + '</th>' + '<th style="border: 1px solid #ddd;">' + 'តម្លៃសរុប' + '</th>' + '</tr>'
+    for(var k in totalItem) {
+            if(totalItem[k].name != undefined){
+                td += '<tr style="border: 1px solid #ddd;">' + 
+                    '<td style="border: 1px solid #ddd;">' + 
+                    totalItem[k].name + '</td>' + 
+                    '<td style="border: 1px solid #ddd;">' + 
+                    totalItem[k].qty + '</td>' + 
+                    '<td style="border: 1px solid #ddd;">' + 
+                    formatKh(totalItem[k].price) + 
+                    '</td>' + '<td style="border: 1px solid #ddd;">' + 
+                    formatKh(totalItem[k].amount) + '</td>' + '</tr>';
+            }
+    }
+    td += '<tr style="border: 1px solid #ddd;">' + 
+                '<td colspan="2"><strong>ទឹកប្រាក់សរុប: ' + 
+                formatKh(total) + 
+                '</strong></td>' + '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + 
+                formatKh(paidAmount) + '</strong></td>' + 
+                '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + 
+                formatKh(outstandingAmount) +'</strong></td>' + '</tr>';
+    return td
 }

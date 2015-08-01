@@ -10,6 +10,7 @@ findCustomer = function(id) {
 };
 
 Template.ice_paymentGeneralMonitor.onRendered(function() {
+  Session.set('invioceReportId', null)
   createNewAlertify(['searchBox', 'paymentPopUP']);
   return Session.set('checked', false);
 });

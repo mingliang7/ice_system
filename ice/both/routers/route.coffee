@@ -110,7 +110,7 @@ Router.route 'ice/customer_reports',
 
 	name: 'ice.customerReport'
 	header:
-		title: 'Customer Report'
+		title: 'Order Report by customer'
 		sub: ''
 	icon: 'customer'
 	title: 'Order Report by customer'
