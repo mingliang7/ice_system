@@ -181,16 +181,21 @@ Template.ice_invoiceGroupGen.helpers({
         }
     },
     listItems: function (items) {
-      var results = '';
+     var results = '';
         for (var k in items) {
-            results += '<tr>' + '<td>' + items[k]['orderDate'] + '</td>';
+            results += '<tr style="border-bottom: 1px solid #000;">' + '<td>' + items[k]['orderDate'] + '</td>';
             for (var j in items[k]) {
-                if (items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម (ដើម)') {
-                    results += '<td>' + +items[k][j].qty + ' kg' + '</td>';
-                } else if (items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម (ដើម)') {
-                    results += '<td>' + +items[k][j].qty + ' ដើម' + '</td>';
+                if(items[k][j].qty != 0){
+                    if (items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម (ដើម)') {
+                        results += '<td>' + +items[k][j].qty + 'kg' + '</td>';
+                    } else if (items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម (ដើម)') {
+                        results += '<td>' + +items[k][j].qty + 'ដើម' + '</td>';
+                    }
+                }else{
+                    results += '<td></td>'
                 }
             }
+            results += '</tr>'
         }
         return results;
     }
@@ -315,16 +320,25 @@ var itemTotalDetail = function (itemsDetail) {
 }
 
 var extractTotalQty = function (totalItem) {
+    debugger
     var qty = '';
     for (var i in totalItem.qty) {
-        qty += '<td>' + formatUS(totalItem.qty[i]) + '</td>';
+        if(totalItem.qty[i] != 0 ){ 
+            qty += '<td>' + formatUS(totalItem.qty[i]) + '</td>';
+        }else{
+            qty += '<td></td>';
+        }
     }
     return qty;
 }
 var extractPrice = function (totalItem) {
     var price = '';
     for (var i in totalItem.price) {
-        price += '<td>' + formatKh(totalItem.price[i]) + '</td>';
+        if(totalItem.qty[i] != 0 ){
+         price += '<td>' + formatKh(totalItem.price[i]) + '</td>';
+        }else{
+         price += '<td></td>'
+        }
     }
     return price;
 }
@@ -348,7 +362,7 @@ var extractTotalAmount = function (totalItem) {
                 amount += '<td>' + formatKh(totalItem.amount[i]) + '</td>';
             }
         }else{
-            amount += '<td>' + formatKh(totalItem.amount[i]) + '</td>';
+            amount += '<td> </td>';
         }
         index++;
     }
