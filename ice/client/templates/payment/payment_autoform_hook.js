@@ -3,7 +3,6 @@ var invoiceUpdate, orderGroupInvoiceUpdate, orderInvoiceUpdate;
 orderInvoiceUpdate = function(doc) {
   var oldPaidAmount;
   oldPaidAmount = Session.get('oldPaidAmount');
-  Session.set('oldPaidAmount', null);
   if (doc.outstandingAmount === 0) {
     return Ice.Collection.Order.update({
       _id: doc.orderId_orderGroupId
@@ -68,14 +67,22 @@ var checkType = function(customerId){
 
 // Before update
 var updateInvoice = function(doc){
-  var invoiceId = Session.get('invoiceId');
-  var oldPaidAmount = Session.get('paidAmount'); 
+  var invoiceId = Payment.get('paymentInvoiceId');
+  var oldPaidAmount = Payment.get('paymentPaidAmount');
   customerId = Ice.ListForReportState.get('customer');
   if(checkType(customerId) == 'general'){
     var oldOrder = Ice.Collection.Order.findOne(invoiceId);
-    var newPaidAmount = (oldPaidAmount > doc.paidAmount) ? oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount)  : (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
-    var outstandingAmount = (oldPaidAmount > doc.paidAmount) ? (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount : (doc.paidAmount - oldPaidAmount) - oldOrder.outstandingAmount;
-    var closing = (outstandingAmount == 0) ? true : false;
+    var newPaidAmount = 0;
+    var outstandingAmount = 0;
+    if(oldPaidAmount > doc.paidAmount){
+      newPaidAmount = oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount);
+      outstandingAmount = (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount
+    }else{
+      newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
+      outstandingAmount = oldOrder.outstandingAmount - (doc.paidAmount - oldPaidAmount);
+      debugger
+    }
+    var closing = ( outstandingAmount == 0) ? true : false;
     Ice.Collection.Order.update({_id: invoiceId}, 
       {$set: {
         paidAmount: newPaidAmount, 
@@ -86,9 +93,16 @@ var updateInvoice = function(doc){
     
   }else{
     var oldOrder = Ice.Collection.OrderGroup.findOne(invoiceId);
-    var newPaidAmount = (oldPaidAmount > doc.paidAmount) ? oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount)  : (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
-    var outstandingAmount = (oldPaidAmount > doc.paidAmount) ? (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount : (doc.paidAmount - oldPaidAmount) - oldOrder.outstandingAmount;
-    var closing = (outstandingAmount == 0) ? true : false;
+    var newPaidAmount = 0;
+    var outstandingAmount = 0;
+    if(oldPaidAmount > doc.paidAmount){
+      newPaidAmount = oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount);
+      outstandingAmount = (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount
+    }else{
+      newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
+      outstandingAmount = oldOrder.outstandingAmount - (doc.paidAmount - oldPaidAmount) ;
+    }
+    var closing = ( outstandingAmount == 0) ? true : false;
     Ice.Collection.OrderGroup.update({_id: invoiceId}, 
       {$set: 
         {paidAmount: newPaidAmount, 
@@ -117,9 +131,13 @@ AutoForm.hooks({
       $('select').each(function(){
         $(this).select2('val', '');
       });
+      Payment.set('paymentInvoiceId', null);
+      Payment.set('paymentPaidAmount', null);
       return alertify.success('successfully');
     },
     onError: function(formType, error) {
+      Payment.set('paymentInvoiceId', null);
+      Payment.set('paymentPaidAmount', null);
       return alertify.error(error.message);
     }
   }

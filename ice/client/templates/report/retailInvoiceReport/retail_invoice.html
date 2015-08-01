@@ -3,11 +3,12 @@
     {{#with data}}
         <!--Title-->
         <div class="report-title">
-            <span class="report-company-name" style="font-family: 'Khmer OS Muol'"></span><br>
-            <span class="report-company-name">{{title.company}}</span><br>
-            <u> វិក្កយបត្រ</u><br>
-            អាស័យដ្ឋាន: {{title.address}}<br>
-            ទូរស័ព្ទ: {{title.telephone}}
+            <span class="report-company-name" style="font-family: 'Khmer OS Muol';">{{title.company}}</span><br>
+            <u style="font-size: 16px"> វិក្កយបត្រ</u><br>
+            <span style="font-size: 10px">
+                អាស័យដ្ឋាន: {{title.address}}<br>
+                ទូរស័ព្ទ: {{title.telephone}}
+            </span>
         </div>
 
         <!--Header-->
@@ -22,7 +23,6 @@
         </table>
 
         <!--Content-->
-        <br>
         <table class="report-content">
             <thead class="report-content-header">
             <tr>
@@ -87,10 +87,10 @@
 </template>
 <!--footerNote-->
 <template name="ice_invoiceReportGenFooterNote">
-    <div style="text-align: center">
+    <div style="font-size: 10px; text-align: center">
     <br>
-    <strong> សូមអរគុណដែលបានជាវទឹកកកពីហាងយើងខ្ញំុ!</strong>
+    <strong> សូមអរគុណដែលបានជាវទឹកកកពីសិប្យកម្មយើងខ្ញំុ!</strong>
     
-    <p style="font-size: 10px;">(Developed by: Rabbit IT Solutions, Tel: 053 50 66 777)</p>
+    <p style="font-size: 8px;">(Developed by: Rabbit IT Solutions, Tel: 053 50 66 777)</p>
     </div>
 </template>

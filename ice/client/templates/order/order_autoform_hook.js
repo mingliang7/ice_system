@@ -37,7 +37,6 @@ getRank = function(date, type) {
   				}
 
   			}else{
-  				debugger
   				if(i + type > 40 ){
             lastDate = new Date(now.getFullYear(), now.getMonth() +1,0)
   					endDate = moment(lastDate).format('YYYY-MM-DD');
@@ -53,7 +52,13 @@ getRank = function(date, type) {
   			}
   		}
   	}
-  	startDate = moment(now.setDate(i)).format('YYYY-MM-DD');
+    last = moment(endDate).format('DD')
+    if(last == '31'){
+      setEndDate = parseInt(last) - type;
+      startDate = moment(now.setDate(setEndDate)).format('YYYY-MM-DD');
+    }else{      
+  	 startDate = moment(now.setDate(i)).format('YYYY-MM-DD');
+    }
   	if(endDate != '') break;
   }
  	return {startDate: startDate, endDate: endDate};
@@ -101,7 +106,7 @@ updateOrderGroup = function(doc){
   var group, id, orderGroup, prefix, type;
   orderGroup = new OrderGroup(doc);
   iceOrderGroupId = Session.get('iceOrderGroupId');
-  oldValue = Session.get('oldOrderGroupValue');
+  oldValue = Session.get('oldOrderValue');
   type = OneRecord.customer(doc.iceCustomerId).customerType;
   if (type !== 'general') {
     date = rangeDate(doc.orderDate, type);
@@ -183,12 +188,12 @@ AutoForm.hooks({
         } else {
           print = Print.get('print');
           pay = Print.get('pay')
-          debugger
           if (print === true) {
             generateReport(id);
             return Print.set('print', false);
           }else if (pay == true){
             generatePayment(id);
+            Session.set('invioceReportId', id)
             return Print.set('print', false);
           }
         }
@@ -227,6 +232,7 @@ AutoForm.hooks({
 var checkingOrder = function (oldDoc, oldValue, newDoc){ // checking oldOrder when update
   var date = moment(newDoc.orderDate).format('YYYY-MM-DD')
   var total = 0;
+  var totalDiscount = 0;
   var totalInDollar = 0;
   for(var k in oldDoc.groupBy['day' + date].items){ // remove items 
     if(oldValue.items[k] != undefined){
@@ -234,16 +240,18 @@ var checkingOrder = function (oldDoc, oldValue, newDoc){ // checking oldOrder wh
         name: oldDoc.groupBy['day' + date].items[k].name,
         price: oldDoc.groupBy['day' + date].items[k].price,
         qty: oldDoc.groupBy['day' + date].items[k].qty -  oldValue.items[k].qty,
-        amount: oldDoc.groupBy['day' + date].items[k].amount -  oldValue.items[k].amount
+        amount: oldDoc.groupBy['day' + date].items[k].amount -  oldValue.items[k].amount,
+        discount: oldDoc.groupBy['day' + date].items[k].discount -  oldValue.items[k].discount
       }
     }
   }
   total =  oldDoc.total - oldValue.total
+  oldDoc.groupBy['day' + date].discount = oldDoc.groupBy['day' + date].discount - oldValue.discount;
   oldDoc.groupBy['day' + date].total = oldDoc.groupBy['day' + date].total - oldValue.total;
   oldDoc.groupBy['day' + date].totalInDollar = oldDoc.groupBy['day' + date].totalInDollar - oldValue.totalInDollar;
   oldDoc.total = total;
   oldDoc.totalInDollar = oldDoc.totalInDollar - oldValue.totalInDollar;
-  oldDoc.outstandingAmount = total;
+  oldDoc.discount = oldDoc.discount - oldValue.discount  
   oldDoc.outstandingAmount = total;
   return insertNewDocToOldOrder(oldDoc, newDoc);
 }
@@ -254,27 +262,40 @@ var insertNewDocToOldOrder = function (oldDoc, newDoc){ //insert a new doc to ol
   order.totalInDollar = newDoc.totalInDollar;
   order.total = newDoc.total;
   order.outstandingAmount = newDoc.total;
+  order.discount = 0 ;
+  if(newDoc.discount != undefined){
+    order.discount = newDoc.discount;
+  }
   newDoc.iceOrderDetail.forEach(function (item) {
+    discount = 0
+    if(item.discount != undefined){
+      discount = item.discount;
+    }
     order.items[item.iceItemId] = {
       qty: item.qty,
       amount: item.amount,
-      price: item.price
+      price: item.price,
+      discount: discount
     }
   });
 
   var date = moment(newDoc.orderDate).format('YYYY-MM-DD')
   for(var k in oldDoc.groupBy['day' + date].items){
     if(order.items[k] != undefined){
+      debugger
       oldDoc.groupBy['day' + date].items[k] = {
         name: oldDoc.groupBy['day' + date].items[k].name,
         price: order.items[k].price,
         qty: oldDoc.groupBy['day' + date].items[k].qty + order.items[k].qty,
-        amount: oldDoc.groupBy['day' + date].items[k].amount + order.items[k].amount
+        amount: oldDoc.groupBy['day' + date].items[k].amount + order.items[k].amount,
+        discount: oldDoc.groupBy['day' + date].items[k].discount + order.items[k].discount
       }
     }
   }
+  oldDoc.groupBy['day' + date].discount =  oldDoc.groupBy['day' + date].discount + order.discount;
   oldDoc.groupBy['day' + date].total =  oldDoc.groupBy['day' + date].total + order.total;
   oldDoc.groupBy['day' + date].totalInDollar =  oldDoc.groupBy['day' + date].totalInDollar + order.totalInDollar;
+  oldDoc.discount = oldDoc.discount + order.discount;
   oldDoc.total = oldDoc.total + order.total;
   oldDoc.totalInDollar = oldDoc.totalInDollar + order.totalInDollar;
   oldDoc.outstandingAmount = oldDoc.outstandingAmount + order.outstandingAmount;

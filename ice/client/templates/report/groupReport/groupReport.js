@@ -56,9 +56,9 @@ Template.ice_invoiceGroupReportGen.helpers({
             type = 'general';
         }
         data.header = [
-            {col1: '#: ' + self.id, col2: 'បុគ្គលិក: ' + ''},
-            {col1: 'អតិថិជន: ' + customerDoc.name, col2: 'ប្រភេទ: ' + type},
-            {col1: 'កាលបរិច្ឆេទ: ' + date +" ដល់ " + endDate, col2: 'ម៉ោង: ' + time}
+            {col1: '#: ' + self.id, col2: 'ប្រភេទ: ' + type},
+            {col1: 'អតិថិជន: ' + customerDoc.name, col2: 'ម៉ោង: ' + time},
+            {col1: 'កាលបរិច្ឆេទ: ' + date +" ដល់ " + endDate, col2: ''}
         ];
 
         /********* Content & Footer *********/
@@ -72,14 +72,16 @@ Template.ice_invoiceGroupReportGen.helpers({
             data.footer = {
                 // subtotal: formatNum(groupOrder.subtotal),
                 // discount: groupOrder.discount == undefined ? '' : groupOrder.discount + '%',
+                discount: formatKhmerCurrency(groupOrder.discount),
                 total: formatKhmerCurrency(groupOrder.total),
                 totalInDollar: formatNum(groupOrder.totalInDollar),
                 paidAmount: formatKhmerCurrency(groupOrder.paidAmount),
                 outstandingAmount: formatKhmerCurrency(groupOrder.outstandingAmount)
             }
             data.totalDetail = {
-                qty: extractTotalQty(totalItem),
+                qty: extractTotalQty(totalItem) ,
                 price: extractPrice(totalItem),
+                discount: extractDiscount(totalItem),
                 amount: extractTotalAmount(data.footer.total, totalItem)
             }
             return data;
@@ -103,14 +105,19 @@ Template.ice_invoiceGroupReportGen.helpers({
     listItems: function (items) {
         var results = '';
         for (var k in items) {
-            results += '<tr>' + '<td>' + items[k]['orderDate'] + '</td>';
+            results += '<tr style="border-bottom: 1px solid #000;">' + '<td>' + items[k]['orderDate'] + '</td>';
             for (var j in items[k]) {
-                if (items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម (ដើម)') {
-                    results += '<td>' + +items[k][j].qty + 'kg' + '</td>';
-                } else if (items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម (ដើម)') {
-                    results += '<td>' + +items[k][j].qty + 'ដើម' + '</td>';
+                if(items[k][j].qty != 0){
+                    if (items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម (ដើម)') {
+                        results += '<td>' + +items[k][j].qty + 'kg' + '</td>';
+                    } else if (items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម (ដើម)') {
+                        results += '<td>' + +items[k][j].qty + 'ដើម' + '</td>';
+                    }
+                }else{
+                    results += '<td></td>'
                 }
             }
+            results += '</tr>'
         }
         return results;
     }
@@ -152,17 +159,19 @@ var itemTotalDetail = function (itemsDetail) {
     itemSubTotal.qty = {};
     itemSubTotal.price = {}
     itemSubTotal.amount = {};
+    itemSubTotal.discount = {};
     for (var k in itemsDetail) {
         for (var i in itemsDetail[k]['items']) {
             itemSubTotal.qty[i] = 0;
             itemSubTotal.amount[i] = 0;
+            itemSubTotal.discount[i] = 0;
         }
     }
-
     for (var k in itemsDetail) {
         for (var i in itemsDetail[k]['items']) {
             itemSubTotal.qty[i] += itemsDetail[k]['items'][i].qty;
             itemSubTotal.price[i] = itemsDetail[k]['items'][i].price
+            itemSubTotal.discount[i] += itemsDetail[k]['items'][i].discount
             itemSubTotal.amount[i] += itemsDetail[k]['items'][i].amount
         }
     }
@@ -172,16 +181,31 @@ var itemTotalDetail = function (itemsDetail) {
 var extractTotalQty = function (totalItem) {
     var qty = '';
     for (var i in totalItem.qty) {
-        qty += '<td>' + formatNum(totalItem.qty[i]) + '</td>';
+        if(totalItem.qty[i] != 0 ){
+            qty += '<td>' + formatNum(totalItem.qty[i]) + '</td>';
+        }else{
+            qty += '<td></td>';
+        }
     }
     return qty;
 }
 var extractPrice = function (totalItem) {
     var price = '';
     for (var i in totalItem.price) {
-        price += '<td>' + formatKhmerCurrency(totalItem.price[i]) + '</td>';
+        if(totalItem.qty[i] != 0 ){
+            price += '<td>' + formatKhmerCurrency(totalItem.price[i]) + '</td>';
+        }else{
+            price += '<td></td>';
+        }
     }
     return price;
+}
+var extractDiscount = function (totalItem) {
+    var discount = '';
+    for (var i in totalItem.discount) {
+        discount += '<td>' + totalItem.discount[i] + '%' + '</td>';
+    }
+    return discount;
 }
 var extractTotalAmount = function (total, totalItem) {
     var totalAmount = 0;
@@ -203,7 +227,7 @@ var extractTotalAmount = function (total, totalItem) {
                 amount += '<td>' + formatKh(totalItem.amount[i]) + '</td>';
             }
         }else{
-            amount += '<td>' + formatKh(totalItem.amount[i]) + '</td>';
+            amount += '<td> </td>';
         }
         index++;
     }

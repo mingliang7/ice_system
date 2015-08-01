@@ -68,9 +68,9 @@
 		list = []
 		userId = Meteor.userId()
 		staff = Ice.Collection.UserStaffs.findOne({userId: userId})
-		list.push {label: "(Select One)", value: "" }
+		list.push {label: "(Select One)", value: "" }	
 		if staff != undefined
-			findStaff(list, staff.staffIds)	
+			findStaff(list, staff.staffIds)
 		list
 
 	paymentStaff: (selecOne) ->

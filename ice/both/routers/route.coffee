@@ -113,7 +113,7 @@ Router.route 'ice/customer_reports',
 		title: 'Customer Report'
 		sub: ''
 	icon: 'customer'
-	title: 'Customer Report'
+	title: 'Order Report by customer'
 
 Router.route 'ice/invoice_groups',
 	->
