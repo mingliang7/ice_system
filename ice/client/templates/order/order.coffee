@@ -85,8 +85,10 @@ Template.ice_order.events
   'click .show': () ->
     alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, @))    
   "click .print": ->
+    Session.set('invioceReportId', null)
     GenReport(@_id) #generateReport alias function in order_autoform_hook
-
+  'click .save': ->
+    Session.set('invioceReportId', null)
 # insert form event
 Template.ice_orderInsertTemplate.onRendered ->
   exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
