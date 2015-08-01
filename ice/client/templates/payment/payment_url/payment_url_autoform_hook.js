@@ -2,8 +2,8 @@
 var invoiceUpdate, orderGroupInvoiceUpdate, orderInvoiceUpdate;
 orderInvoiceUpdate = function(doc) {
   var oldPaidAmount;
-  oldPaidAmount = Session.get('oldPaidAmount');
-  Session.set('oldPaidAmount', null);
+  oldPaidAmount = PaymentUrl.get('oldPaidAmount');
+  PaymentUrl.set('oldPaidAmount', null);
   if (doc.outstandingAmount === 0) {
     return Ice.Collection.Order.update({
       _id: doc.orderId_orderGroupId
@@ -28,8 +28,8 @@ orderInvoiceUpdate = function(doc) {
 
 orderGroupInvoiceUpdate = function(doc) {
   var oldPaidAmount;
-  oldPaidAmount = Session.get('oldPaidAmount');
-  Session.set('oldPaidAmount', null);
+  oldPaidAmount = PaymentUrl.get('oldPaidAmount');
+  PaymentUrl.set('oldPaidAmount', null);
   if (doc.outstandingAmount === 0) {
     return Ice.Collection.OrderGroup.update({
       _id: doc.orderId_orderGroupId
