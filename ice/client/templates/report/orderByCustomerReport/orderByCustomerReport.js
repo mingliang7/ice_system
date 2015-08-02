@@ -389,3 +389,4 @@ var listTotalSummary = function(reduceCustomer) {
                 formatKh(outstandingAmount) +'</strong></td>' + '</tr>';
     return td
 }
+
