@@ -2,7 +2,7 @@
 var invoiceUpdate, orderGroupInvoiceUpdate, orderInvoiceUpdate;
 orderInvoiceUpdate = function(doc) {
   var oldPaidAmount;
-  var newDate = moment().format('YYYY-MM-DD')
+  var newDate = doc.paymentDate;
   oldPaidAmount = PaymentUrl.get('oldPaidAmount');
   PaymentUrl.set('oldPaidAmount', null);
   if (doc.outstandingAmount === 0) {
@@ -30,7 +30,7 @@ orderInvoiceUpdate = function(doc) {
 
 orderGroupInvoiceUpdate = function(doc) {
   var oldPaidAmount;
-  var newDate = moment().format('YYYY-MM-DD');
+  var newDate = doc.paymentDate;
   oldPaidAmount = PaymentUrl.get('oldPaidAmount');
   PaymentUrl.set('oldPaidAmount', null);
   if (doc.outstandingAmount === 0) {

@@ -98,7 +98,7 @@ setOrderGroup = function(doc) {
   } else {
     doc.paidAmount = 0;
     doc.outstandingAmount = doc.total;
-    doc.closeDate = 'none';
+    doc.closingDate = 'none';
     doc.closing = false;
   }
 };

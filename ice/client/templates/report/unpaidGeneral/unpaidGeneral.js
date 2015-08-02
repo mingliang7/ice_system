@@ -22,24 +22,19 @@ generateTpl.helpers({
         /********* Title *********/
         var company = Cpanel.Collection.Company.findOne();
         data.title = {
-            company: company.khName
+            company: company.enName
         };
 
         /********* Header ********/
         data.header = self;
-
-        /********** Content **********/
+        var arr = [self.date];
+            arr.push('23:59:59')
+        var today = arr.join(' ')
+        /********** Content **********/ 
         var content = [];
-        var selector = {};
-
-        if (!_.isEmpty(self.branch)) {
-            selector.cpanel_branchId = self.branch;
-        }
-        if (!_.isEmpty(self.name)) {
-            selector.name = self.name;
-        }
-
-        var getCustomer = Sample.Collection.Customer.find(selector);
+        var selector = {orderDate: {$lte: today}, $or: [{closingDate: {$not: {$gt: today}}}, {closingDate: 'none'}]};
+        var getCustomer = Ice.Collection.Order.find(selector);
+        debugger;
         var index = 1;
         getCustomer.forEach(function (obj) {
             // Do something
