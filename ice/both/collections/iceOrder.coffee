@@ -124,7 +124,10 @@ Ice.Schema.Order = new SimpleSchema(
   branchId:
     type: String
     optional: true
-    
+  _payment: 
+    type: Object
+    optional: true
+    blackbox: true  
 )
 
 Ice.Collection.Order.attachSchema Ice.Schema.Order

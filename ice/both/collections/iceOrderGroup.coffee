@@ -38,6 +38,11 @@ Ice.Schema.OrderGroup = new SimpleSchema(
 	groupBy:
 		type: Object
 		blackbox: true
+		
+	_payment:
+		type: Object
+		blackbox: true
+		optional: true
 
 	iceCustomerId:
 		type: String

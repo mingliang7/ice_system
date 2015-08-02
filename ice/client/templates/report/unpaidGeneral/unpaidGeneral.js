@@ -33,18 +33,13 @@ generateTpl.helpers({
         /********** Content **********/ 
         var content = [];
         var selector = {orderDate: {$lte: today}, $or: [{closingDate: {$not: {$gt: today}}}, {closingDate: 'none'}]};
-        var getCustomer = Ice.Collection.Order.find(selector);
-        debugger;
-        var index = 1;
-        getCustomer.forEach(function (obj) {
-            // Do something
+        var getOrder = Ice.Collection.Order.find(selector);
+        var index =  1 ;
+        getOrder.forEach(function (obj) {
             obj.index = index;
-
             content.push(obj);
-
             index++;
         });
-
         if (content.length > 0) {
             data.content = content;
 
