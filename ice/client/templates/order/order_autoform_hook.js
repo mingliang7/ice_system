@@ -98,7 +98,8 @@ setOrderGroup = function(doc) {
   } else {
     doc.paidAmount = 0;
     doc.outstandingAmount = doc.total;
-    return doc.closing = false;
+    doc.closeDate = 'none';
+    doc.closing = false;
   }
 };
 
@@ -194,7 +195,7 @@ AutoForm.hooks({
           }else if (pay == true){
             generatePayment(id);
             Session.set('invioceReportId', id)
-            return Print.set('print', false);
+            Print.set('pay', false);
           }
         }
       }

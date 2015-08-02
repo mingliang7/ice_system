@@ -68,6 +68,7 @@ Ice.ListForReport = {
             }
          }else{
             if(type == 'general'){
+               debugger
                Ice.Collection.Order.find({iceCustomerId: customerId, closing: false}).forEach(function (invoice) {
                list.push({label: '' + invoice._id + ' | '+ invoice.orderDate  , value: invoice._id})
                });

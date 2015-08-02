@@ -2,13 +2,16 @@
 var invoiceUpdate, orderGroupInvoiceUpdate, orderInvoiceUpdate;
 orderInvoiceUpdate = function(doc) {
   var oldPaidAmount;
+  var newDate = moment().format('YYYY-MM-DD');
   oldPaidAmount = Session.get('oldPaidAmount');
   if (doc.outstandingAmount === 0) {
+    debugger
     return Ice.Collection.Order.update({
       _id: doc.orderId_orderGroupId
     }, {
       $set: {
         closing: true,
+        closingDate: newDate,
         paidAmount: oldPaidAmount + doc.paidAmount,
         outstandingAmount: doc.outstandingAmount
       }
@@ -27,6 +30,7 @@ orderInvoiceUpdate = function(doc) {
 
 orderGroupInvoiceUpdate = function(doc) {
   var oldPaidAmount;
+  var newDate = moment().format('YYYY-MM-DD');
   oldPaidAmount = Session.get('oldPaidAmount');
   Session.set('oldPaidAmount', null);
   if (doc.outstandingAmount === 0) {
@@ -35,6 +39,7 @@ orderGroupInvoiceUpdate = function(doc) {
     }, {
       $set: {
         closing: true,
+        closingDate: newDate,
         paidAmount: oldPaidAmount + doc.paidAmount,
         outstandingAmount: doc.outstandingAmount
       }
@@ -80,14 +85,16 @@ var updateInvoice = function(doc){
     }else{
       newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
       outstandingAmount = oldOrder.outstandingAmount - (doc.paidAmount - oldPaidAmount);
-      debugger
     }
+    var newDate = moment().format('YYYY-MM-DD');
     var closing = ( outstandingAmount == 0) ? true : false;
+    var closingDate = (outstandingAmount == 0) ? newDate : 'none';
     Ice.Collection.Order.update({_id: invoiceId}, 
       {$set: {
         paidAmount: newPaidAmount, 
         outstandingAmount: outstandingAmount, 
-        closing: closing}
+        closing: closing,
+        closingDate: closingDate}
       }
     );
     
@@ -102,12 +109,15 @@ var updateInvoice = function(doc){
       newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
       outstandingAmount = oldOrder.outstandingAmount - (doc.paidAmount - oldPaidAmount) ;
     }
+    var newDate = moment().format('YYYY-MM-DD');
     var closing = ( outstandingAmount == 0) ? true : false;
+    var closingDate = (outstandingAmount == 0) ? newDate : 'none';
     Ice.Collection.OrderGroup.update({_id: invoiceId}, 
       {$set: 
         {paidAmount: newPaidAmount, 
           outstandingAmount: outstandingAmount, 
-          closing: closing
+          closing: closing,
+          closingDate: closingDate
         }
       }
     );
@@ -133,12 +143,12 @@ AutoForm.hooks({
       });
       Payment.set('paymentInvoiceId', null);
       Payment.set('paymentPaidAmount', null);
-      return alertify.success('successfully');
+      alertify.success('successfully');
     },
     onError: function(formType, error) {
       Payment.set('paymentInvoiceId', null);
       Payment.set('paymentPaidAmount', null);
-      return alertify.error(error.message);
+      alertify.error(error.message);
     }
   }
 });

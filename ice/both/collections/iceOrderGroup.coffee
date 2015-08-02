@@ -32,7 +32,9 @@ Ice.Schema.OrderGroup = new SimpleSchema(
 	closing: 
 		type: Boolean
 		defaultValue: false
-
+	closingDate:
+		type: String
+		defaultValue: 'none'
 	groupBy:
 		type: Object
 		blackbox: true
