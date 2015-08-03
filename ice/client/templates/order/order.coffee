@@ -2,6 +2,8 @@ Template.ice_orderUpdateTemplate.onRendered ->
   text = $('[name="iceCustomerId"] option:selected').text()
   $('[name="customer"]').val(text)
 Template.ice_orderInsertTemplate.onRendered ->
+  createNewAlertify('paymentPopUP')
+  $('[name="total"]').attr('readonly', true)
   today = moment(new Date()).format('YYYY-MM-DD HH:mm:ss') 
   $('[name="orderDate"]').val(today)
   datePicker()
@@ -10,9 +12,7 @@ Template.ice_order.onRendered ->
 
 Template.ice_order.events
   "click .insert": ->
-    alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderInsertTemplate))
-    .maximize()
-    $('[name="total"]').attr('readonly', true)
+    Router.go('/ice/home')
   "click .update": ->
     orderId = this._id
     data = Ice.Collection.Order.findOne(orderId);
@@ -90,9 +90,6 @@ Template.ice_order.events
   'click .save': ->
     Session.set('invioceReportId', null)
 # insert form event
-Template.ice_orderInsertTemplate.onRendered ->
-  exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
-  $('[name="exchange"]').select2('val', exhchange_date._id)
 Template.ice_orderInsertTemplate.events
   'click .staffAddon': () ->
       alertify.staffAddOn(fa('plus', 'Staff'), renderTemplate(Template.ice_staffInsertTemplate))
@@ -101,6 +98,8 @@ Template.ice_orderInsertTemplate.events
     
   'change [name="iceCustomerId"]': (e) ->
     id = $(e.currentTarget).val()
+    exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
+    $('[name="exchange"]').select2('val', exhchange_date._id)
     if checkType(id) == 'general'
       $('.pay').removeClass('hidden')
     else
@@ -155,6 +154,8 @@ Template.ice_orderUpdateTemplate.events
 
   'change [name="iceCustomerId"]': (e) ->
     id = $(e.currentTarget).val()
+    exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
+    $('[name="exchange"]').select2('val', exhchange_date._id)
     if checkType(id) == 'general'
       $('.pay').removeClass('hidden')
     else

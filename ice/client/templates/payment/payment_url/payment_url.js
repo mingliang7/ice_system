@@ -68,8 +68,10 @@ datePicker = function(currentInvoiceId) {
 
 selectCustomer = function(self) {
   self = self;
+  debugger
   return Meteor.setTimeout(function() {
-    $('[name="customerId"]').select2('val', self.iceCustomerId);
+    $('[name="customerId"]').val(self.iceCustomerId);
+    $('label.customerName').text(self.iceCustomerId + ' | ' + self._customer.name);
     Ice.ListForReportState.set('customer', self.iceCustomerId);
     selectInvoice(self._id);
     fillInDetail(self.outstandingAmount, self.paidAmount, self.outstandingAmount);
