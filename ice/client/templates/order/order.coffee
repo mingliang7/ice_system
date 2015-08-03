@@ -2,6 +2,12 @@ Template.ice_orderUpdateTemplate.onRendered ->
   text = $('[name="iceCustomerId"] option:selected').text()
   $('[name="customer"]').val(text)
 Template.ice_orderInsertTemplate.onRendered ->
+  $('body').on 'keydown', (e) -> 
+    console.log(typeof(e.keyCode)) 
+    if(e.keyCode == 123)
+      $('.importPayment').slideDown('fast')
+    else
+      $('.importPayment').hide()
   createNewAlertify('paymentPopUP')
   $('[name="total"]').attr('readonly', true)
   today = moment(new Date()).format('YYYY-MM-DD HH:mm:ss') 
@@ -91,6 +97,10 @@ Template.ice_order.events
     Session.set('invioceReportId', null)
 # insert form event
 Template.ice_orderInsertTemplate.events
+  'click .orderPayment': ->
+    Meteor.call('migrateOrder')
+  'click .orderGroupPayment': ->
+    Meteor.call('migrateOrderGroup')
   'click .staffAddon': () ->
       alertify.staffAddOn(fa('plus', 'Staff'), renderTemplate(Template.ice_staffInsertTemplate))
   'click .customerAddon': () ->

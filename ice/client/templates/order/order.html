@@ -28,7 +28,19 @@
 
 
 <!-- insert -->
+<template name="importPayment">
+<div class="importPayment">
+    <div class="container">
+        <div class="col-md-12">
+            <br>
+            <button class="btn btn-primary orderPayment">Migrate Payment to Order</button>
+            <button class="btn btn-default orderGroupPayment">Migrate Payment to OrderGroup</button>
+        </div>
+    </div>
+</div>
+</template>
 <template name="ice_orderInsertTemplate">
+    {{> importPayment}}
     {{#autoForm collection=Ice.Collection.Order id="ice_orderInsertTemplate" type="insert"}}
         <div class="row">
 
