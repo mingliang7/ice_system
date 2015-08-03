@@ -26,13 +26,7 @@
         <!--Header-->
         <div style="width: 100%">
             {{#with header}}
-                <div style="width: 50%; float: left">
-                    <ul class="list-unstyled">
-                        <li><strong>customerType:</strong> {{customerType}}</li>
-                        <li><strong>Customer:</strong> {{customer}}</li>
-                    </ul>
-                </div>
-                <div style="width: 50%; float: right">
+                <div style="width: 50%;">
                     <ul class="list-unstyled">
                         <li><strong>Date:</strong> {{date}}</li>
                     </ul>
@@ -41,10 +35,29 @@
         </div>
 
         <!--Content-->
-        <table class="table">
+         <!--Content-->
+        <table class="table table-borderd">
+            <thead>
+            <tr>
+                <th>Invoice Id</th>
+                <th>Order Date</th>
+                <th>Customer Name</th>
+                <th>Due Amount</th>
+                <th>Paid Amount</th>
+                <th>Outstanding Amount</th>
+            </tr>
+            </thead>
+
             <tbody>
             {{#each content}}
-                {{{list}}}
+                <tr>
+                    <td>{{_id}}</td>
+                    <td>{{orderDate}}</td>
+                    <td>{{customerName}}</td>
+                    <td>{{formatKh _payment.dueAmount}}</td>
+                    <td>{{formatKh _payment.paidAmount}}</td>
+                    <td>{{formatKh _payment.outstandingAmount}}</td>
+                </tr>
             {{/each}}
             </tbody>
         </table>

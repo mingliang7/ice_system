@@ -2,16 +2,18 @@
 var invoiceUpdate, orderGroupInvoiceUpdate, orderInvoiceUpdate;
 orderInvoiceUpdate = function(doc) {
   var oldPaidAmount;
-  var newDate = moment().format('YYYY-MM-DD');
+  var newDate = doc.paymentDate;
   oldPaidAmount = Session.get('oldPaidAmount');
+  var oldPaymentDetail = Ice.Collection.Order.findOne(doc.orderId_orderGroupId)._payment;
+  var payment = paymentDetail(oldPaymentDetail, doc); //extract payment detail
   if (doc.outstandingAmount === 0) {
-    debugger
     return Ice.Collection.Order.update({
       _id: doc.orderId_orderGroupId
     }, {
       $set: {
         closing: true,
         closingDate: newDate,
+        _payment: payment,
         paidAmount: oldPaidAmount + doc.paidAmount,
         outstandingAmount: doc.outstandingAmount
       }
@@ -21,6 +23,7 @@ orderInvoiceUpdate = function(doc) {
       _id: doc.orderId_orderGroupId
     }, {
       $set: {
+        _payment: payment,
         paidAmount: oldPaidAmount + doc.paidAmount,
         outstandingAmount: doc.outstandingAmount
       }
@@ -28,10 +31,12 @@ orderInvoiceUpdate = function(doc) {
   }
 };
 
-orderGroupInvoiceUpdate = function(doc) {
+orderGroupInvoiceUpdate = function(doc) { // for groupInvoice
   var oldPaidAmount;
-  var newDate = moment().format('YYYY-MM-DD');
+  var newDate = doc.paymentDate;
   oldPaidAmount = Session.get('oldPaidAmount');
+  var oldPaymentDetail = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId)._payment;
+  var payment = paymentDetail(oldPaymentDetail, doc); //extract payment detail
   Session.set('oldPaidAmount', null);
   if (doc.outstandingAmount === 0) {
     return Ice.Collection.OrderGroup.update({
@@ -40,6 +45,7 @@ orderGroupInvoiceUpdate = function(doc) {
       $set: {
         closing: true,
         closingDate: newDate,
+        _payment: payment,
         paidAmount: oldPaidAmount + doc.paidAmount,
         outstandingAmount: doc.outstandingAmount
       }
@@ -49,6 +55,7 @@ orderGroupInvoiceUpdate = function(doc) {
       _id: doc.orderId_orderGroupId
     }, {
       $set: {
+        _payment: payment,
         paidAmount: oldPaidAmount + doc.paidAmount,
         outstandingAmount: doc.outstandingAmount
       }
@@ -79,6 +86,7 @@ var updateInvoice = function(doc){
     var oldOrder = Ice.Collection.Order.findOne(invoiceId);
     var newPaidAmount = 0;
     var outstandingAmount = 0;
+    var payment = paymentDetail(oldOrder._payment, doc); // update _payment 
     if(oldPaidAmount > doc.paidAmount){
       newPaidAmount = oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount);
       outstandingAmount = (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount
@@ -86,11 +94,12 @@ var updateInvoice = function(doc){
       newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
       outstandingAmount = oldOrder.outstandingAmount - (doc.paidAmount - oldPaidAmount);
     }
-    var newDate = moment().format('YYYY-MM-DD');
+    var newDate = doc.paymentDate;
     var closing = ( outstandingAmount == 0) ? true : false;
     var closingDate = (outstandingAmount == 0) ? newDate : 'none';
     Ice.Collection.Order.update({_id: invoiceId}, 
       {$set: {
+        _payment: payment,
         paidAmount: newPaidAmount, 
         outstandingAmount: outstandingAmount, 
         closing: closing,
@@ -100,6 +109,7 @@ var updateInvoice = function(doc){
     
   }else{
     var oldOrder = Ice.Collection.OrderGroup.findOne(invoiceId);
+    var payment = paymentDetail(oldOrder._payment, doc)
     var newPaidAmount = 0;
     var outstandingAmount = 0;
     if(oldPaidAmount > doc.paidAmount){
@@ -109,12 +119,13 @@ var updateInvoice = function(doc){
       newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
       outstandingAmount = oldOrder.outstandingAmount - (doc.paidAmount - oldPaidAmount) ;
     }
-    var newDate = moment().format('YYYY-MM-DD');
+    var newDate = doc.paymentDate;
     var closing = ( outstandingAmount == 0) ? true : false;
     var closingDate = (outstandingAmount == 0) ? newDate : 'none';
     Ice.Collection.OrderGroup.update({_id: invoiceId}, 
       {$set: 
         {paidAmount: newPaidAmount, 
+          _payment: payment,
           outstandingAmount: outstandingAmount, 
           closing: closing,
           closingDate: closingDate
@@ -141,13 +152,12 @@ AutoForm.hooks({
       $('select').each(function(){
         $(this).select2('val', '');
       });
+      alertify.success('successfully');
       Payment.set('paymentInvoiceId', null);
       Payment.set('paymentPaidAmount', null);
-      alertify.success('successfully');
     },
     onError: function(formType, error) {
-      Payment.set('paymentInvoiceId', null);
-      Payment.set('paymentPaidAmount', null);
+      Payment.set('paymentInvoiceId', null); Payment.set('paymentPaidAmount', null);
       alertify.error(error.message);
     }
   }
@@ -172,3 +182,33 @@ AutoForm.hooks({
     }
   }
 });
+
+
+
+// extractPayment Detail
+var paymentDetail = function(oldPaymentDetail, doc){
+  var payment = oldPaymentDetail == undefined ? {} : oldPaymentDetail // check if oldPaymentDetail exist
+  var id = Payment.get('paymentId');
+  if(id != undefined){
+    payment[id] = {
+      customerId: doc.customerId,
+      staff: doc.staffId,
+      date: doc.paymentDate,
+      dueAmount: doc.dueAmount,
+      paidAmount: doc.paidAmount,
+      outstandingAmount: doc.outstandingAmount
+    }
+    Payment.set('paymentId', undefined); // set Payment ID back to undefine
+  }else{
+     payment[doc._id] = {
+      customerId: doc.customerId,
+      staff: doc.staffId,
+      date: doc.paymentDate,
+      dueAmount: doc.dueAmount,
+      paidAmount: doc.paidAmount,
+      outstandingAmount: doc.outstandingAmount
+    }
+  }
+  return payment; 
+}
+
