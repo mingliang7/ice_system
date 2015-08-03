@@ -86,7 +86,7 @@ var updateInvoice = function(doc){
     var oldOrder = Ice.Collection.Order.findOne(invoiceId);
     var newPaidAmount = 0;
     var outstandingAmount = 0;
-    var payment = paymentDetail(oldOrder._payment, doc)
+    var payment = paymentDetail(oldOrder._payment, doc); // update _payment 
     if(oldPaidAmount > doc.paidAmount){
       newPaidAmount = oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount);
       outstandingAmount = (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount
@@ -109,7 +109,7 @@ var updateInvoice = function(doc){
     
   }else{
     var oldOrder = Ice.Collection.OrderGroup.findOne(invoiceId);
-    var payment = paymentDetail(oldOrder, doc)
+    var payment = paymentDetail(oldOrder._payment, doc)
     var newPaidAmount = 0;
     var outstandingAmount = 0;
     if(oldPaidAmount > doc.paidAmount){
@@ -211,3 +211,4 @@ var paymentDetail = function(oldPaymentDetail, doc){
   }
   return payment; 
 }
+

@@ -157,18 +157,53 @@ var checkAvailablity = function(doc){
 //remove payment and update order
 var onRemoved = function(doc){
   if(checkType(doc) == 'general'){
-          var oldPaymentDetail = Ice.Collection.Order.findOne()._payment;
-          var payment = delete oldPaymentDetail._payment[doc._id];
-          var oldOrder = Ice.Collection.Order.findOne(doc.orderId_orderGroupId);
-          Ice.Collection.Order.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false, closingDate: 'none'}});
+    removeOrderPayment(doc);
   }else{
-          var oldOrder = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId);
-          Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId}, {$set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false, closingDate: 'none'}});
+    removeOrderGroupPayment(doc);     
   }
   removeDoc(doc._id);
 }
 
 
+
+var removeOrderPayment = function(doc){
+    var oldPaymentDetail = Ice.Collection.Order.findOne(doc.orderId_orderGroupId)._payment;
+    delete oldPaymentDetail[doc._id];
+    var oldOrder = Ice.Collection.Order.findOne(doc.orderId_orderGroupId);
+    if($.isEmptyObject(oldPaymentDetail)){
+      Ice.Collection.Order.update({_id: doc.orderId_orderGroupId}, {$unset:{_payment: ''}, $set: {paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false, closingDate: 'none'}});
+    }else{
+      Ice.Collection.Order.update({_id: doc.orderId_orderGroupId}, {$set: {_payment: oldPaymentDetail, paidAmount: oldOrder.paidAmount - doc.paidAmount, outstandingAmount: doc.paidAmount + doc.outstandingAmount, closing: false, closingDate: 'none'}});
+    }
+}
+
+var removeOrderGroupPayment = function(doc){
+  var oldPaymentDetail = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId)._payment;
+  delete oldPaymentDetail[doc._id];
+   var oldOrder = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId);
+  if($.isEmptyObject(oldPaymentDetail)){
+    Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId}, 
+              {$unset: {_payment: ''},
+                $set: 
+                {
+                  paidAmount: oldOrder.paidAmount - doc.paidAmount, 
+                  outstandingAmount: doc.paidAmount + doc.outstandingAmount, 
+                  closing: false, closingDate: 'none'
+                }
+              });
+  }else{
+    Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId}, 
+            {
+              $set: 
+              {
+                _payment: oldPaymentDetail,
+                paidAmount: oldOrder.paidAmount - doc.paidAmount, 
+                outstandingAmount: doc.paidAmount + doc.outstandingAmount, 
+                closing: false, closingDate: 'none'
+              }
+            });
+  }
+}
 
 var datePicker = function(currentInvoiceId){
   maxDate = '';
