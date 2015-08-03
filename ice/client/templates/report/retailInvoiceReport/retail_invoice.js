@@ -19,6 +19,12 @@
 //     }
 
 // });
+Template.ice_invoiceReportGen.onRendered(function () {
+    setTimeout(function () {
+        window.print();
+        window.close();
+    }, 1000);
+});
 /************ Generate *************/
 Template.ice_invoiceReportGen.helpers({
     data: function () {
