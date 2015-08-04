@@ -27,14 +27,19 @@ Meteor.methods
 					obj = _.findLastKey(payment, (payment) -> 
 									payment
 								)
-					closingDate = payment[obj].date
+					try
+						closingDate = payment[obj].date
+					catch e
+						console.log e
+					
 					Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: closingDate, _payment: payment}})
 					console.log("Migrate #{countPayment} payment to #{countOrder} order") 
 				else
-					Ice.Collection.Order.update({_id: order._id}, {$set: {_payment: payment}})
+					Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: 'none'}})
 					console.log("Migrate #{countPayment} payment to #{countOrder} order")
-
-
+			else
+				Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: 'none'}})
+				console.log("Migrate #{countPayment} payment to #{countOrder} order")
 				
 			
 	migrateOrderGroup: ->
@@ -62,10 +67,16 @@ Meteor.methods
 					obj = _.findLastKey(payment, (payment) -> 
 									payment
 								)
-					closingDate = payment[obj].date
+					try
+						closingDate = payment[obj].date
+					catch e
+						console.log e					
 					Ice.Collection.OrderGroup.update({_id: order._id}, {$set: {closingDate: closingDate, _payment: payment}})
 					console.log("Migrate #{countPayment} payment to #{countOrder} order") 
 				else
-					Ice.Collection.OrderGroup.update({_id: order._id}, {$set: {_payment: payment}})
+					Ice.Collection.OrderGroup.update({_id: order._id}, {$set: {closingDate: 'none'}})
 					console.log("Migrate #{countPayment} payment to #{countOrder} order")
+			else
+				Ice.Collection.OrderGroup.update({_id: order._id}, {$set: {closingDate: 'none'}})
+				console.log("Migrate #{countPayment} payment to #{countOrder} order")
 			
