@@ -1,0 +1,72 @@
+<template name="ice_unpaidGeneral">
+{{> ice_unpaidGeneralInsertTemplate}}
+</template>
+<template name="ice_unpaidGeneralInsertTemplate">
+    {{#autoForm schema=Ice.Schema.UnpaidGeneral id="ice_unpaidGeneralInsertTemplate" action="unpaidGeneralGen" target="_blank"}}
+    <div class="row">
+        <div class="col-md-12">
+           {{> afQuickField name="date"}}
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+        </div>
+    </div>
+    {{/autoForm}}
+</template>
+
+
+<!--Generate-->
+<template name="ice_unpaidGeneralGen">
+    {{#with data}}
+        <!--Title-->
+        <div class="report-title">
+        <span class="report-company-name" style="font-size: 20px;">{{title.company}}</span><br>
+            <div>Unpaid General</div>
+        </div>
+
+        <!--Header-->
+        <div style="width: 100%">
+            {{#with header}}
+                <div style="width: 50%;">
+                    <ul class="list-unstyled">
+                        <li><strong>Date:</strong> {{date}}</li>
+                    </ul>
+                </div>
+            {{/with}}
+        </div>
+
+        <!--Content-->
+         <!--Content-->
+        <table class="table table-borderd">
+            <thead>
+            <tr>
+                <th>Invoice Id</th>
+                <th>Order Date</th>
+                <th>Customer Name</th>
+                <th>Due Amount</th>
+                <th>Paid Amount</th>
+                <th>Outstanding Amount</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {{#each content}}
+                <tr>
+                    <td>{{_id}}</td>
+                    <td>{{orderDate}}</td>
+                    <td>{{customerName}}</td>
+                    <td>{{formatKh _payment.dueAmount}}</td>
+                    <td>{{formatKh _payment.paidAmount}}</td>
+                    <td>{{formatKh _payment.outstandingAmount}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+
+        <!--Footer-->
+
+    {{/with}}
+
+    <!--Sign-->
+    {{> signFooter}}
+</template>
+

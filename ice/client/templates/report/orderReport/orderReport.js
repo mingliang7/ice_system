@@ -1,3 +1,11 @@
+// sort function
+function compare(a,b) {
+  if (a._id < b._id)
+    return -1;
+  if (a._id > b._id)
+    return 1;
+  return 0;
+}
 
 Template.ice_orderReport.onRendered(function() {
   datePicker();
@@ -66,25 +74,20 @@ Template.ice_orderReportGen.helpers({
         endDate = date[1];
         if(staff != 'All' && customerType == 'All' && customer == 'All'){
             selector = {iceStaffId: self.staffId, orderDate: {$gte: startDate, $lte: endDate}}
-            var getOrder = Ice.Collection.Order.find(selector);
-            var index = 1;
+            var getOrder = Ice.Collection.Order.find(selector, {sort: {_id: 1}});
             getOrder.forEach(function (obj) {
                 // Do something
-                obj.index = index;
                 content.push(obj);
-                index++;
             });
         }else if (staff == 'All' && customerType == 'All' && customer == 'All'){
             customers = findCustomerByType(customerType);
             var index = 1;
             for(var i = 0 ; i < customers.length; i++){
                selector = {iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Order.find(selector);
+                var getOrder = Ice.Collection.Order.find(selector, {sort: {_id: 1}});
                 getOrder.forEach(function (obj) {
-                    // Do something
                     obj.index = index;
                     content.push(obj);
-                    index++;
                 });
             }
         }else if (staff != 'All' && customerType !== 'All' && customer == 'All'){
@@ -97,7 +100,6 @@ Template.ice_orderReportGen.helpers({
                     // Do something
                     obj.index = index;
                     content.push(obj);
-                    index++;
                 });
             }
         }else if (staff == 'All' && customerType !== 'All' && customer == 'All'){
@@ -110,7 +112,6 @@ Template.ice_orderReportGen.helpers({
                     // Do something
                     obj.index = index;
                     content.push(obj);
-                    index++;
                 });
             }
         }else if (staff == 'All' && customerType !== 'All' && customer != 'All'){
@@ -121,7 +122,6 @@ Template.ice_orderReportGen.helpers({
                     // Do something
                     obj.index = index;
                     content.push(obj);
-                    index++;
                 });
         }else{
                 index = 1 ;
@@ -131,11 +131,16 @@ Template.ice_orderReportGen.helpers({
                     // Do something
                     obj.index = index;
                     content.push(obj);
-                    index++;
                 });
         }
         if (content.length > 0) {
-            data.content = content;
+            var index = 1 
+            var sortContent = content.sort(compare);
+            sortContent.forEach(function(elem) {
+                elem.index = index;
+                index++;
+            });
+            data.content = sortContent;
             return data;
         } else {
             data.content.push({index: 'no results'});

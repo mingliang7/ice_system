@@ -56,6 +56,7 @@
                 <th>Invoice #</th>
                 <th>Date</th>
                 <th>Customer</th>
+                <th>Staff</th>
                 <th>Status</th>
                 <th>Due Amount</th>
                 <th>Paid Amount</th>
@@ -72,6 +73,7 @@
                     <td>{{_id}}</td>
                     <td>{{paymentDate}}</td>
                     <td>{{name customerId}}</td>
+                    <td>{{findName staffId}}</td>
                     <td>{{status}}</td>
                     <td>{{formatCurrency dueAmount}}</td>
                     <td>{{formatCurrency paidAmount}}</td>
@@ -80,11 +82,11 @@
                 </tr>
             {{/each}}
                 <tr>
-                    <td colspan="5" align="right">Grand Total KHR:</td>
+                    <td colspan="6" align="right">Grand Total KHR:</td>
                     {{{sumTotal content}}}
                 </tr>
                 <tr>
-                    <td colspan="5" align="right">USD:</td>
+                    <td colspan="6" align="right">USD:</td>
                     {{{totalInDollar content}}}
                 </tr>
             </tbody>

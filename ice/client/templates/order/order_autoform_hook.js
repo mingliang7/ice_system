@@ -37,7 +37,6 @@ getRank = function(date, type) {
   				}
 
   			}else{
-  				debugger
   				if(i + type > 40 ){
             lastDate = new Date(now.getFullYear(), now.getMonth() +1,0)
   					endDate = moment(lastDate).format('YYYY-MM-DD');
@@ -53,7 +52,13 @@ getRank = function(date, type) {
   			}
   		}
   	}
-  	startDate = moment(now.setDate(i)).format('YYYY-MM-DD');
+    last = moment(endDate).format('DD')
+    if(last == '31'){
+      setEndDate = parseInt(last) - type;
+      startDate = moment(now.setDate(setEndDate)).format('YYYY-MM-DD');
+    }else{      
+  	 startDate = moment(now.setDate(i)).format('YYYY-MM-DD');
+    }
   	if(endDate != '') break;
   }
  	return {startDate: startDate, endDate: endDate};
@@ -93,7 +98,8 @@ setOrderGroup = function(doc) {
   } else {
     doc.paidAmount = 0;
     doc.outstandingAmount = doc.total;
-    return doc.closing = false;
+    doc.closingDate = 'none';
+    doc.closing = false;
   }
 };
 
@@ -188,7 +194,8 @@ AutoForm.hooks({
             return Print.set('print', false);
           }else if (pay == true){
             generatePayment(id);
-            return Print.set('print', false);
+            Session.set('invioceReportId', id)
+            Print.set('pay', false);
           }
         }
       }

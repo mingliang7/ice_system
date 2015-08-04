@@ -10,7 +10,7 @@ reportTpl.onRendered(function () {
 
 /***** Generate ******/
 generateTpl.helpers({
-    data: function () {
+    dataReport: function () {
         var self = this;
         var data = {
             title: {},
@@ -53,5 +53,8 @@ generateTpl.helpers({
     }, 
     listData: function(data){
         console.log(data)
+    },
+    findName: function(id){
+        return Ice.Collection.Item.findOne(id).name;
     }
 });

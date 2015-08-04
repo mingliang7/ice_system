@@ -110,10 +110,10 @@ Router.route 'ice/customer_reports',
 
 	name: 'ice.customerReport'
 	header:
-		title: 'Customer Report'
+		title: 'Order Report by customer'
 		sub: ''
 	icon: 'customer'
-	title: 'Customer Report'
+	title: 'Order Report by customer'
 
 Router.route 'ice/invoice_groups',
 	->
@@ -135,4 +135,15 @@ Router.route 'ice/remove_invoice_reports',
 		title: 'Remove Invoice Report'
 		sub: ''
 	icon: 'report'
-	title: 'Remove Invoice'
+
+Router.route 'ice/unpaid_generals',
+	->
+		@render 'ice_unpaidGeneral'
+
+	name: 'ice.unpaidGeneral'
+	header:
+		title: 'Unpaid General'
+		sub: ''
+	icon: 'report'
+	title: 'Unpaid General'
+

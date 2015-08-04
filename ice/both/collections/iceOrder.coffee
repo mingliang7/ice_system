@@ -118,11 +118,16 @@ Ice.Schema.Order = new SimpleSchema(
   closing:
     type: Boolean
     optional: true
-
+  closingDate:
+    type: String
+    optional: true
   branchId:
     type: String
     optional: true
-    
+  _payment: 
+    type: Object
+    optional: true
+    blackbox: true  
 )
 
 Ice.Collection.Order.attachSchema Ice.Schema.Order

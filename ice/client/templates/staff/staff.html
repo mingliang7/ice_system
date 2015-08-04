@@ -36,3 +36,39 @@
         <button type="reset" class="btn btn-default">Reset</button>
     {{/autoForm}}
 </template>
+<template name="ice_staffUpdateTemplate">
+    {{#autoForm collection=Ice.Collection.Staffs id="ice_staffUpdateTemplate" type="update" doc=this}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name='name' }}
+                {{> afQuickField name='gender' }}
+                {{> afQuickField name='position' }}
+            </div>
+            <div class="col-md-6">
+                {{> afQuickField name='address'}}
+                {{> afQuickField name='telephone'}}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="reset" class="btn btn-default">Reset</button>
+    {{/autoForm}}
+</template>
+
+<!--Show-->
+<template name="ice_staffShowTemplate">
+    <dl class="dl-horizontal">
+        <dt>Id</dt>
+        <dd>{{_id}}</dd>
+        <dt>Name:</dt>
+        <dd>{{name}}</dd>
+        <dt>Gender</dt>
+        <dd>{{gender}}</dd>
+        <dt>Position</dt>
+        <dd>{{position}}</dd>
+        <dt>Telephone</dt>
+        <dd>{{telephone}}</dd>
+        <dt>Address</dt>
+        <dd>{{address}}</dd>
+    </dl>
+</template>

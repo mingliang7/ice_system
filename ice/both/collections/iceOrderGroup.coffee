@@ -32,10 +32,17 @@ Ice.Schema.OrderGroup = new SimpleSchema(
 	closing: 
 		type: Boolean
 		defaultValue: false
-
+	closingDate:
+		type: String
+		defaultValue: 'none'
 	groupBy:
 		type: Object
 		blackbox: true
+		
+	_payment:
+		type: Object
+		blackbox: true
+		optional: true
 
 	iceCustomerId:
 		type: String

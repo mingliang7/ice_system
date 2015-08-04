@@ -15,7 +15,6 @@ Template.ice_userStaff.events({
             .set({
                 title: "<i class='fa fa-plus'></i> Add New UserStaff"
             })
-            .maximize();
 
     },
     'click .update': function (e, t) {
@@ -26,8 +25,6 @@ Template.ice_userStaff.events({
             .set({
                 title: '<i class="fa fa-pencil"></i> Update Existing UserStaff'
             })
-            .maximize();
-
 
     },
     'click .remove': function (e, t) {

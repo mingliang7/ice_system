@@ -1,11 +1,11 @@
 Router.route 'ice/home',
   ->
-    @render 'ice_home'
+    @render 'ice_orderInsertTemplate'
 
   name: 'ice.home'
   header:
-    title: 'home'
+    title: 'Order'
     sub: ''
 icon: 'home'
-title: "Home"
+title: "order"
 

@@ -2,6 +2,14 @@ Template.ice_orderUpdateTemplate.onRendered ->
   text = $('[name="iceCustomerId"] option:selected').text()
   $('[name="customer"]').val(text)
 Template.ice_orderInsertTemplate.onRendered ->
+  $('body').on 'keydown', (e) -> 
+    console.log(typeof(e.keyCode)) 
+    if(e.keyCode == 123)
+      $('.importPayment').slideDown('fast')
+    else
+      $('.importPayment').hide()
+  createNewAlertify('paymentPopUP')
+  $('[name="total"]').attr('readonly', true)
   today = moment(new Date()).format('YYYY-MM-DD HH:mm:ss') 
   $('[name="orderDate"]').val(today)
   datePicker()
@@ -10,9 +18,7 @@ Template.ice_order.onRendered ->
 
 Template.ice_order.events
   "click .insert": ->
-    alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderInsertTemplate))
-    .maximize()
-    $('[name="total"]').attr('readonly', true)
+    Router.go('/ice/home')
   "click .update": ->
     orderId = this._id
     data = Ice.Collection.Order.findOne(orderId);
@@ -53,37 +59,48 @@ Template.ice_order.events
     $('[name="total"]').attr('readonly', true)
   "click .remove": ->
     id = @_id
+    paidAmount = undefined
     data = Ice.Collection.Order.findOne(id)
-    userId = Meteor.userId()
-    userName = Meteor.users.findOne(userId).username;
-    selector = 
-      dateTime: moment().format('YYYY-MM-DD HH:mm:ss')
-      invoiceData: data 
-      removedBy: 
-        id: userId 
-        name: userName 
-    alertify.confirm(
-      fa('remove', 'Remove order'),
-      "Are you sure to delete "+id+" ?",
-      ->
-        Ice.Collection.Order.remove id, (error) ->
-          if error is 'undefined' 
-            alertify.error error.message 
-          else
-            Ice.Collection.RemoveInvoiceLog.insert(selector)
-            alertify.warning 'Successfully Remove'
-      null
-    )
+    if data.iceOrderGroupId != undefined
+      paidAmount = Ice.Collection.OrderGroup.findOne({_id: data.iceOrderGroupId }).paidAmount 
+    else
+      paidAmount = data.paidAmount
+    if paidAmount == 0
+      userId = Meteor.userId()
+      userName = Meteor.users.findOne(userId).username;
+      selector = 
+        dateTime: moment().format('YYYY-MM-DD HH:mm:ss')
+        data: data 
+        removedBy: 
+          id: userId 
+          name: userName 
+      alertify.confirm(
+        fa('remove', 'Remove order'),
+        "Are you sure to delete "+id+" ?",
+        ->
+          Ice.Collection.Order.remove id, (error) ->
+            if error is 'undefined' 
+              alertify.error error.message 
+            else
+              Ice.Collection.RemoveInvoiceLog.insert(selector)
+              alertify.warning 'Successfully Remove'
+        null
+      )
+    else
+      alertify.error "Invoice ##{id} has payment"
   'click .show': () ->
     alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, @))    
   "click .print": ->
+    Session.set('invioceReportId', null)
     GenReport(@_id) #generateReport alias function in order_autoform_hook
-
+  'click .save': ->
+    Session.set('invioceReportId', null)
 # insert form event
-Template.ice_orderInsertTemplate.onRendered ->
-  exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
-  $('[name="exchange"]').select2('val', exhchange_date._id)
 Template.ice_orderInsertTemplate.events
+  'click .orderPayment': ->
+    Meteor.call('migrateOrder')
+  'click .orderGroupPayment': ->
+    Meteor.call('migrateOrderGroup')
   'click .staffAddon': () ->
       alertify.staffAddOn(fa('plus', 'Staff'), renderTemplate(Template.ice_staffInsertTemplate))
   'click .customerAddon': () ->
@@ -91,6 +108,8 @@ Template.ice_orderInsertTemplate.events
     
   'change [name="iceCustomerId"]': (e) ->
     id = $(e.currentTarget).val()
+    exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
+    $('[name="exchange"]').select2('val', exhchange_date._id)
     if checkType(id) == 'general'
       $('.pay').removeClass('hidden')
     else
@@ -145,6 +164,8 @@ Template.ice_orderUpdateTemplate.events
 
   'change [name="iceCustomerId"]': (e) ->
     id = $(e.currentTarget).val()
+    exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
+    $('[name="exchange"]').select2('val', exhchange_date._id)
     if checkType(id) == 'general'
       $('.pay').removeClass('hidden')
     else
@@ -196,7 +217,7 @@ Template.ice_orderShowTemplate.helpers
     orderDetail = this.iceOrderDetail
     items = []
     orderDetail.forEach (item) ->
-     items.push itemQuery.detail(item.iceItemId, item.qty, item.discount, format(item.amount))
+     items.push itemQuery.detail(item.iceItemId, item.price, item.qty, item.discount, format(item.amount))
     items
   customerType: () ->
     customerDoc = Ice.Collection.Customer.findOne(this.iceCustomerId);
@@ -287,8 +308,8 @@ checkType = (id) ->
 
 #item query
 itemQuery = 
-  detail: (itemId, qty, discount = '0', amount) ->
-    {name, price} = Ice.Collection.Item.findOne(itemId)
+  detail: (itemId, price, qty, discount = '0', amount) ->
+    {name} = Ice.Collection.Item.findOne(itemId)
     "<small>
     {Name:#{name}, 
     Price: #{price}, 
