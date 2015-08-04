@@ -5,7 +5,7 @@ var reportTpl = Template.ice_removeInvoiceReport,
 /***** Form *****/
 reportTpl.onRendered(function () {
     var name = $('[name="date"]');
-    DateTimePicker.dateRange(name);
+    DateTimePicker.dateTime(name);
 });
 
 /***** Generate ******/

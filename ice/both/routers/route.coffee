@@ -147,3 +147,13 @@ Router.route 'ice/unpaid_generals',
 	icon: 'report'
 	title: 'Unpaid General'
 
+Router.route 'ice/unpaid_groups',
+	->
+		@render 'ice_unpaidGroup'
+
+	name: 'ice.unpaidGroup'
+	header:
+		title: 'Unpaid Group'
+		sub: ''
+	icon: 'report'
+	title: 'Unpaid Group'
