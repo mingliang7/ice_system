@@ -56,5 +56,11 @@ generateTpl.helpers({
     },
     findName: function(id){
         return Ice.Collection.Item.findOne(id).name;
+    },
+    formatKh: function(val){
+        return numeral(val).format('0,0');
+    },
+    formatUS: function(val){
+        return numeral(val).format('0,0.00');
     }
 });

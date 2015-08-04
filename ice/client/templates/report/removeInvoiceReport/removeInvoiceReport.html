@@ -39,9 +39,12 @@
             {{#each content}}
                 <tr>
                     <th><u>Invoice Id:&nbsp;{{data._id}}</u></th>
-                    <th>Removed Date:&nbsp;{{dateTime}}</th>
-                    <th>Removed By:&nbsp;{{removedBy.name}}</th>
+                    <th><u>Removed Date:&nbsp;{{dateTime}}</u></th>
+                    <th><u>Removed By:&nbsp;{{removedBy.name}}</u></th>
                     
+                </tr>
+                <tr>
+                    <th colspan="3">Customer: {{data._customer.name}}</th>
                 </tr>
                 <tr>
                     <th colspan="3">Description: </th>
@@ -53,10 +56,13 @@
                             <li>Item: {{findName iceItemId}}</li>
                             <li>Price: {{price}}</li>
                             <li>Qty: {{qty}}</li>
-                            <li>Amount: {{amount}}</li>
+                            <li>Amount: {{ formatKh amount}}</li>
                         </ul>
                     {{/each}}
+                    <span>&nbsp;&nbsp; <strong>Total: {{formatKh data.total}} &nbsp;
+                    TotalInDollar: {{formatUS data.totalInDollar}}</strong></span>
                 </tr>
+                <br>
             {{/each}}
             </tbody>
         </table>
