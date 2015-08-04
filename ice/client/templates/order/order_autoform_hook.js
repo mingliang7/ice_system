@@ -5,7 +5,7 @@ this.Print = new ReactiveObj();
 generateReport = function(id) {
   var doc, q, url;
   doc = Ice.Collection.Order.findOne(id);
-  url = "invoiceReportGen?orderId=" + id + "&customerId=" + doc.iceCustomerId + "&date=" + (moment(doc.createdAt).format('YYYY-MM-DD hh:mm:ss a'));
+  url = "invoiceReportGen?orderId=" + id + "&customerId=" + doc.iceCustomerId + "&date=" + (moment(doc.createdAt).format('YYYY-MM-DD HH:mm:ss'));
   return window.open(url, '_blank');
 };
 
@@ -15,7 +15,7 @@ generatePayment = function(id){
 }
 this.GenReport = generateReport;
 getRank = function(date, type) {
-	obj = {}
+  obj = {}
   var day, now, range;
   range = undefined;
   day = new Date(date).getDate();
@@ -25,58 +25,58 @@ getRank = function(date, type) {
   endDate = '';
   onFeb = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
   for(var i = 1 ; i <= range; i += type ){
-  	for(var j = i ; j < i + type; j++){
-  		if(day <= j){
-  			if(now.getMonth() + 1 == 2){
-  				if(j + type >= onFeb){
-  					endDate = moment(now.setDate(onFeb)).format('YYYY-MM-DD');
-  					break
-  				}else{
-  					endDate = moment(now.setDate((i + type) - 1)).format('YYYY-MM-DD');
-  					break
-  				}
+    for(var j = i ; j < i + type; j++){
+      if(day <= j){
+        if(now.getMonth() + 1 == 2){
+          if(j + type >= onFeb){
+            endDate = moment(now.setDate(onFeb)).format('YYYY-MM-DD');
+            break
+          }else{
+            endDate = moment(now.setDate((i + type) - 1)).format('YYYY-MM-DD');
+            break
+          }
 
-  			}else{
-  				if(i + type > 40 ){
+        }else{
+          if(i + type > 40 ){
             lastDate = new Date(now.getFullYear(), now.getMonth() +1,0)
-  					endDate = moment(lastDate).format('YYYY-MM-DD');
-  					break
+            endDate = moment(lastDate).format('YYYY-MM-DD');
+            break
           }else if(i + type >= 26){
             lastDate = new Date(now.getFullYear(), now.getMonth() +1,0)
             endDate = moment(lastDate).format('YYYY-MM-DD');
             break      
-  				}else{
-  					endDate = moment(now.setDate((i + type) - 1)).format('YYYY-MM-DD');
-  					break
-  				}
-  			}
-  		}
-  	}
+          }else{
+            endDate = moment(now.setDate((i + type) - 1)).format('YYYY-MM-DD');
+            break
+          }
+        }
+      }
+    }
     last = moment(endDate).format('DD')
     if(last == '31'){
       setEndDate = parseInt(last) - type;
       startDate = moment(now.setDate(setEndDate)).format('YYYY-MM-DD');
     }else{      
-  	 startDate = moment(now.setDate(i)).format('YYYY-MM-DD');
+     startDate = moment(now.setDate(i)).format('YYYY-MM-DD');
     }
-  	if(endDate != '') break;
+    if(endDate != '') break;
   }
- 	return {startDate: startDate, endDate: endDate};
+  return {startDate: startDate, endDate: endDate};
 };
 
 rangeDate = function(date, type) {
- 	switch(type){
- 		case '5':	
- 			return getRank(date, 5);
- 		case '10':	
- 			return getRank(date, 10);
- 		case '15':	
- 			return getRank(date, 15);
- 		case '20':	
- 			return getRank(date, 20);
- 		case '30':	
- 			return getRank(date, 30);
- 	}
+  switch(type){
+    case '5': 
+      return getRank(date, 5);
+    case '10':  
+      return getRank(date, 10);
+    case '15':  
+      return getRank(date, 15);
+    case '20':  
+      return getRank(date, 20);
+    case '30':  
+      return getRank(date, 30);
+  }
 };
 
 setOrderGroup = function(doc) {

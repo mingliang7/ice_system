@@ -56,19 +56,21 @@ generateTpl.helpers({
                          return payment;
                     }
                 });
-                var payment = {
-                    dueAmount: obj.total,
-                    paidAmount: obj.total - obj._payment[payment].outstandingAmount,
-                    outstandingAmount: obj._payment[payment].outstandingAmount
-                }
-                order = {
-                    _id: obj._id,
-                    orderDate: obj.orderDate,
-                    closingDate: obj.closingDate,
-                    iceCustomerId: obj.iceCustomerId,
-                    customerName: obj._customer.name,
-                    customerType: obj._customer.customerType,
-                    _payment: payment
+                if(payment != undefined){
+                    var payment = {
+                        dueAmount: obj.total,
+                        paidAmount: obj.total - obj._payment[payment].outstandingAmount,
+                        outstandingAmount: obj._payment[payment].outstandingAmount
+                    }
+                    order = {
+                        _id: obj._id,
+                        orderDate: obj.orderDate,
+                        closingDate: obj.closingDate,
+                        iceCustomerId: obj.iceCustomerId,
+                        customerName: obj._customer.name,
+                        customerType: obj._customer.customerType,
+                        _payment: payment
+                    }
                 }
             }else{
                 order = {
@@ -101,4 +103,3 @@ generateTpl.helpers({
         return numeral(val).format('0,0');
     }
 });
-
