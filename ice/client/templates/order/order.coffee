@@ -109,7 +109,9 @@ Template.ice_orderInsertTemplate.events
   'change [name="iceCustomerId"]': (e) ->
     id = $(e.currentTarget).val()
     exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
+    today = moment().format('YYYY-MM-DD HH:mm:ss') 
     $('[name="exchange"]').select2('val', exhchange_date._id)
+    $('[name="orderDate"]').val(today)
     if checkType(id) == 'general'
       $('.pay').removeClass('hidden')
     else
@@ -165,7 +167,9 @@ Template.ice_orderUpdateTemplate.events
   'change [name="iceCustomerId"]': (e) ->
     id = $(e.currentTarget).val()
     exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
+    today = moment().format('YYYY-MM-DD HH:mm:ss') 
     $('[name="exchange"]').select2('val', exhchange_date._id)
+    $('[name="orderDate"]').val(today)
     if checkType(id) == 'general'
       $('.pay').removeClass('hidden')
     else
