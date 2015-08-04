@@ -1,4 +1,11 @@
-
+// sort function
+function compare(a,b) {
+  if (a._id < b._id)
+    return -1;
+  if (a._id > b._id)
+    return 1;
+  return 0;
+}
 Template.ice_paymentReport.onRendered(function() {
   datePicker();
 });
@@ -67,75 +74,63 @@ Template.ice_paymentReportGen.helpers({
         if(staff != 'All' && customerType == 'All' && customer == 'All'){
             selector = {staffId: self.staffId, paymentDate: {$gte: startDate, $lte: endDate}}
             var getOrder = Ice.Collection.Payment.find(selector);
-            var index = 1;
             getOrder.forEach(function (obj) {
                 // Do something
-                obj.index = index;
                 content.push(obj);
-                index++;
             });
         }else if (staff == 'All' && customerType == 'All' && customer == 'All'){
             customers = findCustomerByType(customerType);
-            var index = 1;
             for(var i = 0 ; i < customers.length; i++){
                selector = {customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
                 var getOrder = Ice.Collection.Payment.find(selector);
                 getOrder.forEach(function (obj) {
                     // Do something
-                    obj.index = index;
                     content.push(obj);
-                    index++;
                 });
             }
         }else if (staff != 'All' && customerType !== 'All' && customer == 'All'){
             customers = findCustomerByType(customerType);
-            var index = 1;
             for(var i = 0 ; i < customers.length; i++){
                selector = {staffId: self.staffId, customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
                 var getOrder = Ice.Collection.Payment.find(selector);
                 getOrder.forEach(function (obj) {
                     // Do something
-                    obj.index = index;
                     content.push(obj);
-                    index++;
                 });
             }
         }else if (staff == 'All' && customerType !== 'All' && customer == 'All'){
-            var index = 1;
             customers = findCustomerByType(customerType);
             for(var i = 0 ; i < customers.length; i++){
                selector = {customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
                 var getOrder = Ice.Collection.Payment.find(selector);
                 getOrder.forEach(function (obj) {
                     // Do something
-                    obj.index = index;
                     content.push(obj);
-                    index++;
                 });
             }
         }else if (staff == 'All' && customerType !== 'All' && customer != 'All'){
                selector = {customerId: self.customerId, paymentDate: {$gte: startDate, $lte: endDate}}
                 var getOrder = Ice.Collection.Payment.find(selector);
-                var index = 1;
                 getOrder.forEach(function (obj) {
                     // Do something
-                    obj.index = index;
                     content.push(obj);
-                    index++;
                 });
         }else{
-                index = 1 ;
                 selector = {staffId: self.staffId, customerId: self.customerId, paymentDate: {$gte: startDate, $lte: endDate}};
                 getOrder = Ice.Collection.Payment.find(selector);
                 getOrder.forEach(function (obj) {
                     // Do something
-                    obj.index = index;
                     content.push(obj);
-                    index++;
                 });
         }
         if (content.length > 0) {
-            data.content = content;
+            var sortContent = content.sort(compare);
+            var index = 1; 
+            sortContent.forEach(function (elm) {
+                elm.index = index;
+                index++;
+            });
+            data.content = sortContent;
             return data;
         } else {
             data.content.push({index: 'no results'});
@@ -151,6 +146,9 @@ Template.ice_paymentReportGen.helpers({
     },
     check: function(value, total){
         return value == undefined ? total : formatKh(value)
+    },
+    findName: function(id){
+        return Ice.Collection.Staffs.findOne(id).name;
     },
     sumTotal: function(content){
         td = ''
