@@ -63,20 +63,20 @@ generateTpl.helpers({
                 }
                 order = {
                     _id: obj._id,
-                    orderDate: obj.orderDate,
+                    orderDate: obj.startDate + ' To ' + obj.endDate,
                     closingDate: obj.closingDate,
                     iceCustomerId: obj.iceCustomerId,
-                    customerName: obj._customer.name,
+                    customerName: obj._customer.name + ' (' + obj._customer.customerType+'ថ្ងៃ)',
                     customerType: obj._customer.customerType,
                     _payment: payment
                 }
             }else{
                 order = {
                     _id: obj._id,
-                    orderDate: obj.orderDate,
+                    orderDate: obj.startDate + ' To ' + obj.endDate,
                     closingDate: obj.closingDate,
                     iceCustomerId: obj.iceCustomerId,
-                    customerName: obj._customer.name,
+                    customerName: obj._customer.name + ' (' + obj._customer.customerType+'ថ្ងៃ)',
                     customerType: obj._customer.customerType,
                     _payment:{
                         outstandingAmount: obj.outstandingAmount,
