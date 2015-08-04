@@ -126,6 +126,16 @@ Router.route 'ice/invoice_groups',
 	icon: 'report'
 	title: 'Invoice Group'
 
+Router.route 'ice/remove_invoice_reports',
+	->
+		@render 'ice_removeInvoiceReport'
+
+	name: 'ice.removeInvoiceReport'
+	header:
+		title: 'Remove Invoice Report'
+		sub: ''
+	icon: 'report'
+
 Router.route 'ice/unpaid_generals',
 	->
 		@render 'ice_unpaidGeneral'
@@ -136,3 +146,4 @@ Router.route 'ice/unpaid_generals',
 		sub: ''
 	icon: 'report'
 	title: 'Unpaid General'
+
