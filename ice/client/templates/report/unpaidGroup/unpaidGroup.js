@@ -8,8 +8,8 @@ function compare(a,b) {
   return 0;
 }
 
-var reportTpl = Template.ice_unpaidGeneral,
-    generateTpl = Template.ice_unpaidGeneralGen;
+var reportTpl = Template.ice_unpaidGroup,
+    generateTpl = Template.ice_unpaidGroupGen;
 
 /***** Form *****/
 reportTpl.onRendered(function () {
@@ -41,12 +41,12 @@ generateTpl.helpers({
                     addDay.getFullYear(), 
                     addDay.getMonth(), 
                     addDay.getDate() + 1)
-        today = moment(today).format('YYYY-MM-DD HH:mm:ss');
+        today = moment(today).format('YYYY-MM-DD');
         yesterday = moment(self.date).format('YYYY-MM-DD 23:59:59');
         /********** Content **********/ 
         var content = [];
-        var selector = {orderDate: {$lt: today}, $or: [{closingDate: {$gt: yesterday}}, {closingDate: 'none'}]}
-        var getOrder = Ice.Collection.Order.find(selector);
+        var selector = {endDate: {$lt: today}, $or: [{closingDate: {$gt: yesterday}}, {closingDate: 'none'}]}
+        var getOrder = Ice.Collection.OrderGroup.find(selector);
         var index =  1 ;
         var order = {};
         getOrder.forEach(function(obj) {

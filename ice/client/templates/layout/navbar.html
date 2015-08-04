@@ -34,6 +34,8 @@
             <li class="{{isActiveRoute regex='ice.paymentReport'}}"><a href="{{pathFor 'ice.paymentReport'}}">Payment</a></li>
             <li class="{{isActiveRoute regex='ice.invoiceGroup'}}"><a href="{{pathFor 'ice.invoiceGroup'}}">Invoice Group</a></li>
             <li class="{{isActiveRoute regex='ice.unpaidGeneral'}}"><a href="{{pathFor 'ice.unpaidGeneral'}}">Unpaid General</a></li>
+            <li class="{{isActiveRoute regex='ice.unpaidGroup'}}"><a href="{{pathFor 'ice.unpaidGroup'}}">Unpaid Group</a></li>
+            
              {{#if isAdmin}}
                     <li class="{{isActiveRoute regex='ice.removeInvoiceReport'}}"><a href="{{pathFor 'ice.removeInvoiceReport'}}">Remove Invoice Report</a></li>
             {{/if}}
