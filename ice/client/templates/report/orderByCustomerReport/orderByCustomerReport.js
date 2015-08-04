@@ -62,22 +62,29 @@ Template.ice_customerReportGen.helpers({
         endDate = date[1];
         if(customerType == 'All' && customer == 'All'){
             selector = {orderDate: {$gte: startDate, $lte: endDate}};
+            var order = Ice.Collection.Order.find(selector)
             var index = 1;
-            var reduceCustomer = groupCustomer(selector);
+            var reduceCustomer = groupCustomer(order);
             var td = listCustomerAsTable(reduceCustomer);
             content.push({list: td});
         }else if (customerType != 'All' && customer == 'All'){
+            var orderArr = [];
             customers = findCustomerByType(customerType);
             for(var i = 0 ; i < customers.length; i++){
                 selector = {iceCustomerId: customers[i], orderDate: {$gte: startDate, $lte: endDate}}
-                var reduceCustomer = groupCustomer(selector);
-                var td = listCustomerAsTable(reduceCustomer);
-                content.push({list: td});
+                var orders = Ice.Collection.Order.find(selector);
+                orders.forEach(function (order) {
+                    orderArr.push(order);
+                });
             }
+            var reduceCustomer = groupCustomer(orderArr);
+            var td = listCustomerAsTable(reduceCustomer);
+            content.push({list: td});
         }else{
             selector = {iceCustomerId: customer, orderDate: {$gte: startDate, $lte: endDate}};
+            var order = Ice.Collection.Order.find(selector)
             var index = 1;
-            var reduceCustomer = groupCustomer(selector);
+            var reduceCustomer = groupCustomer(order);
             var td = listCustomerAsTable(reduceCustomer);
             content.push({list: td});
         }
@@ -206,8 +213,8 @@ var orderGroupCustomer = function(total,id, startDate, endDate) {
 
 // grouping all customer
 
-var groupCustomer = function(selector) {
-    var orders = Ice.Collection.Order.find(selector)
+var groupCustomer = function(order) {
+    var orders = order;
     var customer = customerItem(orders);
     var gItems = getItems();
     var customerObj = {};
@@ -356,9 +363,9 @@ var listTotalSummary = function(reduceCustomer) {
             }
         }
         total += reduceCustomer[k].total;
-        if(reduceCustomer[k].paidAmount){
+        if(reduceCustomer[k].paidAmount != undefined){
             paidAmount += reduceCustomer[k].paidAmount;
-            outstandingAmount += reduceCustomer[k].oustandingAmount;
+            outstandingAmount += reduceCustomer[k].outstandingAmount;
         }else{
             var group = orderGroupCustomer(reduceCustomer[k].total, k, startDate, endDate);
             paidAmount += group.paidAmount
@@ -386,7 +393,7 @@ var listTotalSummary = function(reduceCustomer) {
                 '</strong></td>' + '<td colspan="1"><strong> ទឹកប្រាក់បានទទួល: ' + 
                 formatKh(paidAmount) + '</strong></td>' + 
                 '<td colspan="1"><strong>ទឹកប្រាក់ជំពាក់: ' + 
-                formatKh(outstandingAmount) +'</strong></td>' + '</tr>';
+                formatKh(outstandingAmount ) +'</strong></td>' + '</tr>';
     return td
 }
 
