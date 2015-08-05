@@ -34,15 +34,13 @@ Meteor.methods
 							console.log e
 						
 						Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: closingDate, _payment: payment}})
-						console.log("Migrate #{countPayment} payment to #{countOrder} order") 
+						
 				else 
 					Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: 'none'}})
-					console.log("Migrate #{countPayment} payment to #{countOrder} order")
 			else
 				if order.closing != undefined && order.closing is false
 					Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: 'none'}})
-					console.log("Migrate #{countPayment} payment to #{countOrder} order")
-				
+		alert("Migrate #{countPayment} payment to #{countOrder} order") 		
 			
 	migrateOrderGroup: ->
 		countPayment = 0 
@@ -74,13 +72,11 @@ Meteor.methods
 					catch e
 						console.log e					
 					Ice.Collection.OrderGroup.update({_id: order._id}, {$set: {closingDate: closingDate, _payment: payment}})
-					console.log("Migrate #{countPayment} payment to #{countOrder} order") 
 				else
 					Ice.Collection.OrderGroup.update({_id: order._id}, {$set: {closingDate: 'none'}})
-					console.log("Migrate #{countPayment} payment to #{countOrder} order")
 			else
 				Ice.Collection.OrderGroup.update({_id: order._id}, {$set: {closingDate: 'none'}})
-				console.log("Migrate #{countPayment} payment to #{countOrder} order")
+		alert("Migrate #{countPayment} payment to #{countOrder} order")
 
 	removeMigrateFromOrder: ->
 		orders = Ice.Collection.Order.find()
@@ -90,4 +86,4 @@ Meteor.methods
 				Ice.Collection.Order.update({_id: order._id}, {$unset: {closingDate: '', _payment: ''}})
 				count += 1
 
-		console.log(count + ' payments' + ' removed from order') 
+		alert(count + ' payments' + ' removed from order') 
