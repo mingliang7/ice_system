@@ -89,10 +89,10 @@ var updateInvoice = function(doc){
     var payment = paymentDetail(oldOrder._payment, doc); // update _payment 
     if(oldPaidAmount > doc.paidAmount){
       newPaidAmount = oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount);
-      outstandingAmount = (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount
+      outstandingAmount = doc.dueAmount - doc.paidAmount
     }else{
       newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
-      outstandingAmount = oldOrder.outstandingAmount - (doc.paidAmount - oldPaidAmount);
+      outstandingAmount = doc.dueAmount - doc.paidAmount
     }
     var newDate = doc.paymentDate;
     var closing = ( outstandingAmount == 0) ? true : false;
@@ -114,10 +114,10 @@ var updateInvoice = function(doc){
     var outstandingAmount = 0;
     if(oldPaidAmount > doc.paidAmount){
       newPaidAmount = oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount);
-      outstandingAmount = (oldPaidAmount - doc.paidAmount) +  oldOrder.outstandingAmount
+      outstandingAmount = doc.dueAmount - doc.paidAmount
     }else{
       newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
-      outstandingAmount = oldOrder.outstandingAmount - (doc.paidAmount - oldPaidAmount) ;
+      outstandingAmount = doc.dueAmount - doc.paidAmount
     }
     var newDate = doc.paymentDate;
     var closing = ( outstandingAmount == 0) ? true : false;
