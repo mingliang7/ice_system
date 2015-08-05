@@ -32,7 +32,7 @@ generateTpl.helpers({
         /********** Content **********/
         var content = [];
         var date = self.date ;
-        var selector = {dateTime: {$gte: date}}
+        var selector = {dateTime: {$lte: date}}
         var removeInvoice = Ice.Collection.RemoveInvoiceLog.find(selector);
         var index = 1;
         removeInvoice.forEach(function (obj) {
