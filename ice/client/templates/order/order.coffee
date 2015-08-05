@@ -112,7 +112,9 @@ Template.ice_orderInsertTemplate.events
     today = moment().format('YYYY-MM-DD HH:mm:ss') 
     $('[name="exchange"]').select2('val', exhchange_date._id)
     $('[name="orderDate"]').val(today)
-    totalAmount()
+    total = $('[name="total"]').val()
+    if total != ''
+      totalAmount()
     if checkType(id) == 'general'
       $('.pay').removeClass('hidden')
     else
