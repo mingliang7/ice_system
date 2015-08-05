@@ -112,20 +112,22 @@ Template.ice_orderInsertTemplate.events
     today = moment().format('YYYY-MM-DD HH:mm:ss') 
     $('[name="exchange"]').select2('val', exhchange_date._id)
     $('[name="orderDate"]').val(today)
+    totalAmount()
     if checkType(id) == 'general'
       $('.pay').removeClass('hidden')
     else
       $('.pay').addClass('hidden')
   'change .item': (event) ->
     current = $(event.currentTarget)
-    item = Ice.Collection.Item.findOne(current.val())
-    item.qty = 1 
-    item.amount = item.price * item.qty 
-    current.parents('.array-item').find('.price').val(item.price)
-    current.parents('.array-item').find('.qty').val(item.qty)
-    current.parents('.array-item').find('.amount').val(roundKhr(item.amount))
-    current.parents('.array-item').find('.discount').val('')
-    totalAmount()
+    if current.val() != ''
+      item = Ice.Collection.Item.findOne(current.val())
+      item.qty = 1 
+      item.amount = item.price * item.qty 
+      current.parents('.array-item').find('.price').val(item.price)
+      current.parents('.array-item').find('.qty').val(item.qty)
+      current.parents('.array-item').find('.amount').val(roundKhr(item.amount))
+      current.parents('.array-item').find('.discount').val('')
+      totalAmount()
   'keyup .qty , change .qty': (event) ->
     current = $(event.currentTarget)
     itemQty(current)
