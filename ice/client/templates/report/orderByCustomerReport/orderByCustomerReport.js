@@ -382,7 +382,7 @@ var listTotalSummary = function(reduceCustomer) {
                     '<td style="border: 1px solid #ddd;">' + 
                     totalItem[k].qty + '</td>' + 
                     '<td style="border: 1px solid #ddd;">' + 
-                    formatKh(totalItem[k].price) + 
+                    '' + 
                     '</td>' + '<td style="border: 1px solid #ddd;">' + 
                     formatKh(totalItem[k].amount) + '</td>' + '</tr>';
             }

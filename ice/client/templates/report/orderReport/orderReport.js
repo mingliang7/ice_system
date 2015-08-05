@@ -209,6 +209,27 @@ Template.ice_orderReportGen.helpers({
             }
         });
         return '<td>' + '<strong>' + formatUS(total) + '</strong>'+'</td>' + '<td>' + '<strong>' + formatUS(paidAmount) + '</strong>'+'</td>' + '<td>' + '<strong>' + formatUS(outstandingAmount) + '</td>';
+    }, 
+    sumQty: function(content) {
+        td = '';
+        listItem = {};
+        items = Ice.Collection.Item.find()
+        count = 0;
+        items.forEach(function (item) {
+            listItem[item._id] = item;
+            listItem[item._id].qty = 0;
+            listItem[item._id].amount = 0;
+
+        });
+        content.forEach(function (order) {
+            order.iceOrderDetail.forEach(function(order) {
+                listItem[order.iceItemId] = {qty: listItem[order.iceItemId].qty += order.qty}
+            });
+        });
+        for (var k in listItem) {
+            td += '<td colspan="3"><strong>' + listItem[k].qty + '</strong></td>';
+        }
+        return td ;
     }
 });
 

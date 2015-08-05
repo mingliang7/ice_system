@@ -35,11 +35,11 @@ Meteor.methods
 						
 						Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: closingDate, _payment: payment}})
 						console.log("Migrate #{countPayment} payment to #{countOrder} order") 
-					else
-						Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: 'none'}})
-						console.log("Migrate #{countPayment} payment to #{countOrder} order")
+				else 
+					Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: 'none'}})
+					console.log("Migrate #{countPayment} payment to #{countOrder} order")
 			else
-				if order.closing != undefined
+				if order.closing != undefined && order.closing is false
 					Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: 'none'}})
 					console.log("Migrate #{countPayment} payment to #{countOrder} order")
 				

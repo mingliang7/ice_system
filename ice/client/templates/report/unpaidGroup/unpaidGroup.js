@@ -101,5 +101,21 @@ generateTpl.helpers({
     },
     formatKh: function(val){
         return numeral(val).format('0,0');
+    },
+    totalAmount: function(content) {
+        dueAmount = 0 ;
+        paidAmount = 0 ;
+        outstandingAmount = 0;
+        content.forEach(function(elem) {
+            dueAmount += elem._payment.dueAmount;
+            paidAmount += elem._payment.paidAmount;
+            outstandingAmount +=elem._payment.outstandingAmount;
+        });
+        return '<td><strong>' + formatKh(dueAmount) + '</strong></td>' + '<td><strong>' + formatKh(paidAmount) + '</strong></td>' + 
+            '<td><strong>' + formatKh(outstandingAmount) + '</strong></td>';
     }
 });
+
+var formatKh = function(value){
+    return numeral(value).format('0,0');
+}
