@@ -101,6 +101,8 @@ Template.ice_orderInsertTemplate.events
     Meteor.call('migrateOrder')
   'click .orderGroupPayment': ->
     Meteor.call('migrateOrderGroup')
+  'click .removeOrderPayment': ->
+    Meteor.call('removeMigrateFromOrder')
   'click .staffAddon': () ->
       alertify.staffAddOn(fa('plus', 'Staff'), renderTemplate(Template.ice_staffInsertTemplate))
   'click .customerAddon': () ->

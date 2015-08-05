@@ -10,36 +10,38 @@ Meteor.methods
 		countOrder = 0 
 		orders = Ice.Collection.Order.find()
 		orders.forEach (order) ->
-			if order.paidAmount != 0
-				countOrder += 1 
-				payment = {} 
-				payments = Ice.Collection.Payment.find(orderId_orderGroupId: order._id, {sort: {paymentDate: 1}})
-				payments.forEach (obj) ->
-					countPayment += 1
-					payment[obj._id] =
-						customerId: obj.customerId
-						staff: obj.staffId
-						date: obj.paymentDate
-						dueAmount: obj.dueAmount
-						paidAmount: obj.paidAmount
-						outstandingAmount: obj.outstandingAmount
-				if order.closing
-					obj = _.findLastKey(payment, (payment) -> 
-									payment
-								)
-					try
-						closingDate = payment[obj].date
-					catch e
-						console.log e
-					
-					Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: closingDate, _payment: payment}})
-					console.log("Migrate #{countPayment} payment to #{countOrder} order") 
-				else
+			if(order.closing != undefined) 
+				if order.paidAmount != 0
+					countOrder += 1 
+					payment = {} 
+					payments = Ice.Collection.Payment.find(orderId_orderGroupId: order._id, {sort: {paymentDate: 1}})
+					payments.forEach (obj) ->
+						countPayment += 1
+						payment[obj._id] =
+							customerId: obj.customerId
+							staff: obj.staffId
+							date: obj.paymentDate
+							dueAmount: obj.dueAmount
+							paidAmount: obj.paidAmount
+							outstandingAmount: obj.outstandingAmount
+					if order.closing
+						obj = _.findLastKey(payment, (payment) -> 
+										payment
+									)
+						try
+							closingDate = payment[obj].date
+						catch e
+							console.log e
+						
+						Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: closingDate, _payment: payment}})
+						console.log("Migrate #{countPayment} payment to #{countOrder} order") 
+					else
+						Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: 'none'}})
+						console.log("Migrate #{countPayment} payment to #{countOrder} order")
+			else
+				if order.closing != undefined
 					Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: 'none'}})
 					console.log("Migrate #{countPayment} payment to #{countOrder} order")
-			else
-				Ice.Collection.Order.update({_id: order._id}, {$set: {closingDate: 'none'}})
-				console.log("Migrate #{countPayment} payment to #{countOrder} order")
 				
 			
 	migrateOrderGroup: ->
@@ -79,4 +81,13 @@ Meteor.methods
 			else
 				Ice.Collection.OrderGroup.update({_id: order._id}, {$set: {closingDate: 'none'}})
 				console.log("Migrate #{countPayment} payment to #{countOrder} order")
-			
+
+	removeMigrateFromOrder: ->
+		orders = Ice.Collection.Order.find()
+		count = 0 ;
+		orders.forEach (order) ->
+			if order.closingDate != undefined
+				Ice.Collection.Order.update({_id: order._id}, {$unset: {closingDate: '', _payment: ''}})
+				count += 1
+
+		console.log(count + ' payments' + ' removed from order') 
