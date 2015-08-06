@@ -54,7 +54,7 @@ Template.list_invoices.helpers({
     today = moment(new Date(new Date().setDate(date))).format('YYYY-MM-DD');
     invoices = Ice.Collection.OrderGroup.find({
       endDate: today
-    }).fetch();
+    }, {limit: 20}).fetch();
     console.log(invoices);
     $.each(invoices, function(index, invoice) {
       return invoice.index = index;

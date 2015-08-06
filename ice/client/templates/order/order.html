@@ -45,9 +45,6 @@
     {{#autoForm collection=Ice.Collection.Order id="ice_orderInsertTemplate" type="insert"}}
         <div class="row">
 
-            <div class='col-md-4'>
-                {{> afQuickField name='orderDate' class='input-sm'}}
-            </div>
 
             <div class='col-md-4'>
                  <div class="form-group{{#if afFieldIsInvalid name='iceCustomerId'}} has-error{{/if}}" data-required="true">
@@ -65,6 +62,9 @@
                         <span class="help-block">{{afFieldMessage name='iceCustomerId'}}</span>
                     {{/if}}
                 </div>
+            </div>
+            <div class='col-md-4'>
+                {{> afQuickField name='orderDate' class='input-sm'}}
             </div>
 
             <div class='col-md-4'>

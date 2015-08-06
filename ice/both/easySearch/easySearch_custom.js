@@ -1,6 +1,6 @@
 EasySearch.createSearchIndex('ice_orders', {
   collection: Ice.Collection.Order,
-  field: ['_id', '_customer.name', '_staff.name'],
+  field: ['_id', 'iceCustomerId','_customer.name', '_staff.name'],
   use: 'mongo-db',
   limit: 10,
   convertNumbers: true,
@@ -21,7 +21,7 @@ EasySearch.createSearchIndex('ice_orders', {
 
 EasySearch.createSearchIndex('ice_orderGroups', {
   collection: Ice.Collection.OrderGroup,
-  field: ['_id', '_customer.name'],
+  field: ['_id', 'iceCustomerId', '_customer.name'],
   use: 'mongo-db',
   limit: 10,
   convertNumbers: true,
