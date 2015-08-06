@@ -77,7 +77,10 @@ Ice.Schema.Order = new SimpleSchema(
     autoform:
       type: 'selectize'
       options: ->
-        Ice.List.item()
+        try
+          Ice.List.item()
+        catch e
+          console.log e        
         
   'iceOrderDetail.$.price':
     type: Number
