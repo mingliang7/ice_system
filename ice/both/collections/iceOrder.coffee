@@ -77,10 +77,12 @@ Ice.Schema.Order = new SimpleSchema(
     autoform:
       type: 'selectize'
       options: ->
-        try
-          Ice.List.item()
-        catch e
-          console.log e        
+        list = []
+        items = Ice.Collection.Item.find()
+        items.forEach (item) ->
+          list.push {label: "#{item.code} | #{item.name}", value: item._id}
+        list
+             
         
   'iceOrderDetail.$.price':
     type: Number
