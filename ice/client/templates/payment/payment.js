@@ -21,7 +21,7 @@ Template.ice_payment.helpers({
 Template.ice_payment.events({
   'click .insert': function() {
   	Session.set('checkIfUpdate', false);
-    Router.go('/ice/new/payment');
+    Router.go('ice.ice_paymentInsertTemplate');
    },
   'click .remove': function() {
   	var flag = checkAvailablity(this);
