@@ -8,13 +8,11 @@ Template.ice_orderInsertTemplate.onRendered ->
       $('.importPayment').slideDown('fast')
     else
       $('.importPayment').hide()
-  createNewAlertify('paymentPopUP')
+  createNewAlertify(['order','staffAddOn','customerAddOn', 'paymentPopUP'])
   $('[name="total"]').attr('readonly', true)
   today = moment(new Date()).format('YYYY-MM-DD HH:mm:ss') 
   $('[name="orderDate"]').val(today)
   datePicker()
-Template.ice_order.onRendered ->
-  createNewAlertify(['order','staffAddOn','customerAddOn', 'paymentPopUP'])
 
 Template.ice_order.events
   "click .insert": ->
@@ -158,10 +156,12 @@ Template.ice_orderInsertTemplate.events
 
   'change [name="exchange"]': (event) ->
     val = findExchange($(event.currentTarget).val())
-    total = parseInt $('[name="total"]').val()
-    if val.base is 'KHR'
-      amount = total * val.rates["USD"]
-      $('[name="totalInDollar"]').val(math.round(amount, 2))
+    total = $('[name="total"]').val()
+    if total != ''
+      total = parseInt 
+      if val.base is 'KHR'
+        amount = total * val.rates["USD"]
+        $('[name="totalInDollar"]').val(math.round(amount, 2))
 
 # Update form event
 Template.ice_orderUpdateTemplate.events
