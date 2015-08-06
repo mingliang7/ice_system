@@ -32,7 +32,12 @@ Template.ice_paymentUrlInsertTemplate.events({
   'keyup [name="paidAmount"]': function() {
     var dueAmount, paidAmount;
     dueAmount = parseInt($('[name="dueAmount"]').val());
-    paidAmount = $('[name="paidAmount"]').val();
+    try{
+      paidAmount = $('[name="paidAmount"]').val();
+    }catch(e){
+      console.log(e)
+    }
+
     console.log(paidAmount)
     if (parseFloat(paidAmount) > dueAmount) {
       $('[name="paidAmount"]').val(dueAmount);
