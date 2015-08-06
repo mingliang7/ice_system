@@ -57,6 +57,30 @@ Router.route 'ice/payments',
 	icon: 'payment'
 	title: 'payment'
 
+Router.route 'ice/new/payment',
+	->
+		q = @params.query
+		@render 'ice_paymentInsertTemplate'
+	name: 'ice.ice_paymentInsertTemplate'
+	header:
+		title: 'payment'
+		sub: ''
+	icon: 'payment'
+	title: 'payment'
+
+Router.route 'ice/edit/payment/:id',
+	->
+		q = @params.query
+		@render 'ice_paymentUpdateTemplate'
+	name: 'ice.ice_paymentUpdate'
+	data: ->
+		Ice.Collection.Payment.findOne(this.params.id)
+	header:
+		title: 'payment'
+		sub: ''
+	icon: 'payment'
+	title: 'payment'
+
 Router.route 'ice/payment_url',
 	->
 		q = @params.query

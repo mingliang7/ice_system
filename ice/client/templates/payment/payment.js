@@ -1,9 +1,11 @@
 Session.setDefault('customer', '');
 Payment = new ReactiveObj();
+Template.ice_paymentInsertTemplate.onRendered(function() {
+  return createNewAlertify(['staffAddOn','invoiceAddOn','customerAddOn']);
+});
 Template.ice_payment.onRendered(function() {
   return createNewAlertify(['paymentForm','staffAddOn','invoiceAddOn','customerAddOn']);
 });
-
 
 Template.ice_payment.helpers({
   foo: function() {
@@ -19,7 +21,7 @@ Template.ice_payment.helpers({
 Template.ice_payment.events({
   'click .insert': function() {
   	Session.set('checkIfUpdate', false);
-    alertify.paymentForm(fa('money', 'Payment'), renderTemplate(Template.ice_paymentInsertTemplate)).maximize();
+    Router.go('ice.ice_paymentInsertTemplate');
    },
   'click .remove': function() {
   	var flag = checkAvailablity(this);
@@ -31,13 +33,13 @@ Template.ice_payment.events({
   'click .update': function(){
   	var flag = checkAvailablity(this);
     doc = Ice.Collection.Payment.findOne(this._id);
-  	if(flag) {
-  		Ice.ListForReportState.set('customer', doc.customerId)
-  		Session.set('checkIfUpdate', true); 
-  		Payment.set('paymentPaidAmount', doc.paidAmount); // parsing old paid amount tot payment_autoform_hook.js
-  		Payment.set('paymentInvoiceId', doc.orderId_orderGroupId);// parsing old paid amount tot payment_autoform_hook.js
-  		Payment.set('paymentId', doc._id) //parsing id to paymentDetail()
-      alertify.paymentForm(fa('money', 'Update Payment'), renderTemplate(Template.ice_paymentUpdateTemplate, doc)).maximize(); 
+    if(flag) {
+      Ice.ListForReportState.set('customer', doc.customerId)
+      Session.set('checkIfUpdate', true); 
+      Payment.set('paymentPaidAmount', doc.paidAmount); // parsing old paid amount tot payment_autoform_hook.js
+      Payment.set('paymentInvoiceId', doc.orderId_orderGroupId);// parsing old paid amount tot payment_autoform_hook.js
+      Payment.set('paymentId', doc._id); //parsing id to paymentDetail()
+      Router.go('ice.ice_paymentUpdate',{id: doc._id});
   	}else{
   		alertify.warning('Sorry! invoice ' + doc._id + ' is not a last record :( ')
   	}
@@ -85,8 +87,12 @@ Template.ice_paymentInsertTemplate.events({
   },
   'keyup [name="paidAmount"]': function() {
     var dueAmount, paidAmount;
+    try{
+      paidAmount = $('[name="paidAmount"]').val();
+    }catch(e){
+      console.log(e)     
+    }
     dueAmount = parseInt($('[name="dueAmount"]').val());
-    paidAmount = $('[name="paidAmount"]').val();
     if (parseInt(paidAmount) > dueAmount) {
       $('[name="paidAmount"]').val(dueAmount);
       $('[name="outstandingAmount"]').val(0);
@@ -132,12 +138,19 @@ var findCustomer = function(id) {
 };
 
 
-var removeDoc = function(id) {
-	alertify.confirm((fa('remove'), 'Remove Payment'), 'Are you sure to remove' + id + '?', function(){
-	  		Ice.Collection.Payment.remove(id, function(error){
-	  			error == undefined ? alertify.message(error.message) : alertify.message('Successfully remove') ;
-	  		});
-  			}, null);
+var removeDoc = function(doc) {
+  var doc = doc;
+  alertify.confirm((fa('remove'), 'Remove Payment'), 'Are you sure to remove' + doc._id + '?', function(){
+	  		Ice.Collection.Payment.remove(doc._id, function(error){
+            if(checkType(doc) == 'general'){
+              removeOrderPayment(doc);
+            }else{
+              removeOrderGroupPayment(doc);     
+            }         
+             alertify.message('Successfully remove')
+        });
+        }, null);
+
 } 
 
 var checkType = function(customer){
@@ -156,12 +169,7 @@ var checkAvailablity = function(doc){
 } 
 //remove payment and update order
 var onRemoved = function(doc){
-  if(checkType(doc) == 'general'){
-    removeOrderPayment(doc);
-  }else{
-    removeOrderGroupPayment(doc);     
-  }
-  removeDoc(doc._id);
+ removeDoc(doc);
 }
 
 

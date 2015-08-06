@@ -174,8 +174,10 @@ AutoForm.hooks({
       }
     },
     onSuccess: function(formType, result) {
-      alertify.paymentForm().close();
-      return alertify.success('successfully');
+      alertify.success('successfully');
+      setTimeout(function(){
+        Router.go('ice.payment');
+      }, 100);
     },
     onError: function(formType, error) {
       return alertify.error(error.message);
