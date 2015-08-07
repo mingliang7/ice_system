@@ -75,7 +75,7 @@ Ice.Schema.Order = new SimpleSchema(
   'iceOrderDetail.$.iceItemId':
     type: String
     autoform:
-      type: 'selectize'
+      type: 'select'
       options: ->
         Ice.List.item()
              

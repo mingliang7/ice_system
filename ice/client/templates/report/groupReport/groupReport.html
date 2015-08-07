@@ -3,9 +3,11 @@
         <!--Title-->
         <div class="report-title">
             <span class="report-company-name" style="font-family: 'Khmer OS Muol';">{{title.company}}</span><br>
-            <u style="font-size: 16px"> វិក្កយបត្រ</u><br>
-            អាស័យដ្ឋាន: {{title.address}}<br>
+            <span style='font-size: 10px;'>
+            អាស័យដ្ឋាន: {{title.address}}
             ទូរស័ព្ទ: {{title.telephone}}
+            </span><br>
+            <u style="font-size: 16px">ប័ណ្ណទូរទាត់ប្រាក់</u><br>
         </div>
 
         <!--Header-->
@@ -38,11 +40,11 @@
             {{/each}}
             <br>
             <tr class="dotted">
-                <td>ចំនួន:</td>
+                <td>ចំនួនសរុប:</td>
                 {{{totalDetail.qty}}}
             </tr>
             <tr>
-                <td>តម្លៃ:</td>
+                <td>តម្លៃរាយ:</td>
                 {{{totalDetail.price}}}
             </tr>
             <!-- <tr>
@@ -50,7 +52,7 @@
                 {{{totalDetail.discount}}}
             </tr> -->
             <tr>
-                <td>សរុប:</td>
+                <td>ទឹកប្រាក់សរុប:</td>
                 {{{totalDetail.amount}}}
             </tr>
             </tbody>

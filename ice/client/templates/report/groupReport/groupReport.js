@@ -64,9 +64,9 @@ Template.ice_invoiceGroupReportGen.helpers({
         /********* Content & Footer *********/
         var content = [];
         var groupOrder = Ice.Collection.OrderGroup.findOne(self.id);
-        var itemsDetail = groupOrder.groupBy;
-        contentDetail(content, itemsDetail); //function call
-        var totalItem = itemTotalDetail(itemsDetail);//function call
+        var getSortItems = sortByDay(groupOrder);
+        contentDetail(content, getSortItems); //function call
+        var totalItem = itemTotalDetail(getSortItems);//function call
         if (content.length > 0) {
             data.content = content;
             data.footer = {
@@ -170,7 +170,7 @@ var itemTotalDetail = function (itemsDetail) {
     for (var k in itemsDetail) {
         for (var i in itemsDetail[k]['items']) {
             itemSubTotal.qty[i] += itemsDetail[k]['items'][i].qty;
-            itemSubTotal.price[i] = itemsDetail[k]['items'][i].price
+            itemSubTotal.price[i] = getLastPrice(itemSubTotal.price[i], itemsDetail[k]['items'][i]);
             itemSubTotal.discount[i] += itemsDetail[k]['items'][i].discount
             itemSubTotal.amount[i] += itemsDetail[k]['items'][i].amount
         }
@@ -232,4 +232,28 @@ var extractTotalAmount = function (total, totalItem) {
         index++;
     }
     return amount;
+}
+
+var getLastPrice = function(price, item){ // get the last price of item 
+    lastPrice = 0 
+    if(price == undefined){
+        lastPrice = item.price;
+    }else{
+        if(item.qty != 0 ){
+            lastPrice = item.price;
+        }else{
+            lastPrice = price;
+        }
+    }
+    return lastPrice;
+}
+
+var sortByDay = function(itemsDetail){ //sort item by day 
+    var itemObj = {}
+    var getItemKey = Object.keys(itemsDetail.groupBy)
+    var sortKey = getItemKey.sort()
+    for(var i = 0 ; i < sortKey.length; i++){
+        itemObj[sortKey[i]] = itemsDetail.groupBy[sortKey[i]];
+    }
+    return itemObj;
 }

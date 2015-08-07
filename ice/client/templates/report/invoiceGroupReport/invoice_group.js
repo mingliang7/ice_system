@@ -60,7 +60,8 @@ Template.ice_invoiceGroupGen.helpers({
             var selector = {closing: eval(status), startDate: {$gte: startDate}, endDate: {$lte: endDate}};
             var groupOrder = Ice.Collection.OrderGroup.find(selector);
             groupOrder.forEach(function (itemsDetail) {
-                contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+                getSortItems = sortByDay(itemsDetail);
+                contentDetail(content, getSortItems, itemsDetail); //function call
             });
             if (content.length > 0) {
                 data.content = content;
@@ -75,7 +76,8 @@ Template.ice_invoiceGroupGen.helpers({
             var selector = {startDate: {$gte: startDate}, endDate: {$lte: endDate}};
             var groupOrder = Ice.Collection.OrderGroup.find(selector);
             groupOrder.forEach(function (itemsDetail) {
-                contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+                getSortItems = sortByDay(itemsDetail);
+                contentDetail(content, getSortItems, itemsDetail); //function call
             });
             if (content.length > 0) {
                 data.content = content;
@@ -95,7 +97,8 @@ Template.ice_invoiceGroupGen.helpers({
                 var groupOrder = Ice.Collection.OrderGroup.find(selector);
                 if(groupOrder.count() > 0) {
                     groupOrder.forEach(function (itemsDetail) {
-                        contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+                        getSortItems = sortByDay(itemsDetail);
+                        contentDetail(content, getSortItems, itemsDetail); //function call
                     });
                 }
                 
@@ -116,7 +119,8 @@ Template.ice_invoiceGroupGen.helpers({
                 var groupOrder = Ice.Collection.OrderGroup.find(selector);
                 if(groupOrder.count() > 0) {
                     groupOrder.forEach(function (itemsDetail) {
-                        contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+                        getSortItems = sortByDay(itemsDetail);
+                        contentDetail(content, getSortItems, itemsDetail); //function call
                     });
                 }
                 
@@ -133,7 +137,8 @@ Template.ice_invoiceGroupGen.helpers({
             var selector = {iceCustomerId: customer, startDate: {$gte: startDate}, endDate: {$lte: endDate}};
             var groupOrder = Ice.Collection.OrderGroup.find(selector);
             groupOrder.forEach(function (itemsDetail) {
-                contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+                getSortItems = sortByDay(itemsDetail);
+                contentDetail(content, getSortItems, itemsDetail); //function call
             });
             if (content.length > 0) {
                 data.content = content;
@@ -149,7 +154,8 @@ Template.ice_invoiceGroupGen.helpers({
             var selector = {closing: eval(status), iceCustomerId: customer, startDate: {$gte: startDate}, endDate: {$lte: endDate}};
             var groupOrder = Ice.Collection.OrderGroup.find(selector);
             groupOrder.forEach(function (itemsDetail) {
-                contentDetail(content, itemsDetail.groupBy, itemsDetail); //function call
+                getSortItems = sortByDay(itemsDetail);
+                contentDetail(content, getSortItems, itemsDetail); //function call
             });
             if (content.length > 0) {
                 data.content = content;
@@ -311,7 +317,7 @@ var itemTotalDetail = function (itemsDetail) {
     for (var k in itemsDetail) {
         for (var i in itemsDetail[k]['items']) {
             itemSubTotal.qty[i] += itemsDetail[k]['items'][i].qty;
-            itemSubTotal.price[i] = itemsDetail[k]['items'][i].price;
+            itemSubTotal.price[i] = getLastPrice(itemSubTotal.price[i], itemsDetail[k]['items'][i])
             itemSubTotal.discount[i] += itemsDetail[k]['items'][i].discount;
             itemSubTotal.amount[i] += itemsDetail[k]['items'][i].amount;
         }
@@ -320,7 +326,6 @@ var itemTotalDetail = function (itemsDetail) {
 }
 
 var extractTotalQty = function (totalItem) {
-    debugger
     var qty = '';
     for (var i in totalItem.qty) {
         if(totalItem.qty[i] != 0 ){ 
@@ -378,3 +383,26 @@ var extractDiscount = function (totalItem) {
     return discount;
 }
 
+var getLastPrice = function(price, item){ // get the last price of item 
+    lastPrice = 0 
+    if(price == undefined){
+        lastPrice = item.price;
+    }else{
+        if(item.qty != 0 ){
+            lastPrice = item.price;
+        }else{
+            lastPrice = price;
+        }
+    }
+    return lastPrice;
+}
+
+var sortByDay = function(itemsDetail){ //sort item by day 
+    var itemObj = {}
+    var getItemKey = Object.keys(itemsDetail.groupBy)
+    var sortKey = getItemKey.sort()
+    for(var i = 0 ; i < sortKey.length; i++){
+        itemObj[sortKey[i]] = itemsDetail.groupBy[sortKey[i]];
+    }
+    return itemObj;
+}

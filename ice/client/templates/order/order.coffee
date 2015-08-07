@@ -1,6 +1,8 @@
 Template.ice_orderUpdateTemplate.onRendered ->
   text = $('[name="iceCustomerId"] option:selected').text()
   $('[name="customer"]').val(text)
+Template.ice_order.onRendered ->
+   createNewAlertify(['order','staffAddOn','customerAddOn', 'paymentPopUP'])
 Template.ice_orderInsertTemplate.onRendered ->
   $('body').on 'keydown', (e) -> 
     console.log(typeof(e.keyCode)) 
@@ -8,7 +10,7 @@ Template.ice_orderInsertTemplate.onRendered ->
       $('.importPayment').slideDown('fast')
     else
       $('.importPayment').hide()
-  createNewAlertify(['order','staffAddOn','customerAddOn', 'paymentPopUP'])
+  createNewAlertify(['staffAddOn','customerAddOn', 'paymentPopUP'])
   $('[name="total"]').attr('readonly', true)
   today = moment(new Date()).format('YYYY-MM-DD HH:mm:ss') 
   $('[name="orderDate"]').val(today)
@@ -159,7 +161,7 @@ Template.ice_orderInsertTemplate.events
     val = findExchange($(event.currentTarget).val())
     total = $('[name="total"]').val()
     if total != ''
-      total = parseInt 
+      total = parseFloat(total) 
       if val.base is 'KHR'
         amount = total * val.rates["USD"]
         $('[name="totalInDollar"]').val(math.round(amount, 2))
@@ -257,7 +259,7 @@ datePicker = ->
 itemDiscount = (current) ->
   currentDiscount = current.val()
   price = parseFloat current.parents('.array-item').find('.price').val()
-  qty = parseInt current.parents('.array-item').find('.qty').val()
+  qty = parseFloat current.parents('.array-item').find('.qty').val()
   amount = roundKhr(price * qty)
   if currentDiscount is ''
     current.parents('.array-item').find('.amount').val(amount)
@@ -266,7 +268,7 @@ itemDiscount = (current) ->
   totalAmount()
 itemPrice = (current) ->
   currentPrice = parseFloat current.val()
-  qty = parseInt current.parents('.array-item').find('.qty').val()
+  qty = parseFloat current.parents('.array-item').find('.qty').val()
   discount = current.parents('.array-item').find('.discount').val()
   amount = roundKhr(qty * currentPrice)
   if discount is ''

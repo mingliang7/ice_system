@@ -204,7 +204,6 @@ AutoForm.hooks({
       $('select').each(function(){
         $(this).select2('val', '');
       });
-      $('select#ice-item')[0].selectize.clear(true);
       return alertify.success('Successfully');
     },
     onError: function(formType, error) {
