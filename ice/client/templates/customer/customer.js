@@ -18,15 +18,20 @@ Template.ice_customer.events({
   'click .remove': function() {
     var id;
     id = this._id;
-    return alertify.confirm(fa('remove', 'Remove customer'), "Are you sure to delete " + this.name + "?", function() {
-      return Ice.Collection.Customer.remove(id, function(error) {
-        if (error === 'undefined') {
-          return alertify.error(error.message);
-        } else {
-          return alertify.warning('Successfully Remove');
-        }
-      });
-    }, null);
+    var flag = checkAvailable(id);
+    if(flag){
+      return alertify.confirm(fa('remove', 'Remove customer'), "Are you sure to delete " + this.name + "?", function() {
+        return Ice.Collection.Customer.remove(id, function(error) {
+          if (error === 'undefined') {
+            return alertify.error(error.message);
+          } else {
+            return alertify.warning('Successfully Remove');
+          }
+        });
+      }, null);
+    }else{
+      alertify.warning('Customer Id #' + id + ' has orders');
+    }
   },
   'click .show': function() {
     return alertify.customer(fa('eye', 'Customer detail'), renderTemplate(Template.ice_customerShowTemplate, this));
@@ -64,3 +69,15 @@ AutoForm.hooks({
     }
   }
 });
+
+
+var checkAvailable = function(id){
+  var count = 0 ;
+  customer = Ice.Collection.Customer.findOne(id);
+  if(customer.customerType == 'general'){
+    count = Ice.Collection.Order.find({iceCustomerId: id}).count();
+  }else{
+    count = Ice.Collection.OrderGroup.find({iceCustomerId: id}).count();
+  }
+  return count != 0 ? false : true ;  
+}
