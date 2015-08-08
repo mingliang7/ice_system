@@ -10,7 +10,7 @@ Template.ice_paymentUrlInsertTemplate.events({
     customer = $(e.currentTarget).val();
     Ice.ListForReportState.set('customer', customer);
   },
-  'change [name="orderId_orderGroupId"]': function(e) {
+  'keyup [name="orderId_orderGroupId"]': function(e) {
     var currentInvoice, currentInvoiceId, type;
     currentInvoiceId = $(e.currentTarget).val();
     datePicker(currentInvoiceId);
@@ -38,7 +38,6 @@ Template.ice_paymentUrlInsertTemplate.events({
       console.log(e)
     }
 
-    console.log(paidAmount)
     if (parseFloat(paidAmount) > dueAmount) {
       $('[name="paidAmount"]').val(dueAmount);
       $('[name="outstandingAmount"]').val(0);
@@ -86,7 +85,8 @@ selectCustomer = function(self) {
 
 selectInvoice = function(invoiceId) {
   return Meteor.setTimeout(function() {
-    $('[name="orderId_orderGroupId"]').select2('val', invoiceId);
+    $('[name="orderId_orderGroupId"]').val(invoiceId);
+    $('.orderId').text(invoiceId);
   }, 100);
 
 };

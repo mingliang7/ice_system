@@ -5,9 +5,13 @@
 	{{#autoForm collection=Ice.Collection.Payment id="ice_paymentUrlInsertTemplate" type="insert"}}
 	<div class="row">
 		<div class="col-md-12">
+					<strong>Customer:</strong> 
 					<label class="customerName"></label>
 					{{> afQuickField name="customerId" type="hidden"}}
-					{{> afQuickField name="orderId_orderGroupId"}}
+					<br>
+					<strong>Invoice ID:</strong> 
+					<label class="orderId"></label>
+					{{> afQuickField name="orderId_orderGroupId" type="hidden"}}
 					{{> afQuickField name="paymentDate"}}
 					{{> afQuickField name="dueAmount" readonly='true'}}
 					{{> afQuickField name="paidAmount"}}

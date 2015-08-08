@@ -54,7 +54,7 @@ Template.general_invoices.helpers({
       sort: {
         orderDate: -1
       }
-    }, {limit: 20}).fetch();
+    , limit: 20}).fetch();
     $.each(invoices, function(index, invoice) {
       return invoice.index = index;
     });

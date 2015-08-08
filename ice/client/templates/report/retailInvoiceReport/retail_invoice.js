@@ -45,8 +45,6 @@ Template.ice_invoiceReportGen.helpers({
         };
 
         /********* Header ********/
-
-        console.log(self);
         var customerDoc = Ice.Collection.Customer.findOne(self.customerId);
         var date = moment(self.date).format('YYYY-MM-DD');
         var time = moment(self.date).format('HH:mm:ss');
