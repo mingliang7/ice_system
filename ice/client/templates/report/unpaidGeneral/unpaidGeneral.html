@@ -5,9 +5,12 @@
     {{#autoForm schema=Ice.Schema.UnpaidGeneral id="ice_unpaidGeneralInsertTemplate" action="unpaidGeneralGen" target="_blank"}}
     <div class="row">
         <div class="col-md-6">
-           {{> afQuickField name="date"}}
+           {{> afQuickField name="staff"}}
         <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
         <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+        </div>
+        <div class="col-md-6">
+            {{> afQuickField name="date"}}
         </div>
     </div>
     {{/autoForm}}
@@ -42,6 +45,7 @@
                 <th>Invoice Id</th>
                 <th>Order Date</th>
                 <th>Customer Name</th>
+                <th>Staff Name</th>
                 <th>Due Amount</th>
                 <th>Paid Amount</th>
                 <th>Outstanding Amount</th>
@@ -54,13 +58,14 @@
                     <td>{{_id}}</td>
                     <td>{{orderDate}}</td>
                     <td>{{customerName}}</td>
+                    <td>{{staffName}}</td>
                     <td>{{formatKh _payment.dueAmount}}</td>
                     <td>{{formatKh _payment.paidAmount}}</td>
                     <td>{{formatKh _payment.outstandingAmount}}</td>
                 </tr>
             {{/each}}
             <tr>
-                <td colspan="3" align="right"><strong>Total:</strong></td> {{{totalAmount content}}}
+                <td colspan="4" align="right"><strong>Total:</strong></td> {{{totalAmount content}}}
             </tr>
             </tbody>
         </table>

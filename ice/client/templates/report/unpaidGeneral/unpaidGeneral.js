@@ -36,6 +36,7 @@ generateTpl.helpers({
 
         /********* Header ********/
         data.header = self;
+        var staff = self.staff == '' ? '' : self.staff;
         var addDay = new Date(self.date);
         var today = new Date(
                     addDay.getFullYear(), 
@@ -45,10 +46,15 @@ generateTpl.helpers({
         yesterday = moment(self.date).format('YYYY-MM-DD 23:59:59');
         /********** Content **********/ 
         var content = [];
-        var selector = {orderDate: {$lt: today}, $or: [{closingDate: {$gt: yesterday}}, {closingDate: 'none'}]}
-        var getOrder = Ice.Collection.Order.find(selector);
         var index =  1 ;
         var order = {};
+        var selector = {}
+        if(staff == ''){
+            selector = {orderDate: {$lt: today}, $or: [{closingDate: {$gt: yesterday}}, {closingDate: 'none'}]}
+        }else{
+            selector = {iceStaffId: staff, orderDate: {$lt: today}, $or: [{closingDate: {$gt: yesterday}}, {closingDate: 'none'}]}       
+        }
+        var getOrder = Ice.Collection.Order.find(selector);
         getOrder.forEach(function(obj) {
            if(obj._payment != undefined){
                 var payment = _.findLastKey(obj._payment, function(payment){
@@ -68,7 +74,7 @@ generateTpl.helpers({
                         closingDate: obj.closingDate,
                         iceCustomerId: obj.iceCustomerId,
                         customerName: obj._customer.name + ' (' + obj._customer.customerType + ')',
-                        customerType: obj._customer.customerType,
+                        staffName: obj._staff.name,
                         _payment: payment
                     }
                 }
@@ -79,7 +85,7 @@ generateTpl.helpers({
                     closingDate: obj.closingDate,
                     iceCustomerId: obj.iceCustomerId,
                     customerName: obj._customer.name + ' (' + obj._customer.customerType + ')',
-                    customerType: obj._customer.customerType,
+                    staffName: obj._staff.name,
                     _payment:{
                         outstandingAmount: obj.outstandingAmount,
                         paidAmount: obj.paidAmount,
@@ -88,7 +94,6 @@ generateTpl.helpers({
                 }
                 
             }
-            debugger;
             content.push(order);
         });
         if (content.length > 0) {

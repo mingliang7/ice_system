@@ -5,7 +5,7 @@ var reportTpl = Template.ice_removeInvoiceReport,
 /***** Form *****/
 reportTpl.onRendered(function () {
     var name = $('[name="date"]');
-    DateTimePicker.dateTime(name);
+    DateTimePicker.dateTimeRange(name);
 });
 
 /***** Generate ******/
@@ -31,8 +31,16 @@ generateTpl.helpers({
 
         /********** Content **********/
         var content = [];
-        var date = self.date ;
-        var selector = {dateTime: {$lte: date}}
+        var user = self.user == '' ? '' : self.user;
+        var date = self.date.split(' To ') ;
+        var startDate = date[0];
+        var endDate = date[1];
+        var selector = {}
+        if(user == ''){
+            selector = {dateTime: {$gte: startDate, $lte: endDate}};
+        }else{
+            selector = {'removedBy.id': user, dateTime: {$gte: startDate, $lte: endDate}};
+        }
         var removeInvoice = Ice.Collection.RemoveInvoiceLog.find(selector);
         var index = 1;
         removeInvoice.forEach(function (obj) {
