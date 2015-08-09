@@ -55,7 +55,6 @@ Template.list_invoices.helpers({
     invoices = Ice.Collection.OrderGroup.find({
       endDate: today
     }, {limit: 20}).fetch();
-    console.log(invoices);
     $.each(invoices, function(index, invoice) {
       return invoice.index = index;
     });

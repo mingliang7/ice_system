@@ -5,7 +5,6 @@ Template.ice_order.onRendered ->
    createNewAlertify(['order','staffAddOn','customerAddOn', 'paymentPopUP'])
 Template.ice_orderInsertTemplate.onRendered ->
   $('body').on 'keydown', (e) -> 
-    console.log(typeof(e.keyCode)) 
     if(e.keyCode == 123)
       $('.importPayment').slideDown('fast')
     else
@@ -89,7 +88,8 @@ Template.ice_order.events
     else
       alertify.error "Invoice ##{id} has payment"
   'click .show': () ->
-    alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, @))    
+    doc = Ice.Collection.Order.findOne(@_id)
+    alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, doc))    
   "click .print": ->
     Session.set('invioceReportId', null)
     GenReport(@_id) #generateReport alias function in order_autoform_hook
@@ -176,9 +176,7 @@ Template.ice_orderUpdateTemplate.events
   'change [name="iceCustomerId"]': (e) ->
     id = $(e.currentTarget).val()
     exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
-    today = moment().format('YYYY-MM-DD HH:mm:ss') 
     $('[name="exchange"]').select2('val', exhchange_date._id)
-    $('[name="orderDate"]').val(today)
     if checkType(id) == 'general'
       $('.pay').removeClass('hidden')
     else
@@ -287,9 +285,10 @@ itemQty = (current) ->
     current.parents('.array-item').find('.amount').val(amount - ((price* currentQty) * parseFloat discount)/100)
   totalAmount()
 totalAmount = () ->
-  total = 0 
+  total = 0 ;
   $('.amount').each ->
     total += parseFloat $(this).val()
+  console.log(total)
   $('[name="subtotal"]').val(roundKhr(total))
   subtotal = parseFloat $('[name="subtotal"]').val()
   discount = $('[name="discount"]').val()

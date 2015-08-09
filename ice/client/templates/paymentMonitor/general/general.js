@@ -96,7 +96,6 @@ Template.searchResult.helpers({
         orderDate: -1
       }
     }).fetch();
-    console.log(invoices);
     $.each(invoices, function(index, invoice) {
       return invoice.index = index;
     });
