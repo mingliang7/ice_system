@@ -117,6 +117,17 @@ Ice.ListForReport = {
       list.push({label: 'Closed', value: 'closed'});
 
       return list;
+   },
+   user: function(all){
+      var list = [];
+      if(!_.isEqual(all, false)){
+         list.push({label: "All", value: ""});
+      }
+      var users = Meteor.users.find();
+      users.forEach(function(user) {
+         list.push({label: user.username, value: user._id})
+      });
+      return list;
    }
 }
 
