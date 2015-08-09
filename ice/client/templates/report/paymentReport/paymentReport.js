@@ -1,11 +1,4 @@
-// sort function
-function compare(a,b) {
-  if (a._id < b._id)
-    return -1;
-  if (a._id > b._id)
-    return 1;
-  return 0;
-}
+
 Template.ice_paymentReport.onRendered(function() {
   datePicker();
 });
@@ -39,103 +32,12 @@ datePicker = function() {
 Template.ice_paymentReportGen.helpers({
     data: function () {
         var self = this;
-        var data = {
-            title: {},
-            header: {},
-            content: [],
-            footer: {}
-        };
-
-
-        /********* Header ********/
-        customerType = self.customerType == '' ? 'All' : self.customerType
-        customer = self.customerId == '' ? 'All' : self.customerId 
-        staff = self.staffId == '' ? 'All' : self.staffId 
-        data.header = {
-            staff: staff == 'All' ? staff : findStaff(self.staffId),
-            customerType: customerType,
-            customer: customer,
-            date: self.date,
-            exchange: formatEx(self.exchange)
+        var id = JSON.stringify(self)
+        var payment = Meteor.callAsync(id, 'paymentReport', self)
+        if(!payment.ready()){
+            return false;
         }
-        /**********Title**************/
-        var company = Cpanel.Collection.Company.findOne();
-        data.title = {
-            company: company.enName,
-            address: company.khAddress,
-            telephone: company.telephone
-        };
-        /********** Content **********/
-        var content = [];
-        var selector = {};
-        date = self.date.split(' To ');
-        startDate = date[0];
-        endDate = date[1];
-        if(staff != 'All' && customerType == 'All' && customer == 'All'){
-            selector = {staffId: self.staffId, paymentDate: {$gte: startDate, $lte: endDate}}
-            var getOrder = Ice.Collection.Payment.find(selector);
-            getOrder.forEach(function (obj) {
-                // Do something
-                content.push(obj);
-            });
-        }else if (staff == 'All' && customerType == 'All' && customer == 'All'){
-            customers = findCustomerByType(customerType);
-            for(var i = 0 ; i < customers.length; i++){
-               selector = {customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    content.push(obj);
-                });
-            }
-        }else if (staff != 'All' && customerType !== 'All' && customer == 'All'){
-            customers = findCustomerByType(customerType);
-            for(var i = 0 ; i < customers.length; i++){
-               selector = {staffId: self.staffId, customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    content.push(obj);
-                });
-            }
-        }else if (staff == 'All' && customerType !== 'All' && customer == 'All'){
-            customers = findCustomerByType(customerType);
-            for(var i = 0 ; i < customers.length; i++){
-               selector = {customerId: customers[i], paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    content.push(obj);
-                });
-            }
-        }else if (staff == 'All' && customerType !== 'All' && customer != 'All'){
-               selector = {customerId: self.customerId, paymentDate: {$gte: startDate, $lte: endDate}}
-                var getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    content.push(obj);
-                });
-        }else{
-                selector = {staffId: self.staffId, customerId: self.customerId, paymentDate: {$gte: startDate, $lte: endDate}};
-                getOrder = Ice.Collection.Payment.find(selector);
-                getOrder.forEach(function (obj) {
-                    // Do something
-                    content.push(obj);
-                });
-        }
-        if (content.length > 0) {
-            var sortContent = content.sort(compare);
-            var index = 1; 
-            sortContent.forEach(function (elm) {
-                elm.index = index;
-                index++;
-            });
-            data.content = sortContent;
-            return data;
-        } else {
-            data.content.push({index: 'no results'});
-            return data;
-        }
+        return payment.result();
     },
     name: function(id){
         customer = Ice.Collection.Customer.findOne(id);

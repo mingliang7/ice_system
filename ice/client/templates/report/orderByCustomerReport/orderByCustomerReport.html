@@ -21,7 +21,8 @@
 
 <!--Generate-->
 <template name="ice_customerReportGen">
-    {{#with data}}
+{{#if data}}
+  {{#with data}}
         <!--Title-->
         <div class="report-title">
         <span class="report-company-name" style="font-size: 20px;">{{title.company}}</span><br>
@@ -57,8 +58,12 @@
         <!--Footer-->
 
     {{/with}}
-
     <!--Sign-->
     {{> signFooter}}
+{{else}}
+    {{> loading}}
+{{/if}}
+  
+
 </template>
 

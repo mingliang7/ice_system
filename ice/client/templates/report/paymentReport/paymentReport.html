@@ -22,7 +22,8 @@
 
 <!--Generate-->
 <template name="ice_paymentReportGen">
-    {{#with data}}
+    {{#if data}}
+        {{#with data}}
         <!--Title-->
         <div class="report-title">
             <div class="company-name-en" style="font-size: 20px;">{{title.company}}</div>
@@ -93,10 +94,14 @@
         </table>
 
         <!--Footer-->
+        <!--Sign-->
+        {{> signFooter}}
 
-    {{/with}}
+        {{/with}}
+    {{else}}
+        {{> loading}}
+    {{/if}}
+    
 
-    <!--Sign-->
-    {{> signFooter}}
 </template>
 
