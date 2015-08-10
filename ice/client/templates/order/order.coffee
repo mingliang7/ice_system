@@ -136,16 +136,16 @@ Template.ice_orderInsertTemplate.events
       current.parents('.array-item').find('.amount').val(roundKhr(item.amount))
       current.parents('.array-item').find('.discount').val('')
       totalAmount()
-  'keyup .qty , change .qty': (event) ->
+  'keyup .qty': (event) ->
     current = $(event.currentTarget)
     itemQty(current)
 
-  'keyup .price , change .price': (event) ->
+  'keyup .price': (event) ->
     current = $(event.currentTarget)
     itemPrice(current)
     
 
-  'keyup .discount , change .discount': (event) ->
+  'keyup .discount': (event) ->
     current = $(event.currentTarget)
     itemDiscount(current)
   'keyup [name="discount"]': (event) ->
@@ -194,16 +194,16 @@ Template.ice_orderUpdateTemplate.events
     current.parents('.array-item').find('.amount').val(item.amount)
     current.parents('.array-item').find('.discount').val('')
     totalAmount()
-  'keyup .qty , change .qty': (event) ->
+  'keyup .qty': (event) ->
     current = $(event.currentTarget)
     itemQty(current)
 
-  'keyup .price , change .price': (event) ->
+  'keyup .price': (event) ->
     current = $(event.currentTarget)
     itemPrice(current)
     
 
-  'keyup .discount , change .discount': (event) ->
+  'keyup .discount': (event) ->
     current = $(event.currentTarget)
     itemDiscount(current)
   'keyup [name="discount"]': (event) ->
@@ -290,6 +290,7 @@ itemQty = (current) ->
 totalAmount = () ->
   total = 0 ;
   $('.amount').each ->
+    console.log $(this).val()
     total += parseFloat $(this).val()
   console.log(total)
   $('[name="subtotal"]').val(roundKhr(total))
