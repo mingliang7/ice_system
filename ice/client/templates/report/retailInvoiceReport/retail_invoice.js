@@ -23,7 +23,7 @@ Template.ice_invoiceReportGen.onRendered(function () {
     setTimeout(function () {
         window.print();
         window.close();
-    }, 1500);
+    }, 2500);
 });
 /************ Generate *************/
 Template.ice_invoiceReportGen.helpers({

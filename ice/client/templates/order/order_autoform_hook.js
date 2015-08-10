@@ -204,7 +204,8 @@ AutoForm.hooks({
       $('select').each(function(){
         $(this).select2('val', '');
       });
-      this.resetForm();
+      Session.set('ice_customer_id', null); //set iceCustomerId to null
+      alertify.order().close()
       return alertify.success('Successfully');
     },
     onError: function(formType, error) {

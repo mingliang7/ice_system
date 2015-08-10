@@ -3,21 +3,31 @@ Template.ice_orderUpdateTemplate.onRendered ->
   $('[name="customer"]').val(text)
 Template.ice_order.onRendered ->
    createNewAlertify(['order','staffAddOn','customerAddOn', 'paymentPopUP'])
+
 Template.ice_orderInsertTemplate.onRendered ->
+  id = Session.get('ice_customer_id');
+  exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
+  today = moment().format('YYYY-MM-DD HH:mm:ss') 
+  $('[name="exchange"]').select2('val', exhchange_date._id)
+  $('[name="orderDate"]').val(today)
+  total = $('[name="total"]').val()
+  if total != ''
+    totalAmount()
+  if checkType(id) == 'general'
+    $('.pay').removeClass('hidden')
+  else
+    $('.pay').addClass('hidden')   
   $('body').on 'keydown', (e) -> 
     if(e.keyCode == 123)
       $('.importPayment').slideDown('fast')
     else
       $('.importPayment').hide()
   createNewAlertify(['staffAddOn','customerAddOn', 'paymentPopUP'])
-  $('[name="total"]').attr('readonly', true)
-  today = moment(new Date()).format('YYYY-MM-DD HH:mm:ss') 
-  $('[name="orderDate"]').val(today)
   datePicker()
 
 Template.ice_order.events
   "click .insert": ->
-    Router.go('/ice/home')
+    Router.go('ice.customer')
   "click .update": ->
     orderId = this._id
     data = Ice.Collection.Order.findOne(orderId);
@@ -110,21 +120,6 @@ Template.ice_orderInsertTemplate.events
       alertify.staffAddOn(fa('plus', 'Staff'), renderTemplate(Template.ice_staffInsertTemplate))
   'click .customerAddon': () ->
       alertify.customerAddOn(fa('plus', 'Customer'), renderTemplate(Template.ice_insertTemplate))
-    
-  'change [name="iceCustomerId"]': (e) ->
-    id = $(e.currentTarget).val()
-    if id != ''
-      exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
-      today = moment().format('YYYY-MM-DD HH:mm:ss') 
-      $('[name="exchange"]').select2('val', exhchange_date._id)
-      $('[name="orderDate"]').val(today)
-      total = $('[name="total"]').val()
-      if total != ''
-        totalAmount()
-      if checkType(id) == 'general'
-        $('.pay').removeClass('hidden')
-      else
-        $('.pay').addClass('hidden')
   'change .item': (event) ->
     current = $(event.currentTarget)
     if current.val() != ''
