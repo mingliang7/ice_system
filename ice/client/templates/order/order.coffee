@@ -97,6 +97,9 @@ Template.ice_order.events
     Session.set('invioceReportId', null)
 # insert form event
 Template.ice_orderInsertTemplate.events
+  'click .reset': ->
+    $('select').each ->
+      $(this).select2('val', '')
   'click .orderPayment': ->
     Meteor.call('migrateOrder')
   'click .orderGroupPayment': ->
