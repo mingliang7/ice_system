@@ -126,11 +126,10 @@
 
             <div class='col-md-4'>
                  <div class="form-group{{#if afFieldIsInvalid name='iceCustomerId'}} has-error{{/if}}" data-required="true">
-                    <label class="control-label" for="iceCustomerId">Customer</label>
+                    <label class="control-label" for="iceCustomerId">{{_customer.name}}</label>
 
-                        <input type="text" name="customer" class="form-control input-sm" readonly="true"> 
+                        {{> afFieldInput name='iceCustomerId' class="iceCustomerId form-control" readonly="true"}}
                     <div class="input-group  select2-bootstrap-append">
-                        {{> afFieldInput name='iceCustomerId' class="iceCustomerId input-sm hidden"}}
                     </div>
                     {{#if afFieldIsInvalid name='iceCustomerId'}}
                         <span class="help-block">{{afFieldMessage name='iceCustomerId'}}</span>
