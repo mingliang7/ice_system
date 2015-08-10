@@ -49,10 +49,6 @@ Ice.Schema.Order = new SimpleSchema(
   iceCustomerId:
     type: String
     max: 10
-    autoform:
-      type: 'select2'
-      options: ->
-        Ice.List.customer()
 
   iceStaffId:
     type: String

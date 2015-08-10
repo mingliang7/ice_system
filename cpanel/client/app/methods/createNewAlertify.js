@@ -18,7 +18,7 @@ createNewAlertify = function (names) {
                                 maximizable: true,
                                 closableByDimmer: false,
                                 resizable: false,
-                                transition: "zoom"
+                                transition: "fade"
                             }
                         };
                     },

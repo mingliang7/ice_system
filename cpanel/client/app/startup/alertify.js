@@ -16,7 +16,7 @@ Meteor.startup(function () {
         padding: true,
         overflow: true,
         maintainFocus: true,
-        transition: 'zoom',
+        transition: 'fade',
         autoReset: true,
 
         // notifier defaults

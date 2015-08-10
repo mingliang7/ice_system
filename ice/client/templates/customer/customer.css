@@ -1,0 +1,11 @@
+.customer > tbody > tr {
+	cursor: pointer;
+}
+
+.customer > tbody > tr:hover{
+	color: #337AB7;
+}
+
+.customer > .input-sm{
+	width: 200px;
+} 
