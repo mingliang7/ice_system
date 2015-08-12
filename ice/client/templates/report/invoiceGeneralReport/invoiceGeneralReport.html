@@ -1,0 +1,104 @@
+<template name="ice_invoiceGeneralReport">
+    {{#autoForm schema=Ice.Schema.InvoiceGeneral action="invoiceGeneralReportGen" target="_blank" id="ice_invoiceGeneralReport"}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name="customer"}}
+                <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+            </div>
+            <div class="col-md-6">
+                {{> afQuickField name="date"}}
+            </div>
+        </div>
+    {{/autoForm}}
+</template>
+<template name="invoiceGeneralReportGen">
+{{#if data}}
+    {{#with data}}
+            {{#each content}}
+                    <!--Title-->
+        <div class="report-title">
+            <span class="report-company-name" style="font-family: 'Khmer OS Muol';">{{title.company}}</span><br>
+            <span style="font-size: 10px">
+                អាស័យដ្ឋាន: {{title.address}}<br>
+                ទូរស័ព្ទ: {{title.telephone}}
+            </span><br>
+            <u style="font-size: 16px">ប័ណ្ណទូរទាត់ប្រាក់</u>
+        </div>
+
+        <!--Header-->
+        <table width="100%" border="0">
+            {{#each header}}
+                <tr>
+                    <td width="50%">{{col1}}</td>
+                    <td width="33%">{{col2}}</td>
+                    <td>{{col3}}</td>
+                </tr>
+            {{/each}}
+        </table>
+
+        <!--Content-->
+        <table class="report-content">
+            <thead class="report-content-header">
+            <tr>
+                <th colspan="2">ទំនិញ</th>
+                <th>ចំនួន</th>
+                <th>តម្លៃ</th>
+                <th>បញ្ចុះ</th>
+                <th>សរុប</th>
+            </tr>
+            </thead>
+
+            <tbody class="report-content-body">
+                {{#each item}}
+                <tr>
+                    <td colspan="2">{{itemName iceItemId}}</td>
+                    <td>{{qty}}</td>
+                    <td>{{price}}</td>
+                    <td>{{itemDiscount discount}}</td>
+                    <td>{{amount}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+            </table>
+             <!--Footer-->
+        <p></p>
+        <table class="small-table" >
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th class="pull-right">តម្លៃសរុប: </th> <th>{{footer.subtotal}}</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+            <th class="pull-right">បញ្ចុះតម្លៃ: </th> <th>{{footer.discount}}</th> 
+            </tr>
+             <tr>
+                <th></th>
+                <th></th>
+            <th class="pull-right">តម្លៃសរុប(រៀល): </th> <th>{{footer.total}}</th>
+            </tr>
+             <tr>
+                <th></th>
+                <th></th>
+                <th class="pull-right">តម្លៃសរុប(ដុល្លារ):</th> <th>{{footer.totalInDollar}}</th>
+            </tr>
+            <br>
+            <tr>
+                <th>ប្រាក់បង់:</th><th>{{footer.paidAmount}}</th>
+                <th class="pull-right">ប្រាក់ជំពាក់:</th><th>{{footer.outstandingAmount}}</th>
+            </tr>
+        </thead>
+        </table>
+        
+                {{> ice_invoiceReportGenFooterNote}}
+                <p style="page-break-after:always"></p>
+            {{/each}}
+    {{/with}}
+    {{else}}
+        {{> loading}}
+    {{/if}}
+    <!--Sign-->
+</template>
