@@ -212,6 +212,7 @@ AutoForm.hooks({
       return alertify.success('Successfully');
     },
     onError: function(formType, error) {
+      Loading.set('loadingState', false)
       return alertify.error(error.message);
     }
   },
