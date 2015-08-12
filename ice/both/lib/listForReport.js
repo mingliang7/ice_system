@@ -17,6 +17,18 @@ Ice.ListForReport = {
    	});
    	return list;
    },
+   generalCustomer: function(selectOne){
+      var list = [];
+      var customers = Ice.Collection.Customer.find({customerType: 'general', status: 'enable'});
+      if(!_.isEqual(selectOne, false)){
+         list.push({label: "(Select One)", value: ""});
+      }
+      customers.forEach(function(customer) {
+         list.push({label: '' + customer._id + ' | ' + customer.name + '(' + customer.customerType + ')',
+         value: customer._id})
+      });
+      return list;
+   },
    customerType: function(all){ 
       list = []
       invoiceGroup = Ice.ListForReportState.get('invoiceGroup');

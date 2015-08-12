@@ -181,3 +181,14 @@ Router.route 'ice/unpaid_groups',
 		sub: ''
 	icon: 'report'
 	title: 'Unpaid Group'
+
+Router.route 'ice/invoice_generals',
+	->
+		@render 'ice_invoiceGeneralReport'
+
+	name: 'ice.invoiceGeneral'
+	header:
+		title: 'Invoice General'
+		sub: ''
+	icon: 'report'
+	title: 'Invoice General'
