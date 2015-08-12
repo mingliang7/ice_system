@@ -11,7 +11,9 @@ generateReport = function(id) {
 
 generatePayment = function(id){
   doc = Ice.Collection.Order.findOne(id)
-  alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, doc))
+  setTimeout(function(){
+    alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, doc))
+  },200);
 }
 this.GenReport = generateReport;
 getRank = function(date, type) {
@@ -193,9 +195,9 @@ AutoForm.hooks({
             generateReport(id);
             return Print.set('print', false);
           }else if (pay == true){
+            Print.set('pay', false);
             generatePayment(id);
             Session.set('invioceReportId', id)
-            Print.set('pay', false);
           }
         }
       }
