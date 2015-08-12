@@ -206,6 +206,7 @@ AutoForm.hooks({
       });
       Session.set('ice_customer_id', null); //set iceCustomerId to null
       alertify.order().close()
+       Loading.set('loadingState', false)
       return alertify.success('Successfully');
     },
     onError: function(formType, error) {

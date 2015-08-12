@@ -41,7 +41,9 @@
 </div>
 </template>
 <template name="ice_orderInsertTemplate">
-    {{> importPayment}}
+    {{#if loading}}
+     {{> pleaseWait}}
+    {{/if}}
     {{#autoForm collection=Ice.Collection.Order id="ice_orderInsertTemplate" type="insert"}}
         <div class="row">
 
@@ -337,6 +339,15 @@
 
         <div class="col-sm-2">
             <label>Amount:</label>
+        </div>
+    </div>
+</template>
+
+<template name="pleaseWait">
+    <div class="please-wait">
+        <div class="box">
+            <h1><i class="fa fa-spinner fa-pulse"></i></h1>
+            <h4>&nbsp;&nbsp;Please Wait.....</h4>
         </div>
     </div>
 </template>

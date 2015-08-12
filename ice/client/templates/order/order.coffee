@@ -1,8 +1,13 @@
+@Loading = new ReactiveObj({loadingState: false})
 Template.ice_orderUpdateTemplate.onRendered ->
   text = $('[name="iceCustomerId"] option:selected').text()
   $('[name="customer"]').val(text)
 Template.ice_order.onRendered ->
    createNewAlertify(['order','staffAddOn','customerAddOn', 'paymentPopUP'])
+
+Template.ice_orderInsertTemplate.helpers
+  loading: ->
+    Loading.get('loadingState')
 
 Template.ice_orderInsertTemplate.onRendered ->
   id = Session.get('ice_customer_id');
@@ -104,6 +109,7 @@ Template.ice_order.events
     Session.set('invioceReportId', null)
     GenReport(@_id) #generateReport alias function in order_autoform_hook
   'click .save': ->
+    Loading.set('loadingState', true)
     Session.set('invioceReportId', null)
 # insert form event
 Template.ice_orderInsertTemplate.events
@@ -151,8 +157,11 @@ Template.ice_orderInsertTemplate.events
     
   'click .print': ->
     Print.set 'print', true
+  'click .save': ->
+    Loading.set('loadingState', true)
 
   'click .pay': ->
+    Loading.set('loadingState', true)
     Print.set 'pay', true
 
   'change [name="exchange"]': (event) ->
