@@ -1,76 +1,150 @@
+Meteor.methods({
+invoiceGroup: function (params) {
+        var self = params;
+        var data = {
+            title: {},
+            header: {},
+            content: [],
+            footer: {}
+        };
 
-Template.ice_invoiceGroup.onRendered(function() {
-  datePicker();
-});
 
-Template.ice_invoiceGroup.events({
-  'change [name="staffId"]': function(e){
-    value = $(e.currentTarget).val();
-    return Ice.ListForReportState.set('staffId', value);
-  },
-  'change [name="customerType"]': function(e) {
-    value = $(e.currentTarget).val();
-    return Ice.ListForReportState.set('customerType', value);
-  },
-  'change [name="date"]': function(e) {
-    value = $('[name="date"]').val().split(' To ')
-    Ice.ListForReportState.set('dateRange', value);
-  },
-  'keyup [name="date"]': function(e) {
-    value = $('[name="date"]').val().split(' To ')
-    Ice.ListForReportState.set('dateRange', value);
-  }
-});
-
-var datePicker = function() {
-  var date;
-  date = $('[name="date"]');
-  DateTimePicker.dateRange(date);
-};
-
-/***** Generate ******/
-Template.ice_invoiceGroupGen.helpers({
-    data: function () {
-        var self = this;
-        var id = JSON.stringify(self);
-        var callInvoiceGroup = Meteor.callAsync(id, 'invoiceGroup', self);
-        if(!callInvoiceGroup.ready()){
-            return false;
+        /********* Header ********/
+        customerType = self.customerType == '' ? 'All' : self.customerType
+        customer = self.customerId == '' ? 'All' : self.customerId 
+        status = self.status == '' ? 'All' : self.status
+        data.header = {
+            date: self.date,
+            customerType: customerType,
+            customer: customer
         }
-        return callInvoiceGroup.result();
-    },
-    itemName: function (id) {
-        var name = Ice.Collection.Item.findOne(id).name;
-        return name;
-    },
-    itemDiscount: function (discount) {
-        if (discount == undefined) {
-            return '';
-        } else {
-            return discount;
-        }
-    },
-    listItems: function (items) {
-     var results = '';
-        for (var k in items) {
-            results += '<tr style="border-bottom: 1px solid #000;">' + '<td>' + items[k]['orderDate'] + '</td>';
-            for (var j in items[k]) {
-                if(items[k][j].qty != 0){
-                    if (items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម (ដើម)') {
-                        results += '<td>' + +items[k][j].qty + 'kg' + '</td>';
-                    } else if (items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម (ដើម)') {
-                        results += '<td>' + +items[k][j].qty + 'ដើម' + '</td>';
-                    }
-                }else{
-                    results += '<td></td>'
-                }
+        /********** Content **********/
+        var content = [];
+        var selector = {};
+        date = self.date.split(' To ');
+        startDate = date[0];
+        endDate = date[1];
+        if(status != 'All' && customerType == 'All' && customer == 'All'){
+            status = status == 'closed' ? true : false
+            var selector = {closing: eval(status), startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+            var groupOrder = Ice.Collection.OrderGroup.find(selector);
+            groupOrder.forEach(function (itemsDetail) {
+                getSortItems = sortByDay(itemsDetail);
+                contentDetail(content, getSortItems, itemsDetail); //function call
+            });
+            if (content.length > 0) {
+                data.content = content;
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
             }
-            results += '</tr>'
+
+        }else if (status == 'All' && customerType == 'All' && customer == 'All'){
+            var selector = {startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+            var groupOrder = Ice.Collection.OrderGroup.find(selector);
+            groupOrder.forEach(function (itemsDetail) {
+                getSortItems = sortByDay(itemsDetail);
+                contentDetail(content, getSortItems, itemsDetail); //function call
+            });
+            if (content.length > 0) {
+                data.content = content;
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
+            }
+        }else if (status != 'All' && customerType !== 'All' && customer == 'All'){
+            status = status == 'closed' ? true : false
+            customers = findCustomerByType(customerType);
+            var index = 1;
+            for(var i = 0 ; i < customers.length; i++){
+                status = status == 'closed' ? true : false
+                var selector = {iceCustomerId: customers[i], closing: eval(status), startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+                var groupOrder = Ice.Collection.OrderGroup.find(selector);
+                if(groupOrder.count() > 0) {
+                    groupOrder.forEach(function (itemsDetail) {
+                        getSortItems = sortByDay(itemsDetail);
+                        contentDetail(content, getSortItems, itemsDetail); //function call
+                    });
+                }
+                
+            }
+            if (content.length > 0) {
+                data.content = content;
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
+            }
+        }else if (status == 'All' && customerType !== 'All' && customer == 'All'){
+            customers = findCustomerByType(customerType);
+            for(var i = 0 ; i < customers.length; i++){
+                status = status == 'closed' ? true : false
+                var selector = {iceCustomerId: customers[i], startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+                var groupOrder = Ice.Collection.OrderGroup.find(selector);
+                if(groupOrder.count() > 0) {
+                    groupOrder.forEach(function (itemsDetail) {
+                        getSortItems = sortByDay(itemsDetail);
+                        contentDetail(content, getSortItems, itemsDetail); //function call
+                    });
+                }
+                
+            }
+            if (content.length > 0) {
+                data.content = content;
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
+            }
+        }else if (status == 'All' && customerType !== 'All' && customer != 'All'){
+            var selector = {iceCustomerId: customer, startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+            var groupOrder = Ice.Collection.OrderGroup.find(selector);
+            groupOrder.forEach(function (itemsDetail) {
+                getSortItems = sortByDay(itemsDetail);
+                contentDetail(content, getSortItems, itemsDetail); //function call
+            });
+            if (content.length > 0) {
+                data.content = content;
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
+            }
+
+        }else{
+            status = status == 'closed' ? true : false
+            var selector = {closing: eval(status), iceCustomerId: customer, startDate: {$gte: startDate}, endDate: {$lte: endDate}};
+            var groupOrder = Ice.Collection.OrderGroup.find(selector);
+            groupOrder.forEach(function (itemsDetail) {
+                getSortItems = sortByDay(itemsDetail);
+                contentDetail(content, getSortItems, itemsDetail); //function call
+            });
+            if (content.length > 0) {
+                data.content = content;
+              
+            return data;
+            } else {
+                data.content.push({index: 'no results'});
+                return data;
+            }
         }
-        return results;
+        if (content.length > 0) {
+            data.content = content;
+            return data;
+        } else {
+            data.content.push({index: 'no results'});
+            return data;
+        }
     }
-   
-});
+
+})
 
 // methods
 findStaff = function(id){

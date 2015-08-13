@@ -22,6 +22,7 @@
 
 <!--Generate-->
 <template name="ice_invoiceGroupGen">
+    {{#if data}}
     {{#with data}}
         {{#each content}}
         <!--Title-->
@@ -93,11 +94,22 @@
             </tr> 
         </thead>
         </table>
+        <div style="margin-top: 30px;" >
+            <p class="pull-right">
+            ថ្ងៃទី.......ខែ.......ឆ្នាំ.......<br><br>
+             &nbsp; &nbsp; &nbsp;អ្នកចេញប័ណ្ណ<br><br>
+            </p>
+        </div>
+        <div style="margin-top: 150px;">
+            {{> ice_invoiceReportGenFooterNote}}
+        </div>
         <!--Footer-->
         <p style="page-break-after:always"></p>
     {{/each}}
     {{/with}}
 
     <!--Sign-->
-    {{> ice_invoiceReportGenFooterNote}}
+    {{else}}
+        {{> loading}}
+    {{/if}}
 </template>

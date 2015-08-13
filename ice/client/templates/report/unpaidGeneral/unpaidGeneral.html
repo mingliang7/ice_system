@@ -19,6 +19,7 @@
 
 <!--Generate-->
 <template name="ice_unpaidGeneralGen">
+    {{#if data}}
     {{#with data}}
         <!--Title-->
         <div class="report-title">
@@ -76,5 +77,8 @@
 
     <!--Sign-->
     {{> signFooter}}
+    {{else}}
+        {{> loading}}
+    {{/if}}
 </template>
 
