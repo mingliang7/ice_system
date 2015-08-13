@@ -42,14 +42,16 @@ Ice.TabularTable.Order = new (Tabular.Table)(
       tmpl: Meteor.isClient and Template.ice_orderAction
     }
     {
+      data: 'orderDate'
+      title: 'Order Date'
+    }
+    {
       data: '_id'
       title: 'ID'
     }
     {
-      data: 'iceCustomerId'
+      data: '_customer.name'
       title: 'Customer'
-      render: (val) ->
-        customerDetail.name(val)
     }
     {
       data: 'iceCustomerId'
@@ -72,15 +74,6 @@ Ice.TabularTable.Order = new (Tabular.Table)(
     {
       data: 'outstandingAmount'
       title: 'Outstanding Amount' 
-    }
-    {
-      data: 'discount'
-      title: 'Discount'
-      render: (val) ->
-        if val isnt undefined
-          "<p class='label label-success'>#{val}</p>" 
-        else
-          "<p class='label label-success'>None</p>" 
     }
     {
       data: 'total'
