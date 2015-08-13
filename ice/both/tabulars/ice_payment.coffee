@@ -27,7 +27,8 @@ Ice.TabularTable.Payment = new (Tabular.Table)(
     }
     {
       data: 'customerId'
-      title: 'Customer ID'
+      title: 'Customer', render: (value) ->
+        Ice.Collection.Customer.findOne(value).name
     }
     {
       data: 'orderId_orderGroupId'
