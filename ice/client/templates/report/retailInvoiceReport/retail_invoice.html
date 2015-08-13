@@ -1,5 +1,6 @@
 
 <template name="ice_invoiceReportGen">
+    {{#if data}}
     {{#with data}}
         <!--Title-->
         <div class="report-title">
@@ -84,6 +85,10 @@
 
     <!--Sign-->
     {{> ice_invoiceReportGenFooterNote}}
+    {{autoprint close='true'}}
+    {{else}}
+        {{> loading}}
+    {{/if}}
 </template>
 <!--footerNote-->
 <template name="ice_invoiceReportGenFooterNote">
