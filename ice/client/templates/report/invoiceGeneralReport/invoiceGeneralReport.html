@@ -15,7 +15,6 @@
 <template name="invoiceGeneralReportGen">
 {{#if data}}
     {{#with data}}
-            {{#each content}}
                     <!--Title-->
         <div class="report-title">
             <span class="report-company-name" style="font-family: 'Khmer OS Muol';">{{title.company}}</span><br>
@@ -50,15 +49,9 @@
             </thead>
 
             <tbody class="report-content-body">
-                {{#each item}}
-                <tr>
-                    <td colspan="2">{{itemName iceItemId}}</td>
-                    <td>{{qty}}</td>
-                    <td>{{price}}</td>
-                    <td>{{itemDiscount discount}}</td>
-                    <td>{{amount}}</td>
-                </tr>
-                {{/each}}
+            {{#each content}}
+                {{{extract item}}}
+            {{/each}}
             </tbody>
             </table>
              <!--Footer-->
@@ -95,7 +88,6 @@
         
                 {{> ice_invoiceReportGenFooterNote}}
                 <p style="page-break-after:always"></p>
-            {{/each}}
     {{/with}}
     {{else}}
         {{> loading}}

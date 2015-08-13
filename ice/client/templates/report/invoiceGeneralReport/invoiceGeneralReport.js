@@ -13,9 +13,21 @@ Template.invoiceGeneralReportGen.helpers({
         return generalOrders.result();
     },
 
-    itemName: function(id){
-        var name = Ice.Collection.Item.findOne(id).name;
-        return name;
+    extract: function(item){
+        var concate = ''
+        item.forEach(function(obj) {
+            concate += '<tr><td colspan="2">' + itemName(Object.keys(obj).join('')) + '</td>'
+            for(var k in obj){
+                concate +=      '<td>' + obj[k].qty +'</td>' +
+                                '<td>' + formatKH(obj[k].price) +'</td>' +
+                                '<td>' + itemDiscount(obj[k].discount) + '</td>'+
+                                '<td>' + formatKH(obj[k].amount) + '</td>';
+                    
+            }
+            concate += '</tr>'
+
+        });
+        return concate;
     },
     itemDiscount: function(discount) {
         if(discount == undefined){
@@ -32,8 +44,18 @@ var formatDollar = function(value){
 var formatKH = function(value){
     return numeral(value).format('0,0');
 }
-
+var itemName = function(id){
+    return Ice.Collection.Item.findOne(id).name;
+}
 var datePicker = function() {
   var date = $('[name="date"]');
   DateTimePicker.dateTimeRange(date);
 };
+
+var itemDiscount = function(discount) {
+        if(discount == undefined){
+            return '';
+        }else{
+            return discount;
+        }
+}
