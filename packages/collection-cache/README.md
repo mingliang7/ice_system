@@ -1,4 +1,4 @@
-# Denormalize
+# Collection Cache
 
 This package helps you denormalize you Mongo collections by providing methods for common denormalizations. For example, you can have the name of an author of a post automatically copied into the post. It updates if the author changed name or is removed. This lets you sort you posts after author name very easily. Simply do `Posts.cacheDoc('author', Authors, ['name'])`.
 

@@ -129,8 +129,9 @@ spacebars-compiler@1.0.6
 srp@1.0.3
 stylus@1.0.7
 templating@1.1.1
+theara:autoprint@0.0.5
 theara:call-async@0.1.8
-theara:collection-cache@0.3.7
+theara:collection-cache@0.4.4
 theara:events@0.1.5
 theara:fa-helpers@0.0.3
 theara:id-generator@0.0.6

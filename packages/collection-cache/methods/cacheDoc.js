@@ -26,98 +26,95 @@ Mongo.Collection.prototype.cacheDoc = function (fieldName, collection, collectio
         fieldsInFind[field] = 1;
     });
 
-    /********** Before Insert This Collection **********/
-    thisCollection.before.insert(function (userId, doc) {
-        // Get reference doc
-        var getRefDoc,
-            selector = {
-                _id: doc[refField]
-            };
-        getRefDoc = refCollection.findOne(selector, {fields: fieldsInFind});
-
-        doc[cacheField] = getRefDoc;
-
-        //console.log('Doc->' + thisCollection._name + '.before.insert()');
-    });
-
-
-    /********** Before Update This Collection **********/
-    thisCollection.before.update(function (userId, doc, fieldNames, modifier, options) {
-        modifier.$set = modifier.$set || {};
-
-        // Get new reference doc
-        var getRefDoc,
-            selector = {
-                _id: modifier.$set[refField]
-            };
-
-        // Check soft remove is true
-        if (!_.isUndefined(modifier.$set.removed) || !_.isUndefined(modifier.$set.restoredAt) || _.isUndefined(modifier.$set[refField])) {
-            selector._id = doc[refField];
-        }
-
-        getRefDoc = refCollection.findOne(selector, {fields: fieldsInFind});
-        console.log(getRefDoc)
-        modifier.$set[cacheField] = getRefDoc;
-
-        //console.log('Doc->' + thisCollection._name + '.before.update()');
-    });
-
-    /********** After Update This Collection **********/
-    thisCollection.after.update(function (userId, doc, fieldNames, modifier, options) {
-        modifier.$set = modifier.$set || {};
-
-        if (!_.isUndefined(modifier.$set.restoredAt)) {
-            // Attach soft remove
-            refCollection.attachBehaviour('softRemovable');
+    /********** This Collection After Insert **********/
+    thisCollection.after.insert(function (userId, doc) {
+        Meteor.defer(function () {
+            // Get reference doc
             var selector = {
                 _id: doc[refField]
             };
+            var getRefDoc = refCollection.findOne(selector, {fields: fieldsInFind});
 
-            refCollection.restore(selector);
-        }
+            // Check getRefDoc is undefined
+            if (!_.isUndefined(getRefDoc)) {
+                var fieldsInUpdate = {};
+                fieldsInUpdate[cacheField] = getRefDoc;
 
-        //console.log('Doc->' + thisCollection._name + '.after.update()');
-    });
-
-    /********** After Update Reference Collection **********/
-    refCollection.after.update(function (userId, doc, fieldNames, modifier, options) {
-        modifier.$set = modifier.$set || {};
-
-        // Set selector
-        var selector = {};
-        selector[refField] = doc._id;
-
-        //Fields specifier for Mongo.Collection.update
-        var fieldsInUpdate = {};
-        fieldsInUpdate[refField] = doc._id;
-
-        // Attach soft remove
-        thisCollection.attachBehaviour('softRemovable');
-        if (_.isUndefined(doc.removedAt)) {
-            if (_.isUndefined(doc.restoredAt)) {
-                thisCollection.update(selector, {$set: fieldsInUpdate}, {multi: true});
-            } else {
-                thisCollection.restore(selector);
+                thisCollection.direct.update(doc._id, {$set: fieldsInUpdate});
             }
-        } else {
-            thisCollection.softRemove(selector);
-        }
 
-        // Don't integrate with sof remove
-        //thisCollection.update(selector, {$set: fieldsInUpdate}, {multi: true});
-
-        //console.log('Doc->' + refCollection._name + '.after.update()');
+            //console.log('Doc->' + thisCollection._name + '.after.insert()');
+        });
     });
 
-    /********** After Remove Reference Collection **********/
+
+    /********** This Collection Before Update **********/
+    thisCollection.after.update(function (userId, doc, fieldNames, modifier, options) {
+        Meteor.defer(function () {
+            modifier.$set = modifier.$set || {};
+
+            // Check ref field is updated
+            if (!_.isUndefined(modifier.$set[refField])) {
+                // Get new reference doc
+                var selector = {
+                    _id: modifier.$set[refField]
+                };
+
+                var getRefDoc = refCollection.findOne(selector, {fields: fieldsInFind});
+
+                // Check getRefDoc is undefined
+                if (!_.isUndefined(getRefDoc)) {
+                    var fieldsInUpdate = {};
+                    fieldsInUpdate[cacheField] = getRefDoc;
+
+                    thisCollection.direct.update(doc._id, {$set: fieldsInUpdate});
+                    console.log('after update');
+                }
+            }
+
+            //console.log('Doc->' + thisCollection._name + '.before.update()');
+        });
+    });
+
+    /********** Reference Collection After Update **********/
+    refCollection.after.update(function (userId, doc, fieldNames, modifier, options) {
+        Meteor.defer(function () {
+            modifier.$set = modifier.$set || {};
+
+            // Set selector
+            var selector = {};
+            selector[refField] = doc._id;
+
+            //Fields specifier for Mongo.Collection.update
+            var fieldsInUpdate = {};
+            fieldsInUpdate[refField] = doc._id;
+
+            // Attach soft remove
+            thisCollection.attachBehaviour('softRemovable');
+            if (_.isUndefined(doc.removedAt)) {
+                if (_.isUndefined(doc.restoredAt)) {
+                    thisCollection.update(selector, {$set: fieldsInUpdate}, {multi: true});
+                } else {
+                    thisCollection.restore(selector);
+                }
+            } else {
+                thisCollection.softRemove(selector);
+            }
+
+            //console.log('Doc->' + refCollection._name + '.after.update()');
+        });
+    });
+
+    /********** Reference Collection After Remove **********/
     refCollection.after.remove(function (userId, doc) {
-        // Set selector
-        var selector = {};
-        selector[refField] = doc._id;
+        Meteor.defer(function () {
+            // Set selector
+            var selector = {};
+            selector[refField] = doc._id;
 
-        thisCollection.remove(selector);
+            thisCollection.remove(selector);
 
-        //console.log('Doc->' + refCollection._name + '.after.remove()');
+            //console.log('Doc->' + refCollection._name + '.after.remove()');
+        });
     });
 };

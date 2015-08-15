@@ -1,77 +1,3 @@
-//Before insert
-var invoiceUpdate, orderGroupInvoiceUpdate, orderInvoiceUpdate;
-orderInvoiceUpdate = function(doc) {
-  var oldPaidAmount;
-  var newDate = doc.paymentDate;
-  oldPaidAmount = Session.get('oldPaidAmount');
-  var oldPaymentDetail = Ice.Collection.Order.findOne(doc.orderId_orderGroupId)._payment;
-  var payment = paymentDetail(oldPaymentDetail, doc); //extract payment detail
-  if (doc.outstandingAmount === 0) {
-    return Ice.Collection.Order.update({
-      _id: doc.orderId_orderGroupId
-    }, {
-      $set: {
-        closing: true,
-        closingDate: newDate,
-        _payment: payment,
-        paidAmount: oldPaidAmount + doc.paidAmount,
-        outstandingAmount: doc.outstandingAmount
-      }
-    });
-  } else {
-    return Ice.Collection.Order.update({
-      _id: doc.orderId_orderGroupId
-    }, {
-      $set: {
-        _payment: payment,
-        paidAmount: oldPaidAmount + doc.paidAmount,
-        outstandingAmount: doc.outstandingAmount
-      }
-    });
-  }
-};
-
-orderGroupInvoiceUpdate = function(doc) { // for groupInvoice
-  var oldPaidAmount;
-  var newDate = doc.paymentDate;
-  oldPaidAmount = Session.get('oldPaidAmount');
-  var oldPaymentDetail = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId)._payment;
-  var payment = paymentDetail(oldPaymentDetail, doc); //extract payment detail
-  Session.set('oldPaidAmount', null);
-  if (doc.outstandingAmount === 0) {
-    return Ice.Collection.OrderGroup.update({
-      _id: doc.orderId_orderGroupId
-    }, {
-      $set: {
-        closing: true,
-        closingDate: newDate,
-        _payment: payment,
-        paidAmount: oldPaidAmount + doc.paidAmount,
-        outstandingAmount: doc.outstandingAmount
-      }
-    });
-  } else {
-    return Ice.Collection.OrderGroup.update({
-      _id: doc.orderId_orderGroupId
-    }, {
-      $set: {
-        _payment: payment,
-        paidAmount: oldPaidAmount + doc.paidAmount,
-        outstandingAmount: doc.outstandingAmount
-      }
-    });
-  }
-};
-
-invoiceUpdate = function(doc) { //check customer type
-  var type;
-  type = Ice.ListForReportState.get('type');
-  if (type === 'general') {
-    return orderInvoiceUpdate(doc);
-  } else {
-    return orderGroupInvoiceUpdate(doc);
-  }
-};
 
 var checkType = function(customerId){
   return Ice.Collection.Customer.findOne(customerId).customerType;
@@ -142,9 +68,6 @@ AutoForm.hooks({
         prefix = "" + (Session.get('currentBranch')) + "-";
         doc._id = idGenerator.genWithPrefix(Ice.Collection.Payment, prefix, 12);
         doc.branchId = Session.get('currentBranch');
-        if (doc.customerId && doc.orderId_orderGroupId && doc.paymentDate !== undefined) {
-          invoiceUpdate(doc);
-        }
         return doc;
       }
     },

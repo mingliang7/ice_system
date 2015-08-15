@@ -1,14 +1,18 @@
 Ice.Collection.Payment = new Mongo.Collection('ice_payments')
 
 Ice.Schema.Payment = new SimpleSchema(
-
 	orderId_orderGroupId: 
 		type: String
 		label: 'invoiceId'
 		autoform:
 			type: 'select2'
 			options: ->
-				Ice.ListForReport.invoice()
+				try
+					Ice.ListForReport.invoice()
+				catch e
+					e
+				
+
 	customerId: 
 		type: String
 		label: 'Customer'

@@ -13,15 +13,18 @@ Mongo.Collection.prototype.cacheArrayField = function (arrayFields) {
     /********** Before Insert This Collection **********/
     thisCollection.before.insert(function (userId, doc) {
         _.each(cacheArrayField, function (field) {
-            var items = [];
+            // Check exist
+            if (!_.isUndefined(doc[field])) {
+                var items = [];
 
-            _.each(doc[field], function (obj) {
-                if (!_.isNull(obj)) {
-                    items.push(obj);
-                }
-            });
+                _.each(doc[field], function (obj) {
+                    if (!_.isNull(obj)) {
+                        items.push(obj);
+                    }
+                });
 
-            doc[field] = items;
+                doc[field] = items;
+            }
         });
 
         //console.log('ArrayField->' + thisCollection._name + '.before.insert()');
@@ -32,15 +35,18 @@ Mongo.Collection.prototype.cacheArrayField = function (arrayFields) {
         modifier.$set = modifier.$set || {};
 
         _.each(cacheArrayField, function (field) {
-            var items = [];
+            // Check exist
+            if (!_.isUndefined(modifier.$set[field])) {
+                var items = [];
 
-            _.each(modifier.$set[field], function (obj) {
-                if (!_.isNull(obj)) {
-                    items.push(obj);
-                }
-            });
+                _.each(modifier.$set[field], function (obj) {
+                    if (!_.isNull(obj)) {
+                        items.push(obj);
+                    }
+                });
 
-            modifier.$set[field] = items;
+                modifier.$set[field] = items;
+            }
         });
 
         //console.log('ArrayField->' + thisCollection._name + '.before.update()');
