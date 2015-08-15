@@ -84,14 +84,8 @@ orderGroupInvoiceUpdate = function(doc) {
 
 invoiceUpdate = function(doc) { //check customer type
   var type;
-  type = Ice.Collection.Order.findOne({_id: doc.orderId_orderGroupId});
-  if(type == undefined){
-    type = Ice.Collection.OrderGroup.findOne({_id: doc.orderId_orderGroupId})._customer.customerType; 
-  }else{
-    type = type._customer.customerType;
-  }
-
-  if (type === 'general') {
+  type = checkType(doc.customerId);
+  if (type == 'general') {
     return orderInvoiceUpdate(doc);
   } else {
     return orderGroupInvoiceUpdate(doc);

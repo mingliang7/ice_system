@@ -50,10 +50,10 @@ Template.list_invoices.events({
 Template.list_invoices.helpers({
   invoices: function() {
     var date, invoices, today;
-    date = new Date().getDate() - 1;
-    today = moment(new Date(new Date().setDate(date))).format('YYYY-MM-DD');
+    // date = new Date().getDate() - 1;
+    // today = moment(new Date(new Date().setDate(date))).format('YYYY-MM-DD');
     invoices = Ice.Collection.OrderGroup.find({
-      endDate: today
+      closing: false
     }, {limit: 20}).fetch();
     $.each(invoices, function(index, invoice) {
       return invoice.index = index;
