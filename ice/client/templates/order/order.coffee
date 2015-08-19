@@ -257,14 +257,6 @@ Template.ice_orderShowTemplate.helpers
       "<p class='label label-success'>None</p>"
 
 # autoForm hook
-AutoForm.hooks
-  ice_orderInsertTemplate:
-    before:
-      insert: (doc) ->
-        prefix = Session.get('currentBranch')
-        doc._id = idGenerator.genWithPrefix(Ice.Collection.Order, prefix, 6);
-        doc.branchId = Session.get('currentBranch')
-        doc
 # functions
 datePicker = ->
   orderDate = $('[name="orderDate"]')

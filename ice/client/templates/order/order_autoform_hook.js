@@ -88,6 +88,7 @@ AutoForm.hooks({
         var prefix;
         prefix = "" + (Session.get('currentBranch')) + "-";
         doc._id = idGenerator.genWithPrefix(Ice.Collection.Order, prefix, 12);
+        doc.branchId = Session.get('currentBranch');
         if(checkType(doc.iceCustomerId) == 'general'){
           doc.paidAmount = 0;
           doc.outstandingAmount = doc.total;
