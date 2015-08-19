@@ -54,10 +54,13 @@ Ice.TabularTable.Order = new (Tabular.Table)(
       title: 'Customer'
     }
     {
-      data: 'iceCustomerId'
+      data: '_customer.customerType'
       title: 'Type'
       render: (val) ->
-        customerDetail.type(val)
+        if val is 'general'
+          "<p class='label label-primary'>General</p>"
+        else
+          "<p class='label label-warning'>#{val} days</p>"
     }
 		{
 			data: 'iceOrderDetail'

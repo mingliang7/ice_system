@@ -36,8 +36,8 @@ Template.ice_order.events
   "click .update": ->
     orderId = this._id
     data = Ice.Collection.Order.findOne(orderId);
-    id = this.iceCustomerId
-    if checkType(id) == 'general'
+    id = this._id
+    if this._customer.customerType == 'general'
       if(data.paidAmount == 0)
         alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
         .maximize()

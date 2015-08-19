@@ -11,3 +11,6 @@ Meteor.startup ->
     while i < 5
       Ice.Collection.Item.insert Data["item000#{i+ 1}"]
       i++
+
+  # Meteor.call 'findOrderWhichHasNoGroupId'
+  # Meteor.call 'findOrderWhichIsNameDifferenctFromGroup'
