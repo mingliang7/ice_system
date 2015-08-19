@@ -20,8 +20,10 @@ Template.ice_orderInsertTemplate.onRendered ->
     totalAmount()
   if checkType(id) == 'general'
     $('.pay').removeClass('hidden')
+    $('.saveNpay').removeClass('hidden')
   else
     $('.pay').addClass('hidden')   
+    $('.saveNpay').addClass('hidden')   
   $('body').on 'keydown', (e) -> 
     if(e.keyCode == 123)
       $('.importPayment').slideDown('fast')
@@ -111,6 +113,10 @@ Template.ice_order.events
   'click .save': ->
     Loading.set('loadingState', true)
     Session.set('invioceReportId', null)
+  'click .saveNpay': -> 
+    debugger
+    # doc = Ice.Collection.Order.findOne(id)
+    # alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, doc))
 # insert form event
 Template.ice_orderInsertTemplate.events
   'click .reset': ->
@@ -163,6 +169,9 @@ Template.ice_orderInsertTemplate.events
   'click .pay': ->
     Loading.set('loadingState', true)
     Print.set 'pay', true
+  'click .saveNpay': ->
+    Loading.set('loadingState', true)
+    Print.set 'saveNpay', true
 
   'change [name="exchange"]': (event) ->
     val = findExchange($(event.currentTarget).val())

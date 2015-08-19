@@ -104,7 +104,8 @@ AutoForm.hooks({
           Print.set('pay', false)
         } else {
           print = Print.get('print');
-          pay = Print.get('pay')
+          pay = Print.get('pay');
+          saveNpay = Print.get('saveNpay');
           if (print === true) {
             generateReport(id);
             return Print.set('print', false);
@@ -112,6 +113,9 @@ AutoForm.hooks({
             Print.set('pay', false);
             generatePayment(id);
             Session.set('invioceReportId', id)
+          }else if (saveNpay == true){
+            Print.set('saveNpay', false);
+            generatePayment(id)
           }
         }
       }
