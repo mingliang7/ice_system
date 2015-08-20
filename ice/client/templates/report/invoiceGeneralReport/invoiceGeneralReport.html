@@ -40,17 +40,18 @@
         <table class="report-content">
             <thead class="report-content-header">
             <tr>
-                <th colspan="2">ទំនិញ</th>
-                <th>ចំនួន</th>
-                <th>តម្លៃ</th>
-                <th>បញ្ចុះ</th>
-                <th>សរុប</th>
+                <th>កាលបរិច្ឆេទ</th>
+                <th>ទឹកកកកិន</th>
+                <th>ទឹកកកម៉ត់</th>
+                <th>ទឹកកកតូច</th>
+                <th>ទឹកកកធំ</th>
+                <th>ទឹកកកដើម</th>
             </tr>
             </thead>
 
             <tbody class="report-content-body">
             {{#each content}}
-                {{{extract item}}}
+                {{{content}}}
             {{/each}}
             </tbody>
             </table>
@@ -86,9 +87,16 @@
         </thead>
         </table>
         
-                {{> ice_invoiceReportGenFooterNote}}
-                <p style="page-break-after:always"></p>
     {{/with}}
+      <div style="margin-top: 30px;" >
+            <p class="pull-right">
+            ថ្ងៃទី.......ខែ.......ឆ្នាំ.......<br><br>
+             &nbsp; &nbsp; &nbsp;អ្នកចេញប័ណ្ណ<br><br>
+            </p>
+        </div>
+        <div style="margin-top: 150px;">
+            {{> ice_invoiceReportGenFooterNote}}
+        </div>
     {{else}}
         {{> loading}}
     {{/if}}
