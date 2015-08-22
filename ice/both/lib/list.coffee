@@ -106,6 +106,39 @@
     staffs.forEach (staff) ->
       list.push {label: staff._id + ' : ' + staff.name, value: staff._id}
     list
+  branchForUser:(selectOne, userId) ->
+	  list = []
+	  if !_.isEqual(selectOne, false)
+	    list.push
+	      label: 'All'
+	      value: ''
+	  userId = if _.isUndefined(userId) then Meteor.userId() else userId
+	  Meteor.users.findOne(userId).rolesBranch.forEach (branch) ->
+	    label = Cpanel.Collection.Branch.findOne(branch).enName
+	    list.push
+	      label: label
+	      value: branch
+	    return
+	  list
+  backupAndRestoreTypes: ->
+	  [
+	    {
+	      value: ''
+	      label: 'Select One'
+	    }
+	    {
+	      value: 'Setting'
+	      label: 'Setting'
+	    }
+	    {
+	      value: 'Default'
+	      label: 'Default'
+	    }
+	    {
+	      value: 'Setting,Default'
+	      label: 'Setting And Default'
+	    }
+	  ]
 
 
 # functions 
