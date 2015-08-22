@@ -35,3 +35,8 @@ Ice.Collection.RemoveInvoiceLog.permit([
 	'update'
 	'remove'
 ]).ice_ifGeneral().apply()
+Ice.Collection.EndOfProcess.permit([
+	'insert'
+	'update'
+	'remove'
+]).ice_ifGeneral().apply()

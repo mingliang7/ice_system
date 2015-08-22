@@ -1,5 +1,6 @@
 Ice.Collection.Order.after.insert(function(userId, doc){
   Meteor.defer(function(){
+    Meteor._sleepForMs(2000);
     doc.createdAt = new Date();
     doc.branchId = '001';
 		setOrderGroup(doc);
@@ -34,7 +35,7 @@ getRank = function(date, type) {
             lastDate = new Date(now.getFullYear(), now.getMonth() +1,0)
             endDate = moment(lastDate).format('YYYY-MM-DD');
             break
-          }else if(i + type >= 26){
+          }else if(i + type > 30){
             lastDate = new Date(now.getFullYear(), now.getMonth() +1,0)
             endDate = moment(lastDate).format('YYYY-MM-DD');
             break      

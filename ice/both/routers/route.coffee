@@ -192,3 +192,14 @@ Router.route 'ice/invoice_generals',
 		sub: ''
 	icon: 'report'
 	title: 'Invoice General'
+
+Router.route 'ice/end_of_process',
+	->
+		@render 'ice_endOfProcess'
+
+	name: 'ice.endOfProcess'
+	header:
+		title: 'End of Process'
+		sub: ''
+	icon: 'Process'
+	title: 'End of Process'

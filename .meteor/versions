@@ -91,7 +91,7 @@ meteorhacks:subs-manager@1.4.0
 minifiers@1.1.5
 minimongo@1.0.8
 mizzao:bootboxjs@4.4.0
-mizzao:timesync@0.3.1
+mizzao:timesync@0.3.3
 mizzao:user-status@0.6.4
 mobile-status-bar@1.0.3
 momentjs:moment@2.10.3
@@ -107,6 +107,8 @@ observe-sequence@1.0.6
 ongoworks:security@1.1.0
 ordered-dict@1.0.3
 ovcharik:alertifyjs@1.4.1
+pfafman:filesaver@0.1.0
+phirum:backup-restore@0.0.1
 rainhaven:iron-seo@1.0.1
 raix:eventemitter@0.1.2
 raix:handlebar-helpers@0.2.4
@@ -123,6 +125,7 @@ sacha:spin@2.3.1
 service-configuration@1.0.4
 session@1.1.0
 sha@1.0.3
+silentcicero:jszip@0.0.4
 simple:reactive-method@1.0.2
 spacebars@1.0.6
 spacebars-compiler@1.0.6
