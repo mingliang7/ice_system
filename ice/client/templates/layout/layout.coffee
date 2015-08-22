@@ -1,18 +1,15 @@
 Template.ice_navbar.helpers
 	notification: () ->
-		general = Ice.Collection.Order.find({closing: false}).count()
-		# date = new Date().getDate() - 1 
-		# today = moment(new Date(new Date().setDate(date))).format('YYYY-MM-DD')
-		group = Ice.Collection.OrderGroup.find({closing: false}).count()
-		general + group 
+		general = Counts.get('generalCount')
+		group = Counts.get('groupCount')
+		general + group		
 	generalNotification: () ->
-		Ice.Collection.Order.find({closing: false}).count()
+		Counts.get('generalCount');
 
 	groupNotification: () ->
 		# date = new Date().getDate() - 1 
 		# today = moment(new Date(new Date().setDate(date))).format('YYYY-MM-DD')
-		Ice.Collection.OrderGroup.find({closing: false}).count()
-
+		Counts.get('groupCount');
 	isAdmin: () ->
 		admin = false
 		userId = Meteor.userId()
