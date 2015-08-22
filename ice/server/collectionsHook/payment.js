@@ -1,5 +1,6 @@
 Ice.Collection.Payment.after.insert(function (userId, doc) {
     Meteor.defer(function(){
+      Meteor._sleepForMs(1000);
         if (doc.outstandingAmount != 0) {
             doc.status = "Partial";
         } else {

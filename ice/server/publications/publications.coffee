@@ -22,3 +22,6 @@ Meteor.publish 'ice_staff', ->
 
 Meteor.publish 'ice_removeInvoiceLog', ->
 	Ice.Collection.RemoveInvoiceLog.find() if @userId
+
+Meteor.publish 'ice_endOfProcess', ->
+	Ice.Collection.EndOfProcess.find() if @userId
