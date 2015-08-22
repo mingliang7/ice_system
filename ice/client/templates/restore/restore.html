@@ -1,0 +1,21 @@
+
+<template name="ice_restore">
+        {{#autoForm schema=Ice.Schema.Restore id="ice_restore"}}
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="file-restore">Select a ZIP File:</label>
+                    <input id="file-restore" type="file"/><br/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{> afQuickField name='branch'}}
+                </div>
+                <div class="col-md-6">
+                    {{> afQuickField name='restoreType'}}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Restore</button>
+            <button type="reset" class="btn btn-default">Reset</button>
+        {{/autoForm}}
+</template>

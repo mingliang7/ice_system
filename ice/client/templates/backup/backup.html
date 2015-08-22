@@ -1,0 +1,14 @@
+<template name="ice_backup">
+    {{#autoForm schema=Ice.Schema.Backup id="ice_backup"}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name='branch'}}
+            </div>
+            <div class="col-md-6">
+                {{> afQuickField name='backupType'}}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" >Backup</button>
+        <button type="reset" class="btn btn-default">Reset</button>
+    {{/autoForm}}
+</template>
