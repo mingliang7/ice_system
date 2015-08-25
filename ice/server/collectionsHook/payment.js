@@ -1,3 +1,8 @@
+Ice.Collection.Payment.before.insert(function (userId, doc){
+  var prefix = doc.branchId + '-'; 
+  doc._id = idGenerator.genWithPrefix(Ice.Collection.Payment, prefix, 12);
+});
+
 Ice.Collection.Payment.after.insert(function (userId, doc) {
     Meteor.defer(function(){
       Meteor._sleepForMs(1000);

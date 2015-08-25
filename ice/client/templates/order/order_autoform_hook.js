@@ -10,8 +10,8 @@ generateReport = function(id) {
 };
 
 generatePayment = function(id){
-  doc = Ice.Collection.Order.findOne(id)
   setTimeout(function(){
+    doc = Ice.Collection.Order.findOne(id)
     alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, doc))
   },200);
 }
@@ -85,9 +85,6 @@ AutoForm.hooks({
   ice_orderInsertTemplate: {
     before: {
       insert: function(doc) {
-        var prefix;
-        prefix = "" + (Session.get('currentBranch')) + "-";
-        doc._id = idGenerator.genWithPrefix(Ice.Collection.Order, prefix, 12);
         doc.branchId = Session.get('currentBranch');
         if(checkType(doc.iceCustomerId) == 'general'){
           doc.paidAmount = 0;
@@ -99,25 +96,14 @@ AutoForm.hooks({
       }
     },
     after: { // generate report or payment 
-      insert: function(err, id) {
+      insert: function(err, _id) {
         if (err) {
           Print.set('print', false);
           Print.set('pay', false)
         } else {
-          print = Print.get('print');
-          pay = Print.get('pay');
-          saveNpay = Print.get('saveNpay');
-          if (print === true) {
-            generateReport(id);
-            return Print.set('print', false);
-          }else if (pay == true){
-            Print.set('pay', false);
-            generatePayment(id);
-            Session.set('invioceReportId', id)
-          }else if (saveNpay == true){
-            Print.set('saveNpay', false);
-            generatePayment(id)
-          }
+          setTimeout(function(){
+            checkIfReady();
+          }, 1000);
         }
       }
     },
@@ -208,7 +194,6 @@ var insertNewDocToOldOrder = function (oldDoc, newDoc){ //insert a new doc to ol
   var date = moment(newDoc.orderDate).format('YYYY-MM-DD')
   for(var k in oldDoc.groupBy['day' + date].items){
     if(order.items[k] != undefined){
-      debugger
       oldDoc.groupBy['day' + date].items[k] = {
         name: oldDoc.groupBy['day' + date].items[k].name,
         price: order.items[k].price,
@@ -297,3 +282,30 @@ rangeDate = function(date, type) {
       return getRank(date, 30);
   }
 };
+
+
+var checkIfReady = function(){
+  var id = undefined;
+  Meteor.call('getOrderId', arguments, function(err, id){
+    if (err) {
+      console.log(err);
+    }else{
+      print = Print.get('print');
+      pay = Print.get('pay');
+      saveNpay = Print.get('saveNpay');
+      if (print === true) {
+        generateReport(id);
+        return Print.set('print', false);
+      }else if (pay == true){
+        Print.set('pay', false);
+        generatePayment(id);
+        Session.set('invioceReportId', id)
+      }else if (saveNpay == true){
+        Print.set('saveNpay', false);
+        generatePayment(id)
+      }
+    }
+  });
+}
+
+

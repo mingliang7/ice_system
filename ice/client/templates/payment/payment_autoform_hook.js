@@ -64,9 +64,6 @@ AutoForm.hooks({
   ice_paymentInsertTemplate: {
     before: {
       insert: function(doc) {
-        var prefix;
-        prefix = "" + (Session.get('currentBranch')) + "-";
-        doc._id = idGenerator.genWithPrefix(Ice.Collection.Payment, prefix, 12);
         doc.branchId = Session.get('currentBranch');
         return doc;
       }
