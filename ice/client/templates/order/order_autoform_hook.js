@@ -5,7 +5,7 @@ this.Print = new ReactiveObj();
 generateReport = function(id) {
   var doc, q, url;
   doc = Ice.Collection.Order.findOne(id);
-  url = "invoiceReportGen?orderId=" + id + "&customerId=" + doc.iceCustomerId + "&date=" + (moment(doc.createdAt).format('YYYY-MM-DD HH:mm:ss'));
+  url = "invoiceReportGen/" + id;
   return window.open(url, '_blank');
 };
 

@@ -6,7 +6,7 @@ Router.route('ice/invoiceReport', function () {
     title: "Invoice Report"
 });
 
-Router.route('ice/invoiceReportGen', function () {
+Router.route('ice/invoiceReportGen/:id', function () {
     // Config layout
     this.layout('reportLayout', {
         // Page size: a4, a5, mini
@@ -19,10 +19,8 @@ Router.route('ice/invoiceReportGen', function () {
         }
     });
 
-    var q = this.params.query;
+
     this.render('ice_invoiceReportGen', {
-        data: function () {
-            return q;
-        }
+      
     },{name: 'ice.invoiceReportGen'});
 });
