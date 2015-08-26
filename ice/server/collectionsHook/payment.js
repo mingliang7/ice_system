@@ -1,5 +1,5 @@
 Ice.Collection.Payment.before.insert(function (userId, doc){
-  var prefix = doc.branchId + '-'; 
+  var prefix = '001-'; 
   doc._id = idGenerator.genWithPrefix(Ice.Collection.Payment, prefix, 12);
 });
 
