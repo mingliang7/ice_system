@@ -18,10 +18,6 @@ Ice.TabularTable.Payment = new (Tabular.Table)(
       tmpl: Meteor.isClient and Template.ice_paymentAction
     }
     {
-      data: '_id'
-      title: 'ID'
-    }
-    {
       data: 'paymentDate'
       title: 'Payment Date'
     }
@@ -32,7 +28,7 @@ Ice.TabularTable.Payment = new (Tabular.Table)(
     }
     {
       data: 'orderId_orderGroupId'
-      title: 'Invoice ID'
+      title: 'Order ID'
     }
 		{
 			data: 'dueAmount'
