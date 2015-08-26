@@ -102,7 +102,7 @@ AutoForm.hooks({
           Print.set('pay', false)
         } else {
           setTimeout(function(){
-            checkIfReady();
+            checkIfReady(_id);
           }, 1000);
         }
       }
@@ -284,9 +284,9 @@ rangeDate = function(date, type) {
 };
 
 
-var checkIfReady = function(){
+var checkIfReady = function(aid){
   var id = undefined;
-  Meteor.call('getOrderId', arguments, function(err, id){
+  Meteor.call('getOrderId', aid, function(err, id){
     if (err) {
       console.log(err);
     }else{

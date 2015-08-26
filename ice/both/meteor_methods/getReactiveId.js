@@ -1,5 +1,5 @@
 Meteor.methods({
-	getOrderId: function(){
-		return StateId.get('orderId')
+	getOrderId: function(id){
+		return StateId.get('' + id)
 	}
 });

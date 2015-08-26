@@ -1,7 +1,8 @@
 Ice.Collection.Order.before.insert(function (userId, doc){
+  var id = doc._id;
   var prefix = doc.branchId + '-';
   doc._id = idGenerator.genWithPrefix(Ice.Collection.Order, prefix, 12);
-  StateId.set({orderId: doc._id})
+  StateId.set(id + '', doc._id)
 });
 
 Ice.Collection.Order.before.update(function(userId, doc, fieldNames, modifier,options){
