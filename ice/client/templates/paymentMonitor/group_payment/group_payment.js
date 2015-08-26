@@ -11,7 +11,7 @@ findCustomer = function(id) {
 };
 
 Template.ice_paymentGroupMonitor.onRendered(function() {
-  Session.set('invioceReportId', null)
+  Session.set('invioceReportId', undefined)
   createNewAlertify(['groupSearch', 'paymentPopUP']);
   return Session.set('checked', false);
 });

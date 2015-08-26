@@ -23,8 +23,8 @@
 Template.ice_invoiceReportGen.helpers({
     data: function () {
         var id = Router.current().params.id;
-        var self = Ice.Collection.Order.findOne(id);
-        var splitDate = self.orderDate.split(' ');
+        var getOrder = Ice.Collection.Order.findOne(id);
+        var splitDate = getOrder.orderDate.split(' ');
         var date = splitDate[0];
         var time = splitDate[1];
         console.log(splitDate);
@@ -45,20 +45,19 @@ Template.ice_invoiceReportGen.helpers({
 
         /********* Header ********/
         var type = '';
-        var getOrder = self;
          
-                // var getGroup = Ice.Collection.OrderGroup.findOne({_id: self.groupId, iceCustomerId: self.customerId, startDate: {$lt: self.endDate}, endDate:{$gt: self.startDate}});
+                // var getGroup = Ice.Collection.OrderGroup.findOne({_id: getOrder.groupId, iceCustomerId: getOrder.customerId, startDate: {$lt: getOrder.endDate}, endDate:{$gt: getOrder.startDate}});
         // dueDate = '' + getGroup.startDate + '-' + getGroup.endDate;
         
-        if(self._customer.customerType !== 'general'){
-            type = self._customer.customerType + ' ថ្ងៃ';
+        if(getOrder._customer.customerType !== 'general'){
+            type = getOrder._customer.customerType + ' ថ្ងៃ';
         }
         else{
             type = 'general';
         }
         data.header = [
-            {col1: '#: ' + self._id, col2: 'បុគ្គលិក: ' + getOrder._staff.name },
-            {col1: 'អតិថិជន: ' + self._customer.name, col2: 'ប្រភេទ: ' + type},
+            {col1: '#: ' + getOrder._id, col2: 'បុគ្គលិក: ' + getOrder._staff.name },
+            {col1: 'អតិថិជន: ' + getOrder._customer.name, col2: 'ប្រភេទ: ' + type},
             { col1: 'កាលបរិច្ឆេទ: ' + date, col2: 'ម៉ោង: ' + time }
         ];
 

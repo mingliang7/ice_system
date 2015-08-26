@@ -13,7 +13,7 @@ AutoForm.hooks({
       alertify.paymentPopUP().close();
       if(!_.isUndefined(id)){
         GenReport(id);
-        Session.set('invioceReportId', null)
+        Session.set('invioceReportId', undefined)
       }
     },
     onError: function(formType, error) {
