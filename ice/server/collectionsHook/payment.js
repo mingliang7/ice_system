@@ -30,7 +30,7 @@ Ice.Collection.Payment.after.update(function (userId, doc, fieldNames, modifier,
     Meteor.defer(function(){
       Meteor._sleepForMs(2000);
       updateInvoice(oldDoc, modifier.$set);
-    })
+    });
     console.log('Payment Defer started');
 });
 //Before insert bring to _payment detail to order

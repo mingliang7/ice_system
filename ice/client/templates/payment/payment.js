@@ -33,22 +33,12 @@ Template.ice_payment.events({
   'click .update': function(){
   	var flag = checkAvailablity(this);
     var id = this._id;
-    Meteor.call('updatePayment', id, function(err, doc){
-      if(err){
-        console.log(err);
-      }else{
-        if(flag) {
-          Ice.ListForReportState.set('customer', doc.customerId)
-          Session.set('checkIfUpdate', true);
-          Payment.set('paymentPaidAmount', doc.paidAmount); // parsing old paid amount tot payment_autoform_hook.js
-          Payment.set('paymentInvoiceId', doc.orderId_orderGroupId);// parsing old paid amount tot payment_autoform_hook.js
-          Payment.set('paymentId', doc._id); //parsing id to paymentDetail()
-          Router.go('ice.ice_paymentUpdate',{id: doc._id});
-      	}else{
-      		alertify.warning('Sorry! invoice ' + doc._id + ' is not a last record :( ')
-      	}
-      }
-    });
+    if(flag) {
+        Session.set('checkIfUpdate', true);
+        Router.go('ice.ice_paymentUpdate',{id: id});
+    }else{
+    		alertify.warning('Sorry! invoice ' + doc._id + ' is not a last record :( ')
+    }
   }
 });
 

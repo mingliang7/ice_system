@@ -74,7 +74,12 @@ Router.route 'ice/edit/payment/:id',
 		@render 'ice_paymentUpdateTemplate'
 	name: 'ice.ice_paymentUpdate'
 	data: ->
-		Ice.Collection.Payment.findOne(this.params.id)
+		Meteor.call 'updatePayment', @params.id, (err, result) ->
+			if(err)
+				console.log(err)
+			else
+				Session.set('paymentUpdateObj', result)
+		Session.get('paymentUpdateObj')
 	header:
 		title: 'payment'
 		sub: ''

@@ -52,9 +52,14 @@ Template.list_invoices.helpers({
     var date, invoices, today;
     // date = new Date().getDate() - 1;
     // today = moment(new Date(new Date().setDate(date))).format('YYYY-MM-DD');
-    invoices = Ice.Collection.OrderGroup.find({
-      closing: false
-    }, {limit: 20}).fetch();
+    Meteor.call('groupMonitor', arguments, function(err, results){
+      if(err){
+        console.log(err);
+      } else {
+        Session.set('groupMonitorFetch', results);
+      }
+    });
+    invoices = Session.get('groupMonitorFetch');
     $.each(invoices, function(index, invoice) {
       return invoice.index = index;
     });
@@ -154,4 +159,3 @@ Template.filteredGroupPayment.events({
     return instance.triggerSearch();
   }
 });
-

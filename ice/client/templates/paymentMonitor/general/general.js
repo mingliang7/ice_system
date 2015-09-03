@@ -48,13 +48,14 @@ Template.general_invoices.helpers({
   invoices: function() {
     var invoices, today;
     today = moment(new Date()).format('YYYY-MM-DD');
-    invoices = Ice.Collection.Order.find({
-      closing: false
-    }, {
-      sort: {
-        orderDate: -1
+    Meteor.call('generalMonitor', arguments, function(err, results){
+      if(err){
+        console.log(err);
+      }else{
+        Session.set('generalMonitorFetch', results);
       }
-    , limit: 20}).fetch();
+    });
+    invoices = Session.get('generalMonitorFetch');
     $.each(invoices, function(index, invoice) {
       return invoice.index = index;
     });
