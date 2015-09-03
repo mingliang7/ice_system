@@ -1,5 +1,5 @@
 Session.setDefault('customer', '');
-Payment = new ReactiveObj();
+
 Template.ice_paymentInsertTemplate.onRendered(function() {
   return createNewAlertify(['staffAddOn','invoiceAddOn','customerAddOn']);
 });
@@ -32,17 +32,23 @@ Template.ice_payment.events({
   },
   'click .update': function(){
   	var flag = checkAvailablity(this);
-    doc = Ice.Collection.Payment.findOne(this._id);
-    if(flag) {
-      Ice.ListForReportState.set('customer', doc.customerId)
-      Session.set('checkIfUpdate', true); 
-      Payment.set('paymentPaidAmount', doc.paidAmount); // parsing old paid amount tot payment_autoform_hook.js
-      Payment.set('paymentInvoiceId', doc.orderId_orderGroupId);// parsing old paid amount tot payment_autoform_hook.js
-      Payment.set('paymentId', doc._id); //parsing id to paymentDetail()
-      Router.go('ice.ice_paymentUpdate',{id: doc._id});
-  	}else{
-  		alertify.warning('Sorry! invoice ' + doc._id + ' is not a last record :( ')
-  	}
+    var id = this._id;
+    Meteor.call('updatePayment', id, function(err, doc){
+      if(err){
+        console.log(err);
+      }else{
+        if(flag) {
+          Ice.ListForReportState.set('customer', doc.customerId)
+          Session.set('checkIfUpdate', true);
+          Payment.set('paymentPaidAmount', doc.paidAmount); // parsing old paid amount tot payment_autoform_hook.js
+          Payment.set('paymentInvoiceId', doc.orderId_orderGroupId);// parsing old paid amount tot payment_autoform_hook.js
+          Payment.set('paymentId', doc._id); //parsing id to paymentDetail()
+          Router.go('ice.ice_paymentUpdate',{id: doc._id});
+      	}else{
+      		alertify.warning('Sorry! invoice ' + doc._id + ' is not a last record :( ')
+      	}
+      }
+    });
   }
 });
 
@@ -69,7 +75,7 @@ Template.ice_paymentInsertTemplate.events({
   'change [name="orderId_orderGroupId"]': function(e) {
     var currentInvoice, currentInvoiceId, type;
     currentInvoiceId = $(e.currentTarget).val();
-    datePicker(currentInvoiceId);    
+    datePicker(currentInvoiceId);
     type = Ice.ListForReportState.get('type');
     if (type === 'general') {
       currentInvoice = Ice.Collection.Order.findOne(currentInvoiceId);
@@ -90,7 +96,7 @@ Template.ice_paymentInsertTemplate.events({
     try{
       paidAmount = $('[name="paidAmount"]').val();
     }catch(e){
-      console.log(e)     
+      console.log(e)
     }
     dueAmount = parseInt($('[name="dueAmount"]').val());
     if (parseInt(paidAmount) > dueAmount) {
@@ -119,7 +125,12 @@ Template.ice_paymentUpdateTemplate.events({
     }
 	}
 });
-
+Template.ice_paymentUpdateTemplate.helpers({
+  getCustomer: function (id){
+    var customer = Ice.Collection.Customer.findOne(id);
+    return customer._id + ' | ' + customer.name;
+  }
+});
 Template.ice_paymentShowTemplate.helpers({
   format: function(value) {
     return numeral(value).format('0,0');
@@ -145,13 +156,13 @@ var removeDoc = function(doc) {
             if(checkType(doc) == 'general'){
               removeOrderPayment(doc);
             }else{
-              removeOrderGroupPayment(doc);     
-            }         
+              removeOrderGroupPayment(doc);
+            }
              alertify.message('Successfully remove')
         });
         }, null);
 
-} 
+}
 
 var checkType = function(customer){
   customerId = customer.customerId
@@ -160,13 +171,13 @@ var checkType = function(customer){
 
 var checkAvailablity = function(doc){
   	var currentPayment = doc.paymentDate;
-  	var flag = undefined; 
+  	var flag = undefined;
   	var payments = Ice.Collection.Payment.find({customerId: doc.customerId, orderId_orderGroupId: doc.orderId_orderGroupId});
   	payments.forEach(function (payment) {
   		flag = (currentPayment >= payment.paymentDate) ? true : false
   	});
   	return flag;
-} 
+}
 //remove payment and update order
 var onRemoved = function(doc){
  removeDoc(doc);
@@ -190,23 +201,23 @@ var removeOrderGroupPayment = function(doc){
   delete oldPaymentDetail[doc._id];
    var oldOrder = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId);
   if($.isEmptyObject(oldPaymentDetail)){
-    Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId}, 
+    Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId},
               {$unset: {_payment: ''},
-                $set: 
+                $set:
                 {
-                  paidAmount: oldOrder.paidAmount - doc.paidAmount, 
-                  outstandingAmount: doc.paidAmount + doc.outstandingAmount, 
+                  paidAmount: oldOrder.paidAmount - doc.paidAmount,
+                  outstandingAmount: doc.paidAmount + doc.outstandingAmount,
                   closing: false, closingDate: 'none'
                 }
               });
   }else{
-    Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId}, 
+    Ice.Collection.OrderGroup.update({_id: doc.orderId_orderGroupId},
             {
-              $set: 
+              $set:
               {
                 _payment: oldPaymentDetail,
-                paidAmount: oldOrder.paidAmount - doc.paidAmount, 
-                outstandingAmount: doc.paidAmount + doc.outstandingAmount, 
+                paidAmount: oldOrder.paidAmount - doc.paidAmount,
+                outstandingAmount: doc.paidAmount + doc.outstandingAmount,
                 closing: false, closingDate: 'none'
               }
             });

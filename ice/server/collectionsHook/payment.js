@@ -25,13 +25,19 @@ Ice.Collection.Payment.before.update(function (userId, doc, fieldNames, modifier
         modifier.$set.status = "Close";
     }
 });
-
+Ice.Collection.Payment.after.update(function (userId, doc, fieldNames, modifier, options) {
+    var oldDoc = this.previous
+    Meteor.defer(function(){
+      Meteor._sleepForMs(2000);
+      updateInvoice(oldDoc, modifier.$set);
+    })
+    console.log('Payment Defer started');
+});
 //Before insert bring to _payment detail to order
 var invoiceUpdate, orderGroupInvoiceUpdate, orderInvoiceUpdate;
 orderInvoiceUpdate = function(doc) {
   var newDate = doc.paymentDate;
   var oldPaymentDetail = Ice.Collection.Order.findOne(doc.orderId_orderGroupId);
-  console.log(oldPaymentDetail.paidAmount);
   var payment = paymentDetail(oldPaymentDetail, doc); //extract payment detail
   if (doc.outstandingAmount === 0) {
     return Ice.Collection.Order.direct.update({
@@ -113,6 +119,96 @@ var paymentDetail = function(oldPaymentDetail, doc){
       dueAmount: doc.dueAmount,
       paidAmount: doc.paidAmount,
       outstandingAmount: doc.outstandingAmount
+  }
+  return payment;
+}
+
+//after update
+var checkType = function(customerId){
+  return Ice.Collection.Customer.findOne(customerId).customerType;
+}
+
+// Before update
+var updateInvoice = function(oldDoc, doc){
+  console.log(doc);
+  var invoiceId = oldDoc.orderId_orderGroupId;
+  var oldPaidAmount = oldDoc.paidAmount;
+  customerId = oldDoc.customerId;
+  if(checkType(customerId) == 'general'){
+    var oldOrder = Ice.Collection.Order.findOne(invoiceId);
+    var newPaidAmount = 0;
+    var outstandingAmount = 0;
+    var payment = paymentDetailUpdate(oldOrder._payment,oldDoc, doc); // update _payment
+    if(oldPaidAmount > doc.paidAmount){
+      newPaidAmount = oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount);
+      outstandingAmount = doc.dueAmount - doc.paidAmount
+    }else{
+      newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
+      outstandingAmount = doc.dueAmount - doc.paidAmount
+    }
+    var newDate = doc.paymentDate;
+    var closing = ( outstandingAmount == 0) ? true : false;
+    var closingDate = (outstandingAmount == 0) ? newDate : 'none';
+    Ice.Collection.Order.update({_id: invoiceId},
+      {$set: {
+        _payment: payment,
+        paidAmount: newPaidAmount,
+        outstandingAmount: outstandingAmount,
+        closing: closing,
+        closingDate: closingDate}
+      }
+    );
+
+  }else{
+    var oldOrder = Ice.Collection.OrderGroup.findOne(invoiceId);
+    var payment = paymentDetailUpdate(oldOrder._payment, oldDoc, doc)
+    var newPaidAmount = 0;
+    var outstandingAmount = 0;
+    if(oldPaidAmount > doc.paidAmount){
+      newPaidAmount = oldOrder.paidAmount - (oldPaidAmount - doc.paidAmount);
+      outstandingAmount = doc.dueAmount - doc.paidAmount
+    }else{
+      newPaidAmount = (doc.paidAmount - oldPaidAmount) + oldOrder.paidAmount;
+      outstandingAmount = doc.dueAmount - doc.paidAmount
+    }
+    var newDate = doc.paymentDate;
+    var closing = ( outstandingAmount == 0) ? true : false;
+    var closingDate = (outstandingAmount == 0) ? newDate : 'none';
+    Ice.Collection.OrderGroup.update({_id: invoiceId},
+      {$set:
+        {paidAmount: newPaidAmount,
+          _payment: payment,
+          outstandingAmount: outstandingAmount,
+          closing: closing,
+          closingDate: closingDate
+        }
+      }
+    );
+  }
+}
+
+
+var paymentDetailUpdate = function(oldPaymentDetail, oldDoc, doc){
+  var payment = oldPaymentDetail == undefined ? {} : oldPaymentDetail // check if oldPaymentDetail exist
+  var id = oldDoc._id;
+  if(id != undefined){
+    payment[id] = {
+      customerId: doc.customerId,
+      staff: doc.staffId,
+      date: doc.paymentDate,
+      dueAmount: doc.dueAmount,
+      paidAmount: doc.paidAmount,
+      outstandingAmount: doc.outstandingAmount
+    }
+  }else{
+     payment[doc._id] = {
+      customerId: doc.customerId,
+      staff: doc.staffId,
+      date: doc.paymentDate,
+      dueAmount: doc.dueAmount,
+      paidAmount: doc.paidAmount,
+      outstandingAmount: doc.outstandingAmount
+    }
   }
   return payment;
 }

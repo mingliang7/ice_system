@@ -92,14 +92,8 @@
                 <div class="form-group{{#if afFieldIsInvalid name='customerId'}} has-error{{/if}}" data-required="true">
                     <label class="control-label" for="customerId">Customer</label>
 
-                    <div class="input-group  select2-bootstrap-append">
-                        {{> afFieldInput name='customerId' disabled="true" class="customerId input-sm"}}
-                        <span class="input-group-addon">
-                            <a href="#" class="invoiceAddOn">
-                                {{fa "plus"}}
-                            </a>
-                        </span>
-                    </div>
+                    <input type="text" name="some_name" value={{getCustomer customerId}} readonly="true" class="form-control">
+                    {{> afFieldInput name='customerId' type="hidden" class="customerId input-sm"}}
                     {{#if afFieldIsInvalid name='customerId'}}
                         <span class="help-block">{{afFieldMessage name='customerId'}}</span>
                     {{/if}}
@@ -107,15 +101,8 @@
 
                 <div class="form-group{{#if afFieldIsInvalid name='orderId_orderGroupId'}} has-error{{/if}}" data-required="true">
                     <label class="control-label" for="orderId_orderGroupId">invoice ID</label>
-
-                    <div class="input-group  select2-bootstrap-append">
-                        {{> afFieldInput name='orderId_orderGroupId' disabled="true" class="orderId_orderGroupId input-sm"}}
-                        <span class="input-group-addon">
-                            <a href="#" class="invoiceAddOn">
-                                {{fa "plus"}}
-                            </a>
-                        </span>
-                    </div>
+                    <input type="text" name="some_name" value={{orderId_orderGroupId}} readonly="true" class="form-control">
+                    {{> afFieldInput name='orderId_orderGroupId' type="hidden" class="orderId_orderGroupId input-sm"}}
                     {{#if afFieldIsInvalid name='orderId_orderGroupId'}}
                         <span class="help-block">{{afFieldMessage name='orderId_orderGroupId'}}</span>
                     {{/if}}
@@ -169,4 +156,3 @@
         <dd>{{paymentDate}}</dd>
     </dl>
 </template>
-
