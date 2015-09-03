@@ -1,16 +1,16 @@
 Ice.Collection.Payment.before.insert(function (userId, doc){
-  var prefix = '001-'; 
+  var prefix = '001-';
+  if (doc.outstandingAmount != 0) {
+      doc.status = "Partial";
+  } else {
+      doc.status = "Close";
+  }
   doc._id = idGenerator.genWithPrefix(Ice.Collection.Payment, prefix, 12);
 });
 
 Ice.Collection.Payment.after.insert(function (userId, doc) {
     Meteor.defer(function(){
       Meteor._sleepForMs(1000);
-        if (doc.outstandingAmount != 0) {
-            doc.status = "Partial";
-        } else {
-            doc.status = "Close";
-        }
         invoiceUpdate(doc);
     });
     return console.log('Defer started');
@@ -114,5 +114,5 @@ var paymentDetail = function(oldPaymentDetail, doc){
       paidAmount: doc.paidAmount,
       outstandingAmount: doc.outstandingAmount
   }
-  return payment; 
+  return payment;
 }
