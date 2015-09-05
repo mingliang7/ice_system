@@ -2,9 +2,9 @@
  * Welcome
  */
 // Server clock
-Template.cpanel_welcome.onRendered(function () {
-    Meteor.setInterval(serverClock, 1000);
-});
+// Template.cpanel_welcome.onRendered(function () {
+//     Meteor.setInterval(serverClock, 1000);
+// });
 
 Template.cpanel_welcome.helpers({
     role: function () {

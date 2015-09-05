@@ -11,8 +11,9 @@ generateReport = function(id) {
 
 generatePayment = function(id){
   setTimeout(function(){
-    doc = Ice.Collection.Order.findOne(id)
-    alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, doc))
+    Meteor.call('orderId', id, function(err, doc){
+      alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, doc));
+    });
   },200);
 }
 this.GenReport = generateReport;

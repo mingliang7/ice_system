@@ -31,7 +31,10 @@ Template.ice_orderInsertTemplate.onRendered ->
       $('.importPayment').hide()
   createNewAlertify(['staffAddOn','customerAddOn', 'paymentPopUP'])
   datePicker()
-
+Template.ice_order.helpers
+  selector: ->
+    Tracker.nonreactive ->
+      {}
 Template.ice_order.events
   "click .insert": ->
     Router.go('ice.customer')
