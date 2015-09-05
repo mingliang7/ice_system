@@ -60,26 +60,27 @@ Template.ice_paymentInsertTemplate.events({
     } else {
       $('[name="orderId_orderGroupId"]').attr('disabled', true);
     }
-    return Ice.ListForReportState.set('customer', customer);
+    Session.set('customer', customer);
   },
   'change [name="orderId_orderGroupId"]': function(e) {
-    var currentInvoice, currentInvoiceId, type;
-    currentInvoiceId = $(e.currentTarget).val();
-    datePicker(currentInvoiceId);
-    type = Ice.ListForReportState.get('type');
-    if (type === 'general') {
-      currentInvoice = Ice.Collection.Order.findOne(currentInvoiceId);
-      Session.set('oldPaidAmount', currentInvoice.paidAmount);
-      $('[name="dueAmount"]').val(currentInvoice.outstandingAmount);
-      $('[name="paidAmount"]').val(currentInvoice.outstandingAmount);
-      $('[name="outstandingAmount"]').val(0);
-    } else {
-      currentInvoice = Ice.Collection.OrderGroup.findOne(currentInvoiceId);
-      Session.set('oldPaidAmount', currentInvoice.paidAmount);
-      $('[name="dueAmount"]').val(currentInvoice.outstandingAmount);
-      $('[name="paidAmount"]').val(currentInvoice.outstandingAmount);
-      $('[name="outstandingAmount"]').val(0);
-    }
+      var currentInvoice, currentInvoiceId, type;
+      currentInvoiceId = $(e.currentTarget).val();
+      datePicker(currentInvoiceId);
+      type = Ice.ListForReportState.get('type');
+
+      if (type === 'general') {
+        Meteor.call('orderId',currentInvoiceId, function(err,currentInvoice){
+          $('[name="dueAmount"]').val(currentInvoice.outstandingAmount);
+          $('[name="paidAmount"]').val(currentInvoice.outstandingAmount);
+          $('[name="outstandingAmount"]').val(0);
+        });
+      } else {
+        Meteor.call('orderGroupId', currentInvoiceId, function(err,currentInvoice){
+          $('[name="dueAmount"]').val(currentInvoice.outstandingAmount);
+          $('[name="paidAmount"]').val(currentInvoice.outstandingAmount);
+          $('[name="outstandingAmount"]').val(0);
+        });
+      }
   },
   'keyup [name="paidAmount"]': function() {
     var dueAmount, paidAmount;
@@ -115,6 +116,15 @@ Template.ice_paymentUpdateTemplate.events({
     }
 	}
 });
+Template.ice_paymentInsertTemplate.helpers({
+  invoiceOption: function(){
+    if(Session.get('customer')){
+      invoice = ReactiveMethod.call('invoice', false, Session.get('customer'));
+      Ice.ListForReportState.set('type', invoice.type)
+      return invoice.list;
+    }
+  }
+})
 Template.ice_paymentUpdateTemplate.helpers({
   getCustomer: function (id){
     var customer = Ice.Collection.Customer.findOne(id);
@@ -143,20 +153,21 @@ var removeDoc = function(doc) {
   var doc = doc;
   alertify.confirm((fa('remove'), 'Remove Payment'), 'Are you sure to remove' + doc._id + '?', function(){
 	  		Ice.Collection.Payment.remove(doc._id, function(error){
-            if(checkType(doc) == 'general'){
-              removeOrderPayment(doc);
-            }else{
-              removeOrderGroupPayment(doc);
-            }
-             alertify.message('Successfully remove')
+            checkType(doc) 
+            alertify.message('Successfully remove')
         });
         }, null);
 
 }
 
-var checkType = function(customer){
-  customerId = customer.customerId
-	return Ice.Collection.Customer.findOne(customerId).customerType;
+var checkType = function(doc){
+   Meteor.call("getCustomerType", doc, function(err, result){
+    if(result.type == 'general'){
+      removeOrderPayment(result.data);
+    }else{
+      removeOrderGroupPayment(result.data);
+    }
+   });
 }
 
 var checkAvailablity = function(doc){
@@ -184,14 +195,17 @@ var removeOrderGroupPayment = function(doc){
 }
 
 var datePicker = function(currentInvoiceId){
-  maxDate = '';
-  payments = Ice.Collection.Payment.find({orderId_orderGroupId: currentInvoiceId});
-  if(payments != undefined){
-    payments.forEach(function (payment) {
-      maxDate = maxDate > payment.paymentDate ? maxDate : payment.paymentDate
+    Meteor.call('payment', currentInvoiceId, function(err, payments){
+      maxDate = '';
+      if(payments != undefined){
+        payments.forEach(function (payment) {
+          maxDate = maxDate > payment.paymentDate ? maxDate : payment.paymentDate
+        });
+        maxDate;
+      }
+      var paymentDate = $('[name="paymentDate"]')
+      console.log(maxDate);
+      return DateTimePicker.dateTime(paymentDate)
+      // return maxDate == '' ? DateTimePicker.dateTime(paymentDate) : paymentDate.data('DateTimePicker').minDate(maxDate);
     });
-    maxDate;
-  }
-  var paymentDate = $('[name="paymentDate"]')
-  return maxDate == '' ? DateTimePicker.dateTime(paymentDate) : paymentDate.data('DateTimePicker').minDate(maxDate);
 }

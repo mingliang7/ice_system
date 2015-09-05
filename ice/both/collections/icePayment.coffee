@@ -5,13 +5,7 @@ Ice.Schema.Payment = new SimpleSchema(
 		type: String
 		label: 'invoiceId'
 		autoform:
-			type: 'select2'
-			options: ->
-				try
-					Ice.ListForReport.invoice()
-				catch e
-					e
-				
+			type: 'select'
 
 	customerId: 
 		type: String
@@ -19,7 +13,7 @@ Ice.Schema.Payment = new SimpleSchema(
 		autoform:
 			type: 'select2'
 			options: ->
-				Ice.ListForReport.customer()
+				ReactiveMethod.call('customer')
 	staffId: 
 		type: String
 		label: 'Staff'

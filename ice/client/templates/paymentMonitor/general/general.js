@@ -21,6 +21,10 @@ Template.ice_paymentGeneralMonitor.helpers({
   }
 });
 
+Template.ice_paymentGeneralMonitor.onDestroyed(function(){
+  Session.set('checked', undefined);
+});
+
 Template.ice_paymentGeneralMonitor.events({
   'click .checkAll': function(e) {
     var value;

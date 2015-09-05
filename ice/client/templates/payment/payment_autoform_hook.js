@@ -13,6 +13,8 @@ AutoForm.hooks({
         $(this).select2('val', '');
       });
       alertify.success('successfully');
+      Session.set('payments', undefined);
+      Session.set('customer', undefined);
       Payment.set('paymentInvoiceId', null);
       Payment.set('paymentPaidAmount', null);
     },
