@@ -1,7 +1,8 @@
 Meteor.methods
   getCustomerName: (id) ->
       customer = Ice.Collection.Customer.findOne(id)
-      customer._id + ' | ' + customer.name
+      if(customer)
+        customer._id + ' | ' + customer.name
 
   getCustomer: (id) ->
     Ice.Collection.Customer.findOne(id)

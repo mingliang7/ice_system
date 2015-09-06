@@ -155,7 +155,9 @@ Template.ice_paymentInsertTemplate.helpers({
 });
 Template.ice_paymentUpdateTemplate.helpers({
   getCustomer: function(id) {
-    return ReactiveMethod.call('getCustomerName', id);
+    if(!_.isUndefined(id)){
+      return ReactiveMethod.call('getCustomerName', id);
+    }
   }
 });
 Template.ice_paymentShowTemplate.helpers({
