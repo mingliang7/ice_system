@@ -7,7 +7,7 @@
 		<div class="col-md-6">
 					{{> afQuickField name="staffId" }}
 					{{> afQuickField name="customerType" }}
-					{{> afQuickField name="customerId"}}
+					{{> afQuickField name="customerId" options=customerOption}}
 		</div>
 		<div class="col-md-6">
 					{{> afQuickField name="date"}}
@@ -67,22 +67,22 @@
                 <th rowspan="2">បានបង់</th>
                 <th rowspan="2">ជំពាក់</th>
             </tr>
-            <tr> 
-                <th>Q</th>
-                <th>P</th>
-                <th>A</th>  
-                <th>Q</th>
-                <th>P</th>
-                <th>A</th> 
-                <th>Q</th>
-                <th>P</th>
-                <th>A</th>   
+            <tr>
                 <th>Q</th>
                 <th>P</th>
                 <th>A</th>
                 <th>Q</th>
                 <th>P</th>
-                <th>A</th>        
+                <th>A</th>
+                <th>Q</th>
+                <th>P</th>
+                <th>A</th>
+                <th>Q</th>
+                <th>P</th>
+                <th>A</th>
+                <th>Q</th>
+                <th>P</th>
+                <th>A</th>
             </tr>
             </thead>
 
@@ -129,7 +129,6 @@
     {{else}}
      {{> loading}}
     {{/if}}
-    
+
 
 </template>
-

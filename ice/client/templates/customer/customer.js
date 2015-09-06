@@ -39,6 +39,7 @@ Template.ice_customer.events({
     var dataTable = $(event.target).closest('table').DataTable();
     var rowData = dataTable.row(event.currentTarget).data();
     Session.set('ice_customer_id', rowData._id);
+    Session.set('orderCustomerType', rowData.customerType);
     alertify.order(fa('eye', 'Order'), renderTemplate(Template.ice_orderInsertTemplate, rowData))
       .maximize()
   }
@@ -85,5 +86,5 @@ var checkAvailable = function(id){
   }else{
     count = Ice.Collection.OrderGroup.find({iceCustomerId: id}).count();
   }
-  return count != 0 ? false : true ;  
+  return count != 0 ? false : true ;
 }

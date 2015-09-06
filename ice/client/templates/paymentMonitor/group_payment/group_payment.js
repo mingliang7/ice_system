@@ -13,7 +13,7 @@ findCustomer = function(id) {
 Template.ice_paymentGroupMonitor.onRendered(function() {
   Session.set('invioceReportId', undefined)
   createNewAlertify(['groupSearch', 'paymentPopUP']);
-  return Session.set('checked', false);
+  return Session.set('checked', true);
 });
 
 Template.ice_paymentGroupMonitor.helpers({
@@ -21,7 +21,9 @@ Template.ice_paymentGroupMonitor.helpers({
     return Session.get('checked');
   }
 });
-
+Template.ice_paymentGroupMonitor.onDestroyed(function(){
+    Session.set('checked', undefined);
+});
 Template.ice_paymentGroupMonitor.events({
   'click .checkGroup': function(e) {
     var value;
@@ -145,6 +147,19 @@ Template.searchGroupResult.events({
     return alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, this));
   }
 });
+
+
+Template.filteredGroupPayment.onCreated(function(){
+  var value = $(".filter-group").val();
+  instance = EasySearch.getComponentInstance({
+    index: 'ice_orderGroups'
+  });
+  EasySearch.changeProperty('ice_orderGroups', 'filteredGroupPayment', value);
+  EasySearch.changeLimit('ice_orderGroups', 10);
+  instance.paginate(1);
+  return instance.triggerSearch();
+});
+
 
 Template.filteredGroupPayment.events({
   'change .filter-group': function(e) {

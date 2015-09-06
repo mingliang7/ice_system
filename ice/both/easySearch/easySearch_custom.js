@@ -5,7 +5,11 @@ EasySearch.createSearchIndex('ice_orders', {
   limit: 10,
   convertNumbers: true,
   props: {
-    'filteredPayment': 'all'
+    'filteredPayment': 'all',
+    'sortBy': 'orderDate'
+  },
+  sort: function() {
+    return { 'orderDate': -1 };
   },
   query: function (searchString) {
     // Default query that will be used for searching
@@ -26,7 +30,11 @@ EasySearch.createSearchIndex('ice_orderGroups', {
   limit: 10,
   convertNumbers: true,
   props: {
-    'filteredGroupPayment': 'all'
+    'filteredGroupPayment': 'all',
+    'sortBy': 'startDate'
+  },
+  sort: function(){
+    return {'startDate': -1}
   },
   query: function (searchString) {
     // Default query that will be used for searching

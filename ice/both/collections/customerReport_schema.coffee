@@ -1,5 +1,5 @@
 Ice.Schema.customerReport = new SimpleSchema(
-	customerType: 
+	customerType:
 		type: String
 		label: 'Customer Type'
 		optional: true
@@ -13,8 +13,6 @@ Ice.Schema.customerReport = new SimpleSchema(
 		optional: true
 		autoform:
 			type: 'select2'
-			options: ->
-				Ice.ListForReport.customerByType()
 	date:
 		label: 'Date'
 		type: String

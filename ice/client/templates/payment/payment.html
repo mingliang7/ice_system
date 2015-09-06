@@ -43,7 +43,7 @@
                     <label class="control-label" for="orderId_orderGroupId">invoice ID</label>
 
                     <div class="input-group  select2-bootstrap-append">
-                        {{> afFieldInput name='orderId_orderGroupId' disabled="true" class="orderId_orderGroupId input-sm"}}
+                        {{> afFieldInput name='orderId_orderGroupId' disabled="true" class="orderId_orderGroupId input-sm" options=invoiceOption}}
                         <span class="input-group-addon">
                             <a href="#" class="invoiceAddOn">
                                 {{fa "plus"}}
@@ -143,7 +143,7 @@
         <dt>Id</dt>
         <dd>{{_id}}</dd>
         <dt>Customer ID</dt>
-        <dd>{{customer customerId}}</dd>
+        <dd>{{customerId}}</dd>
         <dt>Invoice ID</dt>
         <dd>{{orderId_orderGroupId}}</dd>
         <dt>Due Amount</dt>

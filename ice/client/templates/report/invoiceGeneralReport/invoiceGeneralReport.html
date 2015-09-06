@@ -2,7 +2,7 @@
     {{#autoForm schema=Ice.Schema.InvoiceGeneral action="invoiceGeneralReportGen" target="_blank" id="ice_invoiceGeneralReport"}}
         <div class="row">
             <div class="col-md-6">
-                {{> afQuickField name="customer"}}
+                {{> afQuickField name="customer" options=customerOption}}
                 <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
         <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
             </div>
@@ -67,7 +67,7 @@
             <tr>
                 <th></th>
                 <th></th>
-            <th class="pull-right">បញ្ចុះតម្លៃ: </th> <th>{{footer.discount}}</th> 
+            <th class="pull-right">បញ្ចុះតម្លៃ: </th> <th>{{footer.discount}}</th>
             </tr>
              <tr>
                 <th></th>
@@ -86,7 +86,7 @@
             </tr>
         </thead>
         </table>
-        
+
     {{/with}}
       <div style="margin-top: 30px;" >
             <p class="pull-right">

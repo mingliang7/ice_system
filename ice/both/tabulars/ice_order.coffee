@@ -1,17 +1,17 @@
 findRecord = OneRecord #calling from OneRecord in query methods file
 #item query
-itemQuery = 
+itemQuery =
   detail: (itemId, price, qty, discount = '0', amount) ->
     {name} = findRecord.item(itemId)
     "<small>
-    {Name:#{name}, 
-    Price: #{price}, 
+    {Name:#{name},
+    Price: #{price},
     Qty:#{qty},
     Discount:#{discount},
     Amount: #{amount}}</small>"
 
 #customer query
-customerDetail = 
+customerDetail =
   name: (val) ->
     {name} = findRecord.customer(val)
     name
@@ -72,18 +72,18 @@ Ice.TabularTable.Order = new (Tabular.Table)(
     }
     {
       data: 'paidAmount'
-      title: 'Paid Amount' 
+      title: 'Paid Amount'
     }
     {
       data: 'outstandingAmount'
-      title: 'Outstanding Amount' 
+      title: 'Outstanding Amount'
     }
     {
       data: 'total'
       title: 'Total', render: (value) ->
-        format(value) 
+        format(value)
     }
-  ])
+  ],extraFields: ['totalInDollar','subtotal', 'iceStaffId', 'exchange','_staff', '_customer', 'iceOrderGroupId', 'iceCustomerId'])
 
 format = (value) ->
   numeral(value).format('0,0')

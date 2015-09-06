@@ -1,5 +1,5 @@
 Ice.Schema.invoiceGroup = new SimpleSchema(
-	status: 
+	status:
 		type: String
 		label: 'Status'
 		optional: true
@@ -7,7 +7,7 @@ Ice.Schema.invoiceGroup = new SimpleSchema(
 			type: 'select2'
 			options: ->
 				Ice.ListForReport.status()
-	customerType: 
+	customerType:
 		type: String
 		label: 'Customer Type'
 		optional: true
@@ -22,8 +22,6 @@ Ice.Schema.invoiceGroup = new SimpleSchema(
 		optional: true
 		autoform:
 			type: 'select2'
-			options: ->
-				Ice.ListForReport.customerByType()
 
 	date:
 		label: 'Date'

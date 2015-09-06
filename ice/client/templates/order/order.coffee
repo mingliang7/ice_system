@@ -12,7 +12,7 @@ Template.ice_orderInsertTemplate.helpers
 Template.ice_orderInsertTemplate.onRendered ->
   id = Session.get('ice_customer_id');
   exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
-  today = moment().format('YYYY-MM-DD HH:mm:ss') 
+  today = moment().format('YYYY-MM-DD HH:mm:ss')
   $('[name="exchange"]').select2('val', exhchange_date._id)
   $('[name="orderDate"]').val(today)
   total = $('[name="total"]').val()
@@ -22,98 +22,78 @@ Template.ice_orderInsertTemplate.onRendered ->
     $('.pay').removeClass('hidden')
     $('.saveNpay').removeClass('hidden')
   else
-    $('.pay').addClass('hidden')   
-    $('.saveNpay').addClass('hidden')   
-  $('body').on 'keydown', (e) -> 
+    $('.pay').addClass('hidden')
+    $('.saveNpay').addClass('hidden')
+  $('body').on 'keydown', (e) ->
     if(e.keyCode == 123)
       $('.importPayment').slideDown('fast')
     else
       $('.importPayment').hide()
   createNewAlertify(['staffAddOn','customerAddOn', 'paymentPopUP'])
   datePicker()
-
+Template.ice_order.helpers
+  selector: ->
+    Tracker.nonreactive ->
+      {}
 Template.ice_order.events
   "click .insert": ->
     Router.go('ice.customer')
   "click .update": ->
     orderId = this._id
-    data = Ice.Collection.Order.findOne(orderId);
+    data = this
     id = this._id
     if this._customer.customerType == 'general'
       if(data.paidAmount == 0)
+        Sessoin.set('orderCustomerType', data._customer.customerType)
         alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
         .maximize()
       else
         alertify.warning('Sorry , invoice ' + id + ' has payment')
     else
       orderGroupId = data.iceOrderGroupId
-      group = Ice.Collection.OrderGroup.findOne(orderGroupId);
-      discount = 0 
-      if(group.paidAmount == 0)
-        order = {}
-        order.items = {};
-        order.discount = 0
-        if data.discount isnt undefined
-          order.discount = data.discount
-        order.total = data.total
-        order.totalInDollar = data.totalInDollar
-        data.iceOrderDetail.forEach (item) ->
-          if item.discount isnt undefined
-            discount = item.discount
-          order.items[item.iceItemId] =
-            qty: item.qty
-            amount:item.amount
-            price: item.price
-            discount: discount
-        Session.set 'oldOrderValue', order
-        Session.set 'iceOrderGroupId', orderGroupId
-        alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
-        .maximize()
-      else
-        alertify.warning('Sorry , invoice ' + id + ' has payment')
+      Meteor.call 'orderGroupIdWithData', data, orderGroupId, (err, result) ->
+        group = result.group;
+        data = result.data;
+        discount = 0
+        if(group.paidAmount == 0)
+          # Session.set 'oldOrderValue', order
+          # Session.set 'iceOrderGroupId', orderGroupId
+          alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
+          .maximize()
+        else
+          alertify.warning('Sorry , invoice ' + id + ' has payment')
 
     $('[name="total"]').attr('readonly', true)
   "click .remove": ->
-    id = @_id
-    paidAmount = undefined
-    data = Ice.Collection.Order.findOne(id)
-    if data.iceOrderGroupId != undefined
-      paidAmount = Ice.Collection.OrderGroup.findOne({_id: data.iceOrderGroupId }).paidAmount 
-    else
-      paidAmount = data.paidAmount
-    if paidAmount == 0
-      userId = Meteor.userId()
-      userName = Meteor.users.findOne(userId).username;
-      selector = 
-        dateTime: moment().format('YYYY-MM-DD HH:mm:ss')
-        data: data 
-        removedBy: 
-          id: userId 
-          name: userName 
-      alertify.confirm(
-        fa('remove', 'Remove order'),
-        "Are you sure to delete "+id+" ?",
-        ->
-          Ice.Collection.Order.remove id, (error) ->
-            if error is 'undefined' 
-              alertify.error error.message 
-            else
-              Ice.Collection.RemoveInvoiceLog.insert(selector)
-              alertify.warning 'Successfully Remove'
-        null
-      )
-    else
-      alertify.error "Invoice ##{id} has payment"
+      data = this
+      Meteor.call "removeOrderAndOrderGroup", data, (error, result) ->
+        if error
+          console.log "error", error
+        if result.paidAmount == 0
+          alertify.confirm(
+            fa('remove', 'Remove order'),
+            "Are you sure to delete "+result.id+" ?",
+            ->
+              Ice.Collection.Order.remove result.id, (error) ->
+                if error is 'undefined'
+                  alertify.error error.message
+                else
+                  Meteor.call('removeInvoiceLog', result.selector)
+                  alertify.warning 'Successfully Remove'
+            null
+          )
+        else
+          alertify.error "Invoice ##{result.id} has payment"
   'click .show': () ->
     doc = Ice.Collection.Order.findOne(@_id)
-    alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, doc))    
+    alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, doc))
   "click .print": ->
     Session.set('invioceReportId', null)
     GenReport(@_id) #generateReport alias function in order_autoform_hook
   'click .save': ->
     Loading.set('loadingState', true)
     Session.set('invioceReportId', null)
-  'click .saveNpay': -> 
+  'click .saveNpay': ->
     debugger
     # doc = Ice.Collection.Order.findOne(id)
     # alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, doc))
@@ -136,8 +116,8 @@ Template.ice_orderInsertTemplate.events
     current = $(event.currentTarget)
     if current.val() != ''
       item = Ice.Collection.Item.findOne(current.val())
-      item.qty = 1 
-      item.amount = item.price * item.qty 
+      item.qty = 1
+      item.amount = item.price * item.qty
       current.parents('.array-item').find('.price').val(item.price)
       current.parents('.array-item').find('.qty').val(item.qty)
       current.parents('.array-item').find('.amount').val(roundKhr(item.amount))
@@ -150,7 +130,7 @@ Template.ice_orderInsertTemplate.events
   'keyup .price': (event) ->
     current = $(event.currentTarget)
     itemPrice(current)
-    
+
 
   'keyup .discount': (event) ->
     current = $(event.currentTarget)
@@ -160,7 +140,7 @@ Template.ice_orderInsertTemplate.events
   'click .btnRemove' : ->
     setTimeout(-> totalAmount()
     200)
-    
+
   'click .print': ->
     Print.set 'print', true
   'click .save': ->
@@ -177,7 +157,7 @@ Template.ice_orderInsertTemplate.events
     val = findExchange($(event.currentTarget).val())
     total = $('[name="total"]').val()
     if total != ''
-      total = parseFloat(total) 
+      total = parseFloat(total)
       if val.base is 'KHR'
         amount = total * val.rates["USD"]
         $('[name="totalInDollar"]').val(math.round(amount, 2))
@@ -200,8 +180,8 @@ Template.ice_orderUpdateTemplate.events
   'change .item': (event) ->
     current = $(event.currentTarget)
     item = Ice.Collection.Item.findOne(current.val())
-    item.qty = 1 
-    item.amount = item.price * item.qty 
+    item.qty = 1
+    item.amount = item.price * item.qty
     current.parents('.array-item').find('.price').val(item.price)
     current.parents('.array-item').find('.qty').val(item.qty)
     current.parents('.array-item').find('.amount').val(item.amount)
@@ -214,7 +194,7 @@ Template.ice_orderUpdateTemplate.events
   'keyup .price': (event) ->
     current = $(event.currentTarget)
     itemPrice(current)
-    
+
 
   'keyup .discount': (event) ->
     current = $(event.currentTarget)
@@ -224,7 +204,7 @@ Template.ice_orderUpdateTemplate.events
   'click .btnRemove' : ->
     setTimeout(-> totalAmount()
     200)
-    
+
   'click .print': ->
     Print.set 'print', true
 
@@ -252,7 +232,7 @@ Template.ice_orderShowTemplate.helpers
   discount: () ->
     discount = this.discount
     if discount isnt undefined
-      "<p class='label label-success'>"+discount+"%</p>" 
+      "<p class='label label-success'>"+discount+"%</p>"
     else
       "<p class='label label-success'>None</p>"
 
@@ -318,7 +298,7 @@ displayTotalInDollar = (total, exchange) ->
   totalInDollar = $('[name="totalInDollar"]')
   if exchange is undefined
     totalInDollar.val('')
-  else 
+  else
     if exchange.base is 'KHR'
       value = math.round(total * exchange.rates["USD"], 2)
       totalInDollar.val(value)
@@ -328,12 +308,12 @@ checkType = (id) ->
   type
 
 #item query
-itemQuery = 
+itemQuery =
   detail: (itemId, price, qty, discount = '0', amount) ->
     {name} = Ice.Collection.Item.findOne(itemId)
     "<small>
-    {Name:#{name}, 
-    Price: #{price}, 
+    {Name:#{name},
+    Price: #{price},
     Qty:#{qty},
     Discount:#{discount},
     Amount: #{amount}}</small>"

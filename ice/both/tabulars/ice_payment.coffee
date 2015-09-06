@@ -22,11 +22,6 @@ Ice.TabularTable.Payment = new (Tabular.Table)(
       title: 'Payment Date'
     }
     {
-      data: 'customerId'
-      title: 'Customer', render: (value) ->
-        Ice.Collection.Customer.findOne(value).name
-    }
-    {
       data: 'orderId_orderGroupId'
       title: 'Order ID'
     }
@@ -54,7 +49,7 @@ Ice.TabularTable.Payment = new (Tabular.Table)(
         else
           "<p class='label label-success'>Close</p>"
     }
-  ])
+  ],extraFields: ['customerId'])
 
 format = (value) ->
   numeral(value).format('0,0')

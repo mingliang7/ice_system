@@ -15,7 +15,7 @@ twbs:bootstrap
 fortawesome:fontawesome
 accounts-password
 ian:accounts-ui-bootstrap-3
-mizzao:user-status
+#mizzao:user-status
 255kb:meteor-status
 sacha:spin
 iron:router
@@ -76,3 +76,4 @@ theara:call-async
 theara:autoprint
 tmeasday:publish-counts
 phirum:backup-restore
+meteorhacks:kadira

@@ -7,8 +7,8 @@
         <div class="col-md-6">
             {{> afQuickField name="status" }}
             {{> afQuickField name="customerType" }}
-            {{> afQuickField name="customerId"}}
-                    
+            {{> afQuickField name="customerId" options=customerOption}}
+
         </div>
         <div class="col-md-6">
             {{> afQuickField name="date"}}
@@ -59,7 +59,7 @@
             </tr>
             </thead>
             <tbody class="report-content-body">
-            
+
                 {{{listItems items}}}
             <tr class="dotted">
                 <td>ចំនួនសរុប:</td>
@@ -91,7 +91,7 @@
                 <th></th>
                 <th class="pull-right">ប្រាក់បង់(៛):</th> <th>{{footer.paidAmount}}</th>
                  <th class="pull-right">ប្រាក់ជំពាក់(៛): </th> <th>{{footer.outstandingAmount}}</th>
-            </tr> 
+            </tr>
         </thead>
         </table>
         <div style="margin-top: 30px;" >
