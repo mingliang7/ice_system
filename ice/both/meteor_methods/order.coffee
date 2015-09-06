@@ -4,3 +4,7 @@ Meteor.methods
 
 	orderGroupId: (id) ->
 		Ice.Collection.OrderGroup.findOne(id)
+
+	orderGroupIdWithData: (data, id) ->
+		group = Ice.Collection.OrderGroup.findOne(id)
+		{data: data, group: group}

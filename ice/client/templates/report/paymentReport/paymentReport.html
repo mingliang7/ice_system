@@ -7,7 +7,7 @@
         <div class="col-md-6">
                     {{> afQuickField name="staffId" }}
                     {{> afQuickField name="customerType" }}
-                    {{> afQuickField name="customerId"}}
+                    {{> afQuickField name="customerId" options=customerOption}}
         </div>
         <div class="col-md-6">
                     {{> afQuickField name="date"}}
@@ -62,9 +62,9 @@
                 <th>Due Amount</th>
                 <th>Paid Amount</th>
                 <th>Balance</th>
-             
+
             </tr>
-            
+
             </thead>
 
             <tbody class="report-content-body">
@@ -79,7 +79,7 @@
                     <td>{{formatCurrency dueAmount}}</td>
                     <td>{{formatCurrency paidAmount}}</td>
                     <td>{{formatCurrency outstandingAmount}}</td>
-                    
+
                 </tr>
             {{/each}}
                 <tr>
@@ -101,7 +101,6 @@
     {{else}}
         {{> loading}}
     {{/if}}
-    
+
 
 </template>
-

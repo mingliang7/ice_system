@@ -1,6 +1,5 @@
 <template name="ice_paymentGroupMonitor">
-<span><input type="checkbox" class="checkGroup">Show All</span>
-{{#if checked}} 
+{{#if checked}}
   {{> allGroupDocs}}
 {{else}}
   {{> list_invoices}}
@@ -26,10 +25,10 @@
              </span>
              </div><!-- /input-group -->
              <br>
-             
+
   </div>
   <div class="col-md-2">
-    {{> filteredGroupPayment}} 
+    {{> filteredGroupPayment}}
   </div>
 </div>
 
@@ -83,7 +82,7 @@
                 </ul>
               </p>
               <p style="font-size: 15px;">
-                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> | 
+                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> |
                 ប្រាក់ជំពាក់: <span style="font-size: 15px;" class="label label-success">{{formatKH outstandingAmount}}</span>
               </p>
             </div>
@@ -120,7 +119,7 @@
                 </ul>
               </p>
               <p style="font-size: 15px;">
-                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> | 
+                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> |
                 ប្រាក់ជំពាក់: <span style="font-size: 15px;" class="label label-success">{{formatKH outstandingAmount}}</span>
               </p>
             </div>

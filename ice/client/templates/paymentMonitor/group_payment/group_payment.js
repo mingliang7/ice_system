@@ -148,6 +148,19 @@ Template.searchGroupResult.events({
   }
 });
 
+
+Template.filteredGroupPayment.onCreated(function(){
+  var value = $(".filter-group").val();
+  instance = EasySearch.getComponentInstance({
+    index: 'ice_orderGroups'
+  });
+  EasySearch.changeProperty('ice_orderGroups', 'filteredGroupPayment', value);
+  EasySearch.changeLimit('ice_orderGroups', 10);
+  instance.paginate(1);
+  return instance.triggerSearch();
+});
+
+
 Template.filteredGroupPayment.events({
   'change .filter-group': function(e) {
     var instance, value;

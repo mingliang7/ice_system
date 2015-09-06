@@ -1,6 +1,5 @@
 <template name="ice_paymentGeneralMonitor">
-<span><input type="checkbox" class="checkAll" checked="true">Show All</span>
-{{#if checked}} 
+{{#if checked}}
   {{> allDocs}}
 {{else}}
   {{> general_invoices}}
@@ -45,9 +44,9 @@
                   <li class="{{#if closing}}delete-mark{{/if}}">{{{reportInfo total totalInDollar}}}</li>
                 </ul>
               </p>
-              
+
               <p style="font-size: 15px;">
-                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> | 
+                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> |
                 ប្រាក់ជំពាក់: <span style="font-size: 15px;" class="label label-success">{{formatKH outstandingAmount}}</span>
               </p>
             </div>
@@ -84,7 +83,7 @@
                 </ul>
               </p>
               <p style="font-size: 15px;">
-                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> | 
+                ប្រាក់បង់: <span style="font-size: 15px;" class="label label-info">{{formatKH paidAmount}}</span> |
                 ប្រាក់ជំពាក់: <span style="font-size: 15px;" class="label label-success">{{formatKH outstandingAmount}}</span>
               </p>
             </div>
@@ -111,10 +110,10 @@
              </span>
              </div><!-- /input-group -->
              <br>
-             
+
   </div>
   <div class="col-md-2">
-    {{> filteredPayment}} 
+    {{> filteredPayment}}
   </div>
 </div>
 <br>

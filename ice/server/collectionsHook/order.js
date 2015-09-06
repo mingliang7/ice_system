@@ -25,7 +25,7 @@ Ice.Collection.Order.before.remove(function (userId, doc) {
     order.items = {};
     order.total = doc.total;
     order.totalInDollar = doc.totalInDollar;
-    order.discount = 0 ; 
+    order.discount = 0 ;
     if(doc.discount != undefined){
       order.discount = doc.discount;
     }
@@ -41,7 +41,7 @@ Ice.Collection.Order.before.remove(function (userId, doc) {
         discount: discount
       };
     });
-    doc = removeOrderGroup(oldDoc, order, orderDate); 
+    doc = removeOrderGroup(oldDoc, order, orderDate);
     console.log(doc)
     if(doc.total == 0) {
       Ice.Collection.OrderGroup.remove(oldDoc._id)
@@ -51,11 +51,11 @@ Ice.Collection.Order.before.remove(function (userId, doc) {
   }
 });
 
-var removeOrderGroup = function (oldDoc, oldValue, orderDate){ // oldDoc is old order group value and oldValue is order old value 
+var removeOrderGroup = function (oldDoc, oldValue, orderDate){ // oldDoc is old order group value and oldValue is order old value
   var date = orderDate;
   var total = 0;
   var totalInDollar = 0;
-  for(var k in oldDoc.groupBy['day' + date].items){ // remove items 
+  for(var k in oldDoc.groupBy['day' + date].items){ // remove items
     if(oldValue.items[k] != undefined){
       oldDoc.groupBy['day' + date].items[k] = {
         name: oldDoc.groupBy['day' + date].items[k].name,

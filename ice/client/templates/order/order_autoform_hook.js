@@ -24,7 +24,7 @@ updateOrderGroup = function(doc){
   orderGroup = new OrderGroup(doc);
   iceOrderGroupId = Session.get('iceOrderGroupId');
   oldValue = Session.get('oldOrderValue');
-  type = OneRecord.customer(doc.iceCustomerId).customerType;
+  type = doc.iceCustomerId;
   if (type !== 'general') {
     date = rangeDate(doc.orderDate, type);
     startDate = date.startDate;
@@ -32,17 +32,14 @@ updateOrderGroup = function(doc){
     oldOrder = Ice.Collection.OrderGroup.findOne(iceOrderGroupId);
     doc = checkingOrder(oldOrder, oldValue, doc);
     Ice.Collection.OrderGroup.update({_id: iceOrderGroupId}, {$set: doc});
-    doc.iceOrderGroupId = doc._id;      
+    doc.iceOrderGroupId = doc._id;
   } else {
     doc.paidAmount = 0;
     doc.outstandingAmount = doc.total;
     return doc.closing = false;
   }
 }
-Template.ice_paymentUrlInsertTemplate.events({ // on change for payment popup 
-  'click .close': function() {
-    window.close()
-  },
+Template.ice_paymentUrlInsertTemplate.events({ // on change for payment popup
   'change [name="customerId"]': function(e) {
     var customer;
     customer = $(e.currentTarget).val();
@@ -96,7 +93,7 @@ AutoForm.hooks({
         return doc;
       }
     },
-    after: { // generate report or payment 
+    after: { // generate report or payment
       insert: function(err, _id) {
         if (err) {
           Print.set('print', false);
@@ -147,7 +144,7 @@ var checkingOrder = function (oldDoc, oldValue, newDoc){ // checking oldOrder wh
   var total = 0;
   var totalDiscount = 0;
   var totalInDollar = 0;
-  for(var k in oldDoc.groupBy['day' + date].items){ // remove items 
+  for(var k in oldDoc.groupBy['day' + date].items){ // remove items
     if(oldValue.items[k] != undefined){
       oldDoc.groupBy['day' + date].items[k] = {
         name: oldDoc.groupBy['day' + date].items[k].name,
@@ -164,7 +161,7 @@ var checkingOrder = function (oldDoc, oldValue, newDoc){ // checking oldOrder wh
   oldDoc.groupBy['day' + date].totalInDollar = oldDoc.groupBy['day' + date].totalInDollar - oldValue.totalInDollar;
   oldDoc.total = total;
   oldDoc.totalInDollar = oldDoc.totalInDollar - oldValue.totalInDollar;
-  oldDoc.discount = oldDoc.discount - oldValue.discount  
+  oldDoc.discount = oldDoc.discount - oldValue.discount
   oldDoc.outstandingAmount = total;
   return insertNewDocToOldOrder(oldDoc, newDoc);
 }
@@ -212,7 +209,7 @@ var insertNewDocToOldOrder = function (oldDoc, newDoc){ //insert a new doc to ol
   oldDoc.totalInDollar = oldDoc.totalInDollar + order.totalInDollar;
   oldDoc.outstandingAmount = oldDoc.outstandingAmount + order.outstandingAmount;
   return oldDoc;
-} 
+}
 
 checkType = function(id){
   return Ice.Collection.Customer.findOne(id).customerType;
@@ -249,7 +246,7 @@ getRank = function(date, type) {
           }else if(i + type >= 26){
             lastDate = new Date(now.getFullYear(), now.getMonth() +1,0)
             endDate = moment(lastDate).format('YYYY-MM-DD');
-            break      
+            break
           }else{
             endDate = moment(now.setDate((i + type) - 1)).format('YYYY-MM-DD');
             break
@@ -261,7 +258,7 @@ getRank = function(date, type) {
     if(last == '31'){
       setEndDate = parseInt(last) - type;
       startDate = moment(now.setDate(setEndDate)).format('YYYY-MM-DD');
-    }else{      
+    }else{
      startDate = moment(now.setDate(i)).format('YYYY-MM-DD');
     }
     if(endDate != '') break;
@@ -271,15 +268,15 @@ getRank = function(date, type) {
 
 rangeDate = function(date, type) {
   switch(type){
-    case '5': 
+    case '5':
       return getRank(date, 5);
-    case '10':  
+    case '10':
       return getRank(date, 10);
-    case '15':  
+    case '15':
       return getRank(date, 15);
-    case '20':  
+    case '20':
       return getRank(date, 20);
-    case '30':  
+    case '30':
       return getRank(date, 30);
   }
 };
@@ -308,5 +305,3 @@ var checkIfReady = function(aid){
     }
   });
 }
-
-
