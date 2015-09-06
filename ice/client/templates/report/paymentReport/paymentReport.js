@@ -52,7 +52,7 @@ Template.ice_paymentReportGen.helpers({
     return payment.result();
   },
   name: function(id) {
-    customer = Ice.Collection.Customer.findOne(id);
+    customer = ReactiveMethod.call('getCustomer', id);
     return customer.name + ' (' + customer.customerType + ')';
   },
   itemDetail: function(orderDetail) {

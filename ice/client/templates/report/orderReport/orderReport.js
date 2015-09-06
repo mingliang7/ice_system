@@ -62,7 +62,7 @@ Template.ice_orderReportGen.helpers({
     return data.result();
   },
   name: function(id) {
-    customer = Ice.Collection.Customer.findOne(id);
+    customer = ReactiveMethod.call('getCustomer', id);
     return customer.name + ' (' + customer.customerType + ')'
   },
   staffName: function(id) {

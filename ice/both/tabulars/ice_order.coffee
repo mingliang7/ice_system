@@ -83,7 +83,7 @@ Ice.TabularTable.Order = new (Tabular.Table)(
       title: 'Total', render: (value) ->
         format(value)
     }
-  ],extraFields: ['subtotal', 'iceStaffId', 'exchange','_staff', '_customer', 'iceOrderGroupId', 'iceCustomerId'])
+  ],extraFields: ['totalInDollar','subtotal', 'iceStaffId', 'exchange','_staff', '_customer', 'iceOrderGroupId', 'iceCustomerId'])
 
 format = (value) ->
   numeral(value).format('0,0')

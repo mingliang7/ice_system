@@ -5,8 +5,6 @@ Ice.Schema.InvoiceGeneral  = new SimpleSchema(
 		optional: true
 		autoform:
 			type: 'select2'
-			options: ->
-				Ice.ListForReport.generalCustomer()
 	date:
 		label: 'Date'
 		type: String

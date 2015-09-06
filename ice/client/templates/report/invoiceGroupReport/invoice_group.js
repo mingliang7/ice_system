@@ -22,17 +22,20 @@ Template.ice_invoiceGroup.events({
 });
 Template.ice_invoiceGroupInsertTemplate.helpers({
   customerOption: function() {
-    type = Ice.ListForReportState.get('customerType');
-    console.log(type);
-    if (!_.isUndefined(type)) {
-      return ReactiveMethod.call('customerByType', type);
-    } else {
-      return [{
-        label: 'All',
-        value: ''
-      }];
-    }
+      type = Ice.ListForReportState.get('customerType');
+      console.log(type);
+      if (!_.isEmpty(type)) {
+        return ReactiveMethod.call('customerByType', type);
+      } else {
+        return [{
+          label: 'All',
+          value: ''
+        }];
+      }
   }
+});
+Template.ice_invoiceGroupInsertTemplate.onDestroyed(function(){
+  Ice.ListForReportState.set('customerType', undefined);
 });
 var datePicker = function() {
   var date;

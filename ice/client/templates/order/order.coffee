@@ -44,6 +44,7 @@ Template.ice_order.events
     id = this._id
     if this._customer.customerType == 'general'
       if(data.paidAmount == 0)
+        Sessoin.set('orderCustomerType', data._customer.customerType)
         alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
         .maximize()
       else
@@ -55,23 +56,8 @@ Template.ice_order.events
         data = result.data;
         discount = 0
         if(group.paidAmount == 0)
-          order = {}
-          order.items = {};
-          order.discount = 0
-          if data.discount isnt undefined
-            order.discount = data.discount
-          order.total = data.total
-          order.totalInDollar = data.totalInDollar
-          data.iceOrderDetail.forEach (item) ->
-            if item.discount isnt undefined
-              discount = item.discount
-            order.items[item.iceItemId] =
-              qty: item.qty
-              amount:item.amount
-              price: item.price
-              discount: discount
-          Session.set 'oldOrderValue', order
-          Session.set 'iceOrderGroupId', orderGroupId
+          # Session.set 'oldOrderValue', order
+          # Session.set 'iceOrderGroupId', orderGroupId
           alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
           .maximize()
         else
@@ -79,36 +65,25 @@ Template.ice_order.events
 
     $('[name="total"]').attr('readonly', true)
   "click .remove": ->
-    id = @_id
-    paidAmount = undefined
-    data = Ice.Collection.Order.findOne(id)
-    if data.iceOrderGroupId != undefined
-      paidAmount = Ice.Collection.OrderGroup.findOne({_id: data.iceOrderGroupId }).paidAmount
-    else
-      paidAmount = data.paidAmount
-    if paidAmount == 0
-      userId = Meteor.userId()
-      userName = Meteor.users.findOne(userId).username;
-      selector =
-        dateTime: moment().format('YYYY-MM-DD HH:mm:ss')
-        data: data
-        removedBy:
-          id: userId
-          name: userName
-      alertify.confirm(
-        fa('remove', 'Remove order'),
-        "Are you sure to delete "+id+" ?",
-        ->
-          Ice.Collection.Order.remove id, (error) ->
-            if error is 'undefined'
-              alertify.error error.message
-            else
-              Ice.Collection.RemoveInvoiceLog.insert(selector)
-              alertify.warning 'Successfully Remove'
-        null
-      )
-    else
-      alertify.error "Invoice ##{id} has payment"
+      data = this
+      Meteor.call "removeOrderAndOrderGroup", data, (error, result) ->
+        if error
+          console.log "error", error
+        if result.paidAmount == 0
+          alertify.confirm(
+            fa('remove', 'Remove order'),
+            "Are you sure to delete "+result.id+" ?",
+            ->
+              Ice.Collection.Order.remove result.id, (error) ->
+                if error is 'undefined'
+                  alertify.error error.message
+                else
+                  Meteor.call('removeInvoiceLog', result.selector)
+                  alertify.warning 'Successfully Remove'
+            null
+          )
+        else
+          alertify.error "Invoice ##{result.id} has payment"
   'click .show': () ->
     doc = Ice.Collection.Order.findOne(@_id)
     alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, doc))

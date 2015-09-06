@@ -7,7 +7,7 @@ Ice.Schema.paymentReport = new SimpleSchema(
 			type: 'select2'
 			options: ->
 				Ice.ListForReport.staff()
-	customerType: 
+	customerType:
 		type: String
 		label: 'Customer Type'
 		optional: true
@@ -21,13 +21,11 @@ Ice.Schema.paymentReport = new SimpleSchema(
 		optional: true
 		autoform:
 			type: 'select2'
-			options: ->
-				Ice.ListForReport.customerByType()
 	date:
 		label: 'Date'
 		type: String
 
-	exchange: 
+	exchange:
 		type: String
 		label: 'Exchange'
 		autoform:
