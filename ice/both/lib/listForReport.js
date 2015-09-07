@@ -11,7 +11,7 @@ Ice.ListForReport = {
    		list.push({label: "(Select One)", value: ""});
    	}
    	customers.forEach(function (customer) {
-   		type = customer.customerType == 'general' ? 'General' : customer.customerType + ' days'; 
+   		type = customer.customerType == 'general' ? 'General' : customer.customerType + ' days';
    		list.push({label: '' + customer._id + ' | ' + customer.name + '(' + type + ')',
    		value: customer._id})
    	});
@@ -29,7 +29,7 @@ Ice.ListForReport = {
       });
       return list;
    },
-   customerType: function(all){ 
+   customerType: function(all){
       list = []
       invoiceGroup = Ice.ListForReportState.get('invoiceGroup');
       if(!_.isEqual(all, false)){
@@ -65,7 +65,7 @@ Ice.ListForReport = {
          list.push({label: "(Select One)", value: ""});
       }
       if(customerId != ''){
-         var type = Ice.Collection.Customer.findOne(customerId).customerType; 
+         var type = Ice.Collection.Customer.findOne(customerId).customerType;
          if(update == true){
             if(type == 'general'){
                Ice.Collection.Order.find({iceCustomerId: customerId}).forEach(function (invoice) {
@@ -110,7 +110,7 @@ Ice.ListForReport = {
       var list = [];
       var customerType = Ice.ListForReportState.get('customerType');
       customerType = customerType == undefined ? '' : customerType;
-      customers = findCustomerByType(customerType); 
+      customers = findCustomerByType(customerType);
       if(!_.isEqual(all, false)){
          list.push({label: "All", value: ""});
       }
@@ -144,7 +144,7 @@ Ice.ListForReport = {
 }
 
 var findCustomerByType = function(type){
-   arr = [] 
+   arr = []
    customers = undefined;
    if(type != ''){
       customers = Ice.Collection.Customer.find({customerType: type})

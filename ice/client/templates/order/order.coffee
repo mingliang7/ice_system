@@ -44,7 +44,7 @@ Template.ice_order.events
     id = this._id
     if this._customer.customerType == 'general'
       if(data.paidAmount == 0)
-        Sessoin.set('orderCustomerType', data._customer.customerType)
+        Session.set('orderCustomerType', data._customer.customerType)
         alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
         .maximize()
       else

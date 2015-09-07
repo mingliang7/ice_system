@@ -107,10 +107,8 @@ AutoForm.hooks({
         //   updateOrderGroup(doc.$set);
         // }
         type = Session.get('orderCustomerType')
-        if(type){
-          doc.paidAmount = 0;
-          doc.outstandingAmount = doc.total;
-          doc.closing = false;
+        if(type == 'general'){
+          doc.$set.outstandingAmount = doc.$set.total;
         }
         return doc;
       }
