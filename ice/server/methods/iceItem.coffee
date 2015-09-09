@@ -14,3 +14,4 @@ Meteor.startup ->
 
   # Meteor.call 'findOrderWhichHasNoGroupId'
   # Meteor.call 'findOrderWhichIsNameDifferenctFromGroup'
+  # Meteor.call 'correctOrderCustomer', '2015-08-10 00:00:00'
