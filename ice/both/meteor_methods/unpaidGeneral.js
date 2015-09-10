@@ -19,12 +19,12 @@ Meteor.methods({
         var staff = self.staff == '' ? '' : self.staff;
         var addDay = new Date(self.date);
         var today = new Date(
-                    addDay.getFullYear(), 
-                    addDay.getMonth(), 
+                    addDay.getFullYear(),
+                    addDay.getMonth(),
                     addDay.getDate() + 1)
         today = moment(today).format('YYYY-MM-DD HH:mm:ss');
         yesterday = moment(self.date).format('YYYY-MM-DD 23:59:59');
-        /********** Content **********/ 
+        /********** Content **********/
         var content = [];
         var index =  1 ;
         var order = {};
@@ -32,9 +32,10 @@ Meteor.methods({
         if(staff == ''){
             selector = {orderDate: {$lt: today}, $or: [{closingDate: {$gt: yesterday}}, {closingDate: 'none'}]}
         }else{
-            selector = {iceStaffId: staff, orderDate: {$lt: today}, $or: [{closingDate: {$gt: yesterday}}, {closingDate: 'none'}]}       
+            selector = {iceStaffId: staff, orderDate: {$lt: today}, $or: [{closingDate: {$gt: yesterday}}, {closingDate: 'none'}]}
         }
-        var getOrder = Ice.Collection.Order.find(selector);
+        var getOrder = Ice.Collection.Order.find(selector).fetch();
+				console.log(getOrder.length);
         getOrder.forEach(function(obj) {
            if(obj._payment != undefined){
                 var payment = _.findLastKey(obj._payment, function(payment){
@@ -48,7 +49,7 @@ Meteor.methods({
                         paidAmount: obj.total - obj._payment[payment].outstandingAmount,
                         outstandingAmount: obj._payment[payment].outstandingAmount
                     }
-                    order = {
+                    order[obj._id] = {
                         _id: obj._id,
                         orderDate: obj.orderDate,
                         closingDate: obj.closingDate,
@@ -59,7 +60,7 @@ Meteor.methods({
                     }
                 }
             }else{
-                order = {
+                order[obj._id] = {
                     _id: obj._id,
                     orderDate: obj.orderDate,
                     closingDate: obj.closingDate,
@@ -72,10 +73,12 @@ Meteor.methods({
                         dueAmount: obj.total
                     }
                 }
-                
+
             }
-            content.push(order);
         });
+				for (var key in order) {
+					content.push(order[key]);
+				}
         if (content.length > 0) {
             var sortContent = content.sort(compare)
             data.content = sortContent;

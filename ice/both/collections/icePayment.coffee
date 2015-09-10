@@ -1,31 +1,31 @@
 Ice.Collection.Payment = new Mongo.Collection('ice_payments')
 
 Ice.Schema.Payment = new SimpleSchema(
-	orderId_orderGroupId: 
+	orderId_orderGroupId:
 		type: String
 		label: 'invoiceId'
 		autoform:
 			type: 'select'
 
-	customerId: 
+	customerId:
 		type: String
 		label: 'Customer'
 		autoform:
 			type: 'select2'
 			options: ->
 				ReactiveMethod.call('customer')
-	staffId: 
+	staffId:
 		type: String
 		label: 'Staff'
 		autoform:
 			type: 'select2'
 			options: ->
-				Ice.List.paymentStaff()
+				Ice.List.staff()
 	dueAmount:
 		type: Number
 		decimal: true
 		label: 'Due Amount'
-		
+
 	paidAmount:
 		type: Number
 		decimal: true
@@ -35,12 +35,12 @@ Ice.Schema.Payment = new SimpleSchema(
 		type: Number
 		decimal: true
 		label: 'Outstanding Amount'
-	
+
 	paymentDate:
 		type: String
 		defaultValue: ->
 			moment().format('YYYY-MM-DD HH:mm:ss')
-	createdAt: 
+	createdAt:
 		type: Date
 		autoValue: ->
 			if @isInsert

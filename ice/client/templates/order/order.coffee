@@ -12,9 +12,9 @@ Template.ice_orderInsertTemplate.helpers
 Template.ice_orderInsertTemplate.onRendered ->
   id = Session.get('ice_customer_id');
   exhchange_date = Cpanel.Collection.Exchange.findOne({}, {sort: {dateTime: -1}})
-  today = moment().format('YYYY-MM-DD HH:mm:ss')
+  # today = moment().format('YYYY-MM-DD HH:mm:ss')
   $('[name="exchange"]').select2('val', exhchange_date._id)
-  $('[name="orderDate"]').val(today)
+  # $('[name="orderDate"]').val(today)
   total = $('[name="total"]').val()
   if total != ''
     totalAmount()

@@ -26,12 +26,12 @@ Meteor.methods({
         data.header = self;
         var addDay = new Date(self.date);
         var today = new Date(
-                    addDay.getFullYear(), 
-                    addDay.getMonth(), 
+                    addDay.getFullYear(),
+                    addDay.getMonth(),
                     addDay.getDate() + 1)
         today = moment(today).format('YYYY-MM-DD');
         yesterday = moment(self.date).format('YYYY-MM-DD 23:59:59');
-        /********** Content **********/ 
+        /********** Content **********/
         var content = [];
         var selector = {endDate: {$lt: today}, $or: [{closingDate: {$gt: yesterday}}, {closingDate: 'none'}]}
         var getOrder = Ice.Collection.OrderGroup.find(selector);
@@ -50,7 +50,7 @@ Meteor.methods({
                         paidAmount: obj.total - obj._payment[payment].outstandingAmount,
                         outstandingAmount: obj._payment[payment].outstandingAmount
                     }
-                    order = {
+                    order[obj._id] = {
                         _id: obj._id,
                         orderDate: obj.startDate + ' To ' + obj.endDate,
                         closingDate: obj.closingDate,
@@ -61,7 +61,7 @@ Meteor.methods({
                     }
                 }
             }else{
-                order = {
+                order[obj._id] = {
                     _id: obj._id,
                     orderDate: obj.startDate + ' To ' + obj.endDate,
                     closingDate: obj.closingDate,
@@ -74,10 +74,12 @@ Meteor.methods({
                         dueAmount: obj.total
                     }
                 }
-                
+
             }
-            content.push(order);
         });
+        for (var key in order) {
+          content.push(order[key]);
+        }
         if (content.length > 0) {
             var sortContent = content.sort(compare)
             data.content = sortContent;
