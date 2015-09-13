@@ -4,7 +4,7 @@ Template.ice_orderGroup.events({
     var currentUserId = Meteor.userId();
     Meteor.call('getCurrentUserRole', currentUserId, function(err, result) {
       if (result) {
-        if (doc.outstandingAmount === 0) {
+        if (doc.paidAmount === 0) {
           alertify.confirm(
             fa('remove', 'Remove Order-Group'),
             'Are you sure to delete #' + doc._id + ' ?',
