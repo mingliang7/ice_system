@@ -19,6 +19,16 @@ Router.route 'ice/orders',
 		sub: ''
 	icon: 'shopping-cart'
 	title: 'order'
+Router.route 'ice/orderGroups',
+	->
+		@render 'ice_orderGroup'
+
+	name: 'ice.orderGroup'
+	header:
+		title: 'order group'
+		sub: ''
+	icon: 'shopping-cart'
+	title: 'order group'
 
 Router.route 'ice/paymentGroupMonitors',
 	->
