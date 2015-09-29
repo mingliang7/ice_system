@@ -51,10 +51,10 @@ itemQuery = {
   detail: function(itemId, price, qty, discount, amount) {
     discount = discount === undefined ? 0 : discount;
     name = Ice.Collection.Item.findOne(itemId).name;
-    return "<small>Name: " + name + ', ' +
+    return "<li><small>Name: " + name + ', ' +
       "Price: " + price + ', ' +
       "Qty: " + qty + ', ' +
       "Discount: " + discount + ', ' +
-      "Amount: " + amount + "</small>";
+      "Amount: " + amount + "</small></li>";
   }
 };
