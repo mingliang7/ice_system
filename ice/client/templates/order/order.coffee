@@ -120,7 +120,8 @@ Template.ice_orderInsertTemplate.events
       item.amount = item.price * item.qty
       current.parents('.array-item').find('.price').val(item.price)
       current.parents('.array-item').find('.qty').val(item.qty)
-      current.parents('.array-item').find('.amount').val(roundKhr(item.amount))
+      # current.parents('.array-item').find('.amount').val(roundKhr(item.amount))
+      current.parents('.array-item').find('.amount').val(math.round(item.amount, 2))
       current.parents('.array-item').find('.discount').val('')
       totalAmount()
   'keyup .qty': (event) ->
@@ -246,7 +247,8 @@ itemDiscount = (current) ->
   currentDiscount = current.val()
   price = parseFloat current.parents('.array-item').find('.price').val()
   qty = parseFloat current.parents('.array-item').find('.qty').val()
-  amount = roundKhr(price * qty)
+  # amount = roundKhr(price * qty)
+  amount = math.round(price * qty,2)
   if currentDiscount is ''
     current.parents('.array-item').find('.amount').val(amount)
   else
@@ -256,7 +258,8 @@ itemPrice = (current) ->
   currentPrice = parseFloat current.val()
   qty = parseFloat current.parents('.array-item').find('.qty').val()
   discount = current.parents('.array-item').find('.discount').val()
-  amount = roundKhr(qty * currentPrice)
+  # amount = roundKhr(qty * currentPrice)
+  amount = math.round(qty * currentPrice, 2)
   if discount is ''
     current.parents('.array-item').find('.amount').val(amount)
   else
@@ -266,7 +269,8 @@ itemQty = (current) ->
   currentQty = parseFloat current.val()
   price = parseFloat current.parents('.array-item').find('.price').val()
   discount = current.parents('.array-item').find('.discount').val()
-  amount = roundKhr(currentQty * price)
+  # amount = roundKhr(currentQty * price)
+  amount = math.round(currentQty * price, 2)
   if discount is ''
     current.parents('.array-item').find('.amount').val(amount)
   else
@@ -278,14 +282,17 @@ totalAmount = () ->
     console.log $(this).val()
     total += parseFloat $(this).val()
   console.log(total)
-  $('[name="subtotal"]').val(roundKhr(total))
+  # $('[name="subtotal"]').val(roundKhr(total))
+  $('[name="subtotal"]').val(total)
   subtotal = parseFloat $('[name="subtotal"]').val()
   discount = $('[name="discount"]').val()
   if  discount is ''
-    $('[name="total"]').val(roundKhr(total))
+    # $('[name="total"]').val(roundKhr(total))
+    $('[name="total"]').val(total)
   else
     discountAmount = (subtotal - parseFloat discount)
-    $('[name="total"]').val(roundKhr(discountAmount))
+    # $('[name="total"]').val(roundKhr(discountAmount))
+    $('[name="total"]').val(math.round(discountAmount,2))
   displayTotalInDollar($('[name="total"]').val(), findExchange($('[name="exchange"]').val()));
 
 findExchange = (id) ->
