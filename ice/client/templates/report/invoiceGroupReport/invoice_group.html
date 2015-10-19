@@ -28,7 +28,7 @@
         <!--Title-->
         <div class="report-title">
             <span class="report-company-name" style="font-family: 'Khmer OS Muol';">{{title.company}}</span><br>
-            <span  style="font-size: 10px">
+            <span  style="font-size: 11px">
                 អាស័យដ្ឋាន: {{title.address}}<br>
                 ទូរស័ព្ទ: {{title.telephone}}
             </span>
@@ -37,7 +37,7 @@
         </div>
 
         <!--Header-->
-        <table width="100%" border="0">
+        <table width="100%" border="0" style="font-size: 15px;">
             {{#each header}}
                 <tr>
                     <td width="75%">{{col1}}</td>
@@ -47,7 +47,7 @@
         </table>
 
         <!--Content-->
-        <table class="report-content">
+        <table class="report-content" style="font-size: 13px;">
             <thead class="report-content-header">
             <tr>
                 <th>កាលបរិច្ឆេទ</th>
@@ -58,14 +58,14 @@
                 <th >ទឹកកកដើម</th>
             </tr>
             </thead>
-            <tbody class="report-content-body">
+            <tbody class="report-content-body-group" >
 
                 {{{listItems items}}}
-            <tr class="dotted">
+            <tr class="dotted" style="font-size: 13px;">
                 <td>ចំនួនសរុប:</td>
                 {{{totalDetail.qty}}}
             </tr>
-            <tr>
+            <tr style="font-size: 13px;">
                 <td>តម្លៃរាយ:</td>
                 {{{totalDetail.price}}}
             </tr>
@@ -73,14 +73,14 @@
                 <td>បញ្ចុះតម្លៃ:</td>
                 {{{totalDetail.discount}}}
             </tr> -->
-            <tr>
+            <tr style="font-size: 13px;">
                 <td>ទឹកប្រាក់សរុប:</td>
                 {{{totalDetail.amount}}}
             </tr>
             </tbody>
         </table>
                 <table class="small-table" >
-        <thead>
+        <thead style="font-size: 13px;">
              <tr >
                  <th class="pull-right">បញ្ចុះតម្លៃ(៛): </th> <th>{{footer.discount}}</th>
                  <th class="pull-right">តម្លៃសរុប(៛): </th> <th>{{footer.total}}</th>
@@ -94,7 +94,7 @@
             </tr>
         </thead>
         </table>
-        <div style="margin-top: 30px;" >
+        <div style="margin-top: 30px; font-size: 13px;" >
             <p class="pull-right">
             ថ្ងៃទី.......ខែ.......ឆ្នាំ.......<br><br>
              &nbsp; &nbsp; &nbsp;អ្នកចេញប័ណ្ណ<br><br>

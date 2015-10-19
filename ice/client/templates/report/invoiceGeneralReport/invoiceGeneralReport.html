@@ -18,7 +18,7 @@
                     <!--Title-->
         <div class="report-title">
             <span class="report-company-name" style="font-family: 'Khmer OS Muol';">{{title.company}}</span><br>
-            <span style="font-size: 10px">
+            <span style="font-size: 11px">
                 អាស័យដ្ឋាន: {{title.address}}<br>
                 ទូរស័ព្ទ: {{title.telephone}}
             </span><br>
@@ -26,7 +26,7 @@
         </div>
 
         <!--Header-->
-        <table width="100%" border="0">
+        <table width="100%" border="0" style="font-size: 13px;">
             {{#each header}}
                 <tr>
                     <td width="50%">{{col1}}</td>
@@ -38,7 +38,7 @@
 
         <!--Content-->
         <table class="report-content">
-            <thead class="report-content-header">
+            <thead class="report-content-header" style="font-size: 13px;">
             <tr>
                 <th>កាលបរិច្ឆេទ</th>
                 <th>ទឹកកកកិន</th>
@@ -49,7 +49,7 @@
             </tr>
             </thead>
 
-            <tbody class="report-content-body">
+            <tbody class="report-content-body-group">
             {{#each content}}
                 {{{content}}}
             {{/each}}
@@ -57,7 +57,7 @@
             </table>
              <!--Footer-->
         <p></p>
-        <table class="small-table" >
+        <table class="small-table" style="font-size: 13px;">
         <thead>
             <tr>
                 <th></th>

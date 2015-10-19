@@ -120,7 +120,11 @@
     font-size: 9px;
     border-right: 1px solid #000;
 }
-
+.report-content-body-group td {
+    padding: 3px;
+    font-size: 13px;
+    border-right: 1px solid #000;
+}
 .report-page-header-footer {
     border-collapse: collapse;
     width: 100%;
