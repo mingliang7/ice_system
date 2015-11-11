@@ -1,0 +1,86 @@
+<template name="iceContainer_customer">
+	{{> iceContainer_customerTabular}}
+</template>
+
+<template name="iceContainer_customerTabular">
+    <p>
+        <button type="button" class="btn btn-primary insert">{{fa "plus"}} Add New</button>
+    </p>
+
+    {{> tabular table=IceContainer.TabularTable.Customer selector=selector class="table table-striped table-bordered table-condensed table-hover customer"}}
+</template>
+
+<!--Action-->
+<template name="iceContainer_customerAction">
+    {{#tabularAction}}
+        <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
+        <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
+        <li><a href="#" class="show">{{fa "eye"}} Show</a></li>
+    {{/tabularAction}}
+</template>
+
+<!-- insert -->
+<template name="iceContainer_insertTemplate">
+    {{#autoForm collection=IceContainer.Collection.Customer id="insertTemplate" type="insert"}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name='name'}}
+                {{> afQuickField name='gender'}}
+                {{> afQuickField name='status'}}
+            </div>
+
+            <div class="col-md-6">
+                {{> afQuickField name='telephone'}}
+                {{> afQuickField name= 'address' rows=3}}
+                {{> afQuickField name= 'description' rows=3}}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+<!-- update -->
+<template name="iceContainer_updateTemplate">
+    {{#autoForm collection=IceContainer.Collection.Customer doc=this id="updateTemplate" type="update"}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name='name'}}
+                {{> afQuickField name='gender'}}
+                {{> afQuickField name='status'}}
+            </div>
+
+            <div class="col-md-6">
+                {{> afQuickField name='telephone'}}
+                {{> afQuickField name= 'address' rows=3}}
+                {{> afQuickField name= 'description' rows=3}}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} update</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+<!-- Show -->
+<template name="iceContainer_customerShowTemplate">
+    <dl class="dl-horizontal">
+        <dt>Id</dt>
+        <dd>{{_id}}</dd>
+        <dt>Name</dt>
+        <dd>{{name}}</dd>
+        <dt>Gender</dt>
+        <dd>{{gender}}</dd>
+        <dt>Type</dt>
+        <dd>{{customerType}}</dd>
+        <dt>Status</dt>
+        <dd>{{status}}</dd>
+        <dt>Address</dt>
+        <dd>{{address}}</dd>
+        <dt>Telephone</dt>
+        <dd>{{telephone}}</dd>
+        <dt>Description</dt>
+        <dd>{{Description}}</dd>
+    </dl>
+</template>
