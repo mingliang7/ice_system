@@ -1,0 +1,84 @@
+<template name="iceContainer_container">
+	{{> iceContainer_containerTabular}}
+</template>
+
+<template name="iceContainer_containerTabular">
+    <p>
+        <button type="button" class="btn btn-primary insert">{{fa "plus"}} Add New</button>
+    </p>
+	<p class="pull-right">
+		<span>
+			Available: <input type="checkbox" name="available" value="Available" checked="true">
+			Unavailable: <input type="checkbox" name="unavailable" value="Unavailable">
+			Broken: <input type="checkbox" name="broken" value="Broken">
+		</span>
+	</p>
+
+    {{> tabular table=IceContainer.TabularTable.Container selector=selector class="table table-striped table-bordered table-condensed table-hover customer"}}
+</template>
+
+<!--Action-->
+<template name="iceContainer_containerAction">
+    {{#tabularAction}}
+        <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
+        <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
+        <li><a href="#" class="show">{{fa "eye"}} Show</a></li>
+    {{/tabularAction}}
+</template>
+
+<!-- insert -->
+<template name="iceContainer_insert">
+    {{#autoForm collection=IceContainer.Collection.Container id="iceContainer_insert" type="insert"}}
+        <div class="row">
+            <div class="col-md-12">
+                {{> afQuickField name='code' value=getCode readonly=true}}
+                {{> afQuickField name='unit'}}
+                {{> afQuickField name='price'}}
+                {{> afQuickField name='condition'}}
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+<!-- update -->
+<template name="iceContainer_update">
+    {{#autoForm collection=IceContainer.Collection.Container doc=this id="iceContainer_update" type="update"}}
+        <div class="row">
+            <div class="col-md-12">
+              {{> afQuickField name='code'}}
+              {{> afQuickField name='unit'}}
+              {{> afQuickField name='price'}}
+              {{> afQuickField name='condition'}}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} update</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+<!-- Show -->
+<template name="iceContainer_show">
+    <dl class="dl-horizontal">
+        <dt>Id</dt>
+        <dd>{{_id}}</dd>
+        <dt>Name</dt>
+        <dd>{{name}}</dd>
+        <dt>Gender</dt>
+        <dd>{{gender}}</dd>
+        <dt>Type</dt>
+        <dd>{{customerType}}</dd>
+        <dt>Status</dt>
+        <dd>{{status}}</dd>
+        <dt>Address</dt>
+        <dd>{{address}}</dd>
+        <dt>Telephone</dt>
+        <dd>{{telephone}}</dd>
+        <dt>Description</dt>
+        <dd>{{Description}}</dd>
+    </dl>
+</template>

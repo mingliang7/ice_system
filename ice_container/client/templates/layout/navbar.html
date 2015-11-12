@@ -7,7 +7,8 @@
                 Data<span class="caret"></span>
             </a>
             <ul class="dropdown-menu" role="menu">
-                <li class="{{isActiveRoute regex='ice.customer'}}"><a href="{{pathFor 'iceContainer.customer'}}">Customer</a></li>
+                <li class="{{isActiveRoute regex='iceContainer.customer'}}"><a href="{{pathFor 'iceContainer.customer'}}">Customer</a></li>
+                <li class="{{isActiveRoute regex='iceContainer.container'}}"><a href="{{pathFor 'iceContainer.container'}}">Container&nbsp;<span class="badge badge-success">{{getPublishedCount 'containerCounter'}}</span></a></li>
             </ul>
         </li>
     </ul>
