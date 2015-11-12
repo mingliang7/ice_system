@@ -40,3 +40,8 @@ Ice.Collection.EndOfProcess.permit([
 	'update'
 	'remove'
 ]).ice_ifGeneral().apply()
+Ice.Collection.Container.permit([
+  'insert'
+  'update'
+  'remove'
+]).ice_ifGeneral().apply()

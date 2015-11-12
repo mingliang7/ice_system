@@ -5,5 +5,6 @@ Meteor.subscribe 'ice_orderGroup'
 # Meteor.subscribe 'ice_payments'
 Meteor.subscribe 'ice_userStaff'
 Meteor.subscribe 'ice_staff'
+Meteor.subscribe "container"
 # Meteor.subscribe 'ice_removeInvoiceLog'
 # Meteor.subscribe 'ice_endOfProcess'

@@ -1,8 +1,8 @@
-<template name="iceContainer_container">
-	{{> iceContainer_containerTabular}}
+<template name="ice_container">
+	{{> ice_containerTabular}}
 </template>
 
-<template name="iceContainer_containerTabular">
+<template name="ice_containerTabular">
     <p>
         <button type="button" class="btn btn-primary insert">{{fa "plus"}} Add New</button>
     </p>
@@ -14,11 +14,11 @@
 		</span>
 	</p>
 
-    {{> tabular table=IceContainer.TabularTable.Container selector=selector class="table table-striped table-bordered table-condensed table-hover customer"}}
+    {{> tabular table=Ice.TabularTable.Container selector=selector class="table table-striped table-bordered table-condensed table-hover customer"}}
 </template>
 
 <!--Action-->
-<template name="iceContainer_containerAction">
+<template name="ice_containerAction">
     {{#tabularAction}}
         <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
         <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
@@ -27,8 +27,8 @@
 </template>
 
 <!-- insert -->
-<template name="iceContainer_insert">
-    {{#autoForm collection=IceContainer.Collection.Container id="iceContainer_insert" type="insert"}}
+<template name="ice_insert">
+    {{#autoForm collection=Ice.Collection.Container id="ice_insert" type="insert"}}
         <div class="row">
             <div class="col-md-12">
                 {{> afQuickField name='code' value=getCode readonly=true}}
@@ -45,8 +45,8 @@
 </template>
 
 <!-- update -->
-<template name="iceContainer_update">
-    {{#autoForm collection=IceContainer.Collection.Container doc=this id="iceContainer_update" type="update"}}
+<template name="ice_update">
+    {{#autoForm collection=Ice.Collection.Container doc=this id="ice_update" type="update"}}
         <div class="row">
             <div class="col-md-12">
               {{> afQuickField name='code'}}
@@ -62,7 +62,7 @@
 </template>
 
 <!-- Show -->
-<template name="iceContainer_show">
+<template name="ice_show">
     <dl class="dl-horizontal">
         <dt>Id</dt>
         <dd>{{_id}}</dd>

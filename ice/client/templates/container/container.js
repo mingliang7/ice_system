@@ -1,13 +1,13 @@
-var indexTpl = Template.iceContainer_container,
-  insertTpl = Template.iceContainer_insert,
-  updateTpl = Template.iceContainer_update,
-  showTpl = Template.iceContainer_show;
+var indexTpl = Template.ice_container,
+  insertTpl = Template.ice_insert,
+  updateTpl = Template.ice_update,
+  showTpl = Template.ice_show;
 indexTpl.onRendered(function () {
   Session.set('Available', 'Available');
   createNewAlertify('container');
 });
 
-Template.iceContainer_containerTabular.helpers({
+Template.ice_containerTabular.helpers({
   selector: function () {
     var obj = {};
     var available = Session.get('Available');
@@ -66,7 +66,7 @@ indexTpl.events({
 
 insertTpl.helpers({
   getCode: function () {
-    return idGenerator.genWithPrefix(IceContainer.Collection.Container,
+    return idGenerator.genWithPrefix(Ice.Collection.Container,
       'BP', 5, 'code');
   }
 });
@@ -75,7 +75,7 @@ insertTpl.helpers({
 // autoform hooks
 
 AutoForm.hooks({
-  iceContainer_insert: {
+  ice_insert: {
     onSuccess: function (type, result) {
       Session.set("code", true);
       alertify.success('Successfully Insert')

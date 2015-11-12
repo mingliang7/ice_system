@@ -1,5 +1,5 @@
 Meteor.publish('container', function () {
-  Counts.publish(this, 'containerCounter', IceContainer.Collection.Container
+  Counts.publish(this, 'containerCounter', Ice.Collection.Container
     .find({
       status: 'Available'
     }));

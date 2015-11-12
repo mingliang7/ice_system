@@ -1,7 +1,7 @@
 # Customer
-IceContainer.TabularTable.Container = new (Tabular.Table)(
+Ice.TabularTable.Container = new (Tabular.Table)(
   name: 'iceContainerList'
-  collection: IceContainer.Collection.Container
+  collection: Ice.Collection.Container
   pagingType: 'full_numbers'
   autoWidth: false
   columnDefs: [ {
