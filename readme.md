@@ -12,7 +12,7 @@ Ice.Schema.Container = new SimpleSchema({
     decimal: true
 
   term:
-    type: String
+    type: Number
     optional: true
 
   status:
@@ -45,6 +45,17 @@ Ice.Schema.lending = new SimpleSchema({
 
   'containers.$.containerId':
     type: String
+  
+  'containers.$.condition':
+    type: String
+
+  'containers.$.returnDate':
+    type: Date
+    optional: true
+
+  'containers.$.returnCondition':
+    type: String
+    optional: true
 
 })
 ```
