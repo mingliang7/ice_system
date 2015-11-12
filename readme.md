@@ -1,7 +1,7 @@
 ## ice container schema
 ```js
 Ice.Schema.Container = new SimpleSchema({
-  condition: 
+  condition:
     type: String
 
   unit:
@@ -11,7 +11,7 @@ Ice.Schema.Container = new SimpleSchema({
     type: Number
     decimal: true
 
-  option:
+  term:
     type: String
     optional: true
 
@@ -20,6 +20,51 @@ Ice.Schema.Container = new SimpleSchema({
     autoValue: ->
       if @isInsert
         'Available'
+
+  transaction:
+    type: Array
+    blackbox: true
+    optional: true
+
+})
+```
+## ice lending schema
+```js
+Ice.Schema.lending = new SimpleSchema({
+  lendingDate:
+    type: Date
+
+  customerId:
+    type: String
+
+  containers:
+    type: Array
+
+  'containers.$':
+    type: Object
+
+  'containers.$.containerId':
+    type: String
+
+})
+```
+## ice returning schema
+```js
+Ice.Schema.returning = new SimpleSchema({
+  returningDate:
+    type: Date
+
+  customerId:
+    type: String
+
+  containers:
+    type: Array
+
+  'containers.$':
+    type: Object
+
+  'containers.$.containerId':
+    type: String
 
 })
 ```
