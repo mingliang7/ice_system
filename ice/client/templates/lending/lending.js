@@ -32,13 +32,6 @@ insertTpl.events({
     $('.containerDropDown').modal();
   }
 });
-Template.containerDropDown.helpers({
-  selector: function () {
-    return {
-      status: 'Available'
-    }
-  }
-});
 Template.containerDropDown.events({
   'click tbody > tr': function (event) {
     var dataTable = $(event.target).closest('table').DataTable();

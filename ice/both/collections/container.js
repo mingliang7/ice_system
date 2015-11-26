@@ -15,7 +15,7 @@ Ice.Schema.Container = new SimpleSchema({
   condition: {
     type: String,
     autoform: {
-      type: 'select2',
+      type: 'select',
       options: function () {
         return Ice.List.condition();
       }
