@@ -21,7 +21,12 @@ Ice.Schema.Lending = new SimpleSchema({
 
   'containers.$.condition':
     type: String
+    autoform:
+      type: 'select'
+      options: ->
+        Ice.List.condition()
 
+# update when return container
   'containers.$.returnDate':
     type: Date
     optional: true

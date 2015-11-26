@@ -1,0 +1,183 @@
+<template name="ice_lending">
+	{{> ice_lendingTabular}}
+</template>
+
+<template name="ice_lendingTabular">
+    {{> tabular table=Ice.TabularTable.Lending selector=selector class="table table-striped table-bordered table-condensed table-hover customer"}}
+</template>
+
+<!--Action-->
+<template name="ice_lendingAction">
+    {{#tabularAction}}
+        <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
+        <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
+        <li><a href="#" class="show">{{fa "eye"}} Show</a></li>
+    {{/tabularAction}}
+</template>
+
+<!-- insert -->
+<template name="ice_lendingInsert">
+		{{> containerDropDown}}
+    {{#autoForm collection=Ice.Collection.Lending id="ice_lendingInsert" type="insert"}}
+        <div class="row">
+					<div class="col-md-12">
+                {{> afQuickField name='customerId' value=customerId type='hidden'}}
+            <div class="col-md-4">
+							<label for="">Customer<b>*</b></label>
+							<input type="text" value={{customerName}} class="form-control" readonly="true">
+            </div>
+						<div class="col-md-4">
+							{{> afQuickField name='lendingDate'}}
+						</div>
+						<div class="col-md-4">
+							{{> afQuickField name='staffId'}}
+						</div>
+					</div>
+        </div>
+				<div class="row">
+					<div class="col-md-12">
+						{{> afArrayField name="containers" id="container" template="customArrayLendingField" subtemplate="customObjectLendingField"}}
+					</div>
+				</div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+<!-- update -->
+<template name="ice_lendingUpdate">
+    {{#autoForm collection=Ice.Collection.Lending doc=this id="ice_lendingUpdate" type="update"}}
+        <div class="row">
+            <div class="col-md-12">
+              {{> afQuickField name='code'}}
+              {{> afQuickField name='unit'}}
+              {{> afQuickField name='price'}}
+              {{> afQuickField name='condition'}}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} update</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+<!-- Show -->
+<template name="ice_lendingShow">
+    <dl class="dl-horizontal">
+        <dt>Id</dt>
+        <dd>{{_id}}</dd>
+        <dt>Name</dt>
+        <dd>{{name}}</dd>
+        <dt>Gender</dt>
+        <dd>{{gender}}</dd>
+        <dt>Type</dt>
+        <dd>{{customerType}}</dd>
+        <dt>Status</dt>
+        <dd>{{status}}</dd>
+        <dt>Address</dt>
+        <dd>{{address}}</dd>
+        <dt>Telephone</dt>
+        <dd>{{telephone}}</dd>
+        <dt>Description</dt>
+        <dd>{{Description}}</dd>
+    </dl>
+</template>
+
+<!--Custom array field-->
+<template name="afArrayField_customArrayLendingField">
+    <div class="panel panel-default">
+        <div class="panel-heading">{{fa "fa fa-shopping-cart"}} {{afFieldLabelText name=this.atts.name}}</div>
+        <div class="panel-body">
+
+            {{#if afFieldIsInvalid name=this.atts.name}}
+                <div class="has-error">
+                    <span class="help-block">{{{afFieldMessage name=this.atts.name}}}</span>
+                </div>
+            {{/if}}
+            {{> lendingHeader}}
+            {{#afEachArrayItem name=this.atts.name minCount=this.atts.minCount maxCount=this.atts.maxCount}}
+                <div class="row array-item">
+
+                    {{> UI.dynamic template=../atts.subtemplate}}
+
+                    <div class="col-sm-1">
+                        {{#if afArrayFieldHasMoreThanMinimum name=../atts.name minCount=../atts.minCount maxCount=../atts.maxCount}}
+                            <button type="button" class="btn btn-sm btn-danger autoform-remove-item btnRemove">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/afEachArrayItem}}
+
+            {{#if afArrayFieldHasLessThanMaximum name=this.atts.name minCount=this.atts.minCount maxCount=this.atts.maxCount}}
+                <div class="row">
+                    <!--Sub Total-->
+                    <!-- <div class="col-sm-9 text-right">
+                        <strong>Sub Total :</strong>
+                    </div>
+                    <div class="col-sm-2">
+                        {{> afQuickField name='subtotal' readonly="true" label=false template="bootstrap3" class="input-sm"}}
+                    </div> -->
+                    <div class="col-sm-10"></div>
+                    <!--Add more-->
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-primary autoform-add-item btn-sm btnAdd"
+                                data-autoform-field="{{this.atts.name}}" data-autoform-minCount="{{this.atts.minCount}}"
+                                data-autoform-maxCount="{{this.atts.maxCount}}">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </div>
+                </div>
+
+            {{/if}}
+
+        </div>
+    </div>
+</template>
+
+<!--Custom object field-->
+<template name="customObjectLendingField">
+		<div class="col-sm-5">
+				<input type='text' class="form-control cursor-pointer fake" name={{current.containerId}} placeholder="Choose a container" readonly="true">
+				{{> afQuickField name=current.containerId template="bootstrap3" label=false class="input-sm item customer ice-container"
+				 readonly=true placeholder='Choose Container' type='hidden'}}
+	  </div>
+	    <div class="col-sm-5">
+	        {{> afQuickField name=current.condition template="bootstrap3" label=false class="input-sm condition cursor-pointer"}}
+	    </div>
+</template>
+
+<template name="lendingHeader">
+    <div class="row">
+        <div class="col-sm-5">
+            <label>Container*:</label>
+
+        </div>
+        <div class="col-sm-5">
+            <label>Condition:</label>
+        </div>
+    </div>
+</template>
+
+
+<template name="containerDropDown">
+    <div class="container">
+    <div class="row">
+      <div class="modal fade containerDropDown" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel"><i class="fa fa-list-alt"></i> Container</h4>
+            </div>
+            <div class="modal-body">
+              {{> tabular table=Ice.TabularTable.Container selector=selector  class="table table-striped table-bsaleed table-condensed customer"}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</template>

@@ -1,7 +1,7 @@
 # Customer
-Ice.TabularTable.Container = new (Tabular.Table)(
-  name: 'iceContainerList'
-  collection: Ice.Collection.Container
+Ice.TabularTable.Lending = new (Tabular.Table)(
+  name: 'iceLendingList'
+  collection: Ice.Collection.Lending
   pagingType: 'full_numbers'
   autoWidth: false
   columnDefs: [ {
@@ -15,11 +15,15 @@ Ice.TabularTable.Container = new (Tabular.Table)(
   columns: [
     {
       title: '<i class="fa fa-bars"></i>'
-      tmpl: Meteor.isClient and Template.ice_containerAction
+      tmpl: Meteor.isClient and Template.ice_lendingAction
     }
     {
       data: '_id'
       title: 'ID'
+    }
+    {
+      data: 'code'
+      title: 'Code'
     }
     {
       data: 'unit'

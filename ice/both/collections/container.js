@@ -15,6 +15,15 @@ Ice.Schema.Container = new SimpleSchema({
   condition: {
     type: String
   },
+  status: {
+    type: String,
+    autoValue: function () {
+      if (this.isInsert) {
+        return 'Available';
+      }
+    }
+  },
+  // transaction = [{id, date, type: 'lending or returning', condition}]
   transaction: {
     type: Array,
     optional: true
@@ -23,14 +32,6 @@ Ice.Schema.Container = new SimpleSchema({
     type: Object,
     blackbox: true,
     optional: true
-  },
-  status: {
-    type: String,
-    autoValue: function () {
-      if (this.isInsert) {
-        return 'Available';
-      }
-    }
   }
 });
 
