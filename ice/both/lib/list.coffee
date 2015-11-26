@@ -1,10 +1,10 @@
 @Ice.List =
 	condition: ->
 		list = [
-						{label: 'Broken', value: 'broken'}
-						{label: 'Bad', value: 'bad'},
-						{label: 'Medium', value: 'medium'},
 						{label: 'Good', value: 'good'},
+						{label: 'Medium', value: 'medium'},
+						{label: 'Bad', value: 'bad'},
+						{label: 'Broken', value: 'broken'}
 					 ]
 	gender: (selectOne) ->
 		list = []

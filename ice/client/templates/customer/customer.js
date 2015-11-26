@@ -59,7 +59,7 @@ Template.ice_customer.events({
       var dataTable = $(event.target).closest('table').DataTable();
       var rowData = dataTable.row(event.currentTarget).data();
       Session.set('ice_customer_id', rowData._id);
-      alertify.order(fa('plus', 'New Lending'), renderTemplate(Template
+      alertify.lending(fa('plus', 'New Lending'), renderTemplate(Template
         .ice_lendingInsert)).maximize();
     }
   }

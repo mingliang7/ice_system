@@ -13,7 +13,13 @@ Ice.Schema.Container = new SimpleSchema({
     optional: true
   },
   condition: {
-    type: String
+    type: String,
+    autoform: {
+      type: 'select2',
+      options: function () {
+        return Ice.List.condition();
+      }
+    }
   },
   status: {
     type: String,

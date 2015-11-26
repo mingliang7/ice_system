@@ -12,7 +12,9 @@ indexTpl.events({
       insertTpl)).maximize();
   }
 });
-
+insertTpl.onRendered(function () {
+  datePicker();
+});
 insertTpl.helpers({
   customerId: function () {
     return Session.get('ice_customer_id');
@@ -65,7 +67,13 @@ Template.containerDropDown.events({
   }
 
 });
-// autoform hooks
+
+//datepicker
+var datePicker = function () {
+    lendingDate = $('[name="lendingDate"]');
+    return DateTimePicker.dateTime(lendingDate);
+  }
+  // autoform hooks
 
 AutoForm.hooks({
   ice_lendingInsert: {

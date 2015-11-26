@@ -2,13 +2,17 @@ Ice.Collection.Lending = new Mongo.Collection('ice_lending')
 
 Ice.Schema.Lending = new SimpleSchema({
   lendingDate:
-    type: Date
+    type: String
 
   customerId:
     type: String
 
   staffId:
     type: String
+    autoform:
+      type: 'select2'
+      options: ->
+        Ice.List.staff()
 
   containers:
     type: Array
