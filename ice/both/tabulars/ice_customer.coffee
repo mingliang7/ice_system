@@ -7,7 +7,7 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
   columnDefs: [ {
     'width': '12px'
     'targets': 0
-  } ]
+  }, {'width': '12px', 'targets': 8} ]
   order: [ [
     '1'
     'desc'
@@ -44,7 +44,7 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
           "<p class='label label-success'>#{val.capitalize()}</p>"
         else
           "<p class='label label-warning'>#{val.capitalize()}</p>"
-    } 
+    }
     {
       data: 'address'
       title: 'Address'
@@ -53,9 +53,13 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
       data: 'telephone'
       title: 'Telephone'
     }
+    {
+      data: '_lendingCount'
+      title: 'LC <i class="fa fa-arrow-up"></i>'
+      tmpl: Meteor.isClient and Template.ice_lendingCount
+    }
   ])
 
 
 String.prototype.capitalize = ->
     this.charAt(0).toUpperCase() + this.slice(1)
-

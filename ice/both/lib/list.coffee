@@ -1,5 +1,11 @@
 @Ice.List =
-
+	condition: ->
+		list = [
+						{label: 'Good', value: 'good'},
+						{label: 'Medium', value: 'medium'},
+						{label: 'Bad', value: 'bad'},
+						{label: 'Broken', value: 'broken'}
+					 ]
 	gender: (selectOne) ->
 		list = []
 		if !_.isEqual(selectOne, false)
@@ -68,7 +74,7 @@
 		list = []
 		userId = Meteor.userId()
 		staff = Ice.Collection.UserStaffs.findOne({userId: userId})
-		list.push {label: "(Select One)", value: "" }	
+		list.push {label: "(Select One)", value: "" }
 		if staff != undefined
 			findStaff(list, staff.staffIds)
 		list
@@ -141,7 +147,7 @@
 	  ]
 
 
-# functions 
+# functions
 staffName = (id) ->
 	{name} = Ice.Collection.Staffs.findOne(id)
 	name
@@ -149,5 +155,5 @@ findStaff = (list, staffIds) ->
 	i = 0
 	while i < staffIds.length
 		list.push {label: staffName(staffIds[i]), value: staffIds[i]}
-		i++ 
+		i++
 	list

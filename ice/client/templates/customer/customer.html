@@ -18,7 +18,16 @@
         <li><a href="#" class="show">{{fa "eye"}} Show</a></li>
     {{/tabularAction}}
 </template>
-
+<template name="ice_lendingCount">
+	<button class="btn btn-default lending-count">
+        {{#if _lendingCount}}
+         {{_lendingCount}}
+        {{else}}
+         0
+        {{/if}}
+        <!-- <i class="fa fa-arrow-circle-right"></i>Order List -->
+      </button>
+</template>
 <!-- insert -->
 <template name="ice_insertTemplate">
     {{#autoForm collection=Ice.Collection.Customer id="insertTemplate" type="insert"}}
