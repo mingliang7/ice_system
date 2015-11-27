@@ -1,5 +1,5 @@
 @Ice.List =
-	condition: ->
+	condition: ()->
 		list = [
 						{label: 'Good', value: 'good'},
 						{label: 'Medium', value: 'medium'},

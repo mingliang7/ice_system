@@ -46,19 +46,31 @@
 
 <!-- update -->
 <template name="ice_lendingUpdate">
-    {{#autoForm collection=Ice.Collection.Lending doc=this id="ice_lendingUpdate" type="update"}}
-        <div class="row">
-            <div class="col-md-12">
-              {{> afQuickField name='code'}}
-              {{> afQuickField name='unit'}}
-              {{> afQuickField name='price'}}
-              {{> afQuickField name='condition'}}
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} update</button>
-        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
-    {{/autoForm}}
+	{{> containerDropDown}}
+	{{#autoForm collection=Ice.Collection.Lending doc=this id="ice_lendingUpdate" type="update"}}
+			<div class="row">
+				<div class="col-md-12">
+							{{> afQuickField name='customerId' value=customerId type='hidden'}}
+					<div class="col-md-4">
+						<label for="">Customer<b>*</b></label>
+						<input type="text" value={{customerName}} class="form-control" readonly="true">
+					</div>
+					<div class="col-md-4">
+						{{> afQuickField name='lendingDate'}}
+					</div>
+					<div class="col-md-4">
+						{{> afQuickField name='staffId'}}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					{{> afArrayField name="containers" id="container" template="customArrayLendingField" subtemplate="customObjectLendingField"}}
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+			<button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+	{{/autoForm}}
 </template>
 
 <!-- Show -->
@@ -139,9 +151,15 @@
 <!--Custom object field-->
 <template name="customObjectLendingField">
 		<div class="col-sm-5">
-				<input type='text' class="form-control cursor-pointer fake" name={{current.containerId}} placeholder="Choose a container" readonly="true">
+		{{#if check formId}} <!-- check if update-->
 				{{> afQuickField name=current.containerId template="bootstrap3" label=false class="input-sm item customer ice-container"
 				 readonly=true placeholder='Choose Container' type='hidden'}}
+				<input type='text' class="form-control cursor-pointer fake" value={{currentName current.containerId}} name={{current.containerId}} placeholder="Choose a container" readonly="true">
+		{{else}}
+				{{> afQuickField name=current.containerId template="bootstrap3" label=false class="input-sm item customer ice-container"
+				 readonly=true placeholder='Choose Container' type='hidden'}}
+				<input type='text' class="form-control cursor-pointer fake" name={{current.containerId}} placeholder="Choose a container" readonly="true">
+		{{/if}}
 	  </div>
 	    <div class="col-sm-5">
 	        {{> afQuickField name=current.condition template="bootstrap3" label=false class="input-sm condition cursor-pointer"}}
@@ -172,7 +190,7 @@
               <h4 class="modal-title" id="myModalLabel"><i class="fa fa-list-alt"></i> Container</h4>
             </div>
             <div class="modal-body">
-              {{> tabular table=Ice.TabularTable.Container selector=selector  class="table table-striped table-bsaleed table-condensed customer"}}
+            	{{> ice_containerTabular data=false}}
             </div>
           </div>
         </div>

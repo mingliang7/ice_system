@@ -18,6 +18,10 @@ Ice.TabularTable.Lending = new (Tabular.Table)(
       tmpl: Meteor.isClient and Template.ice_lendingAction
     }
     {
+      data: '_id'
+      title: 'ID'
+    }
+    {
       data: '_customer.name'
       title: 'Customer'
     }

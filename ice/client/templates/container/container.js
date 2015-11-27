@@ -4,6 +4,8 @@ var indexTpl = Template.ice_container,
   showTpl = Template.ice_show;
 indexTpl.onRendered(function () {
   Session.set('Available', 'Available');
+  // Session.set('Broken', 'Unavailable');
+  // Session.set('Broken', 'Broken');
   createNewAlertify('container');
 });
 
@@ -28,6 +30,7 @@ Template.ice_containerTabular.helpers({
 
   }
 })
+
 indexTpl.events({
   'change [name="available"]': function (
     event) {
@@ -71,11 +74,20 @@ insertTpl.helpers({
   }
 });
 
-
+indexTpl.onDestroyed(function () {
+  Session.set('Unavailable', undefined);
+  Session.set('Broken', undefined);
+});
 // autoform hooks
 
 AutoForm.hooks({
   ice_insert: {
+    before: {
+      insert: function (doc) {
+        doc.transaction = [];
+        return doc;
+      }
+    },
     onSuccess: function (type, result) {
       Session.set("code", true);
       alertify.success('Successfully Insert')
