@@ -38,6 +38,9 @@ Ice.Schema.Container = new SimpleSchema({
     type: Object,
     blackbox: true,
     optional: true
+  },
+  branchId: {
+    type: String
   }
 });
 

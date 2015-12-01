@@ -17,12 +17,18 @@ Ice.Schema.Returning = new SimpleSchema({
 
   'containers.$.lendingId':
     type: String
-
+    autoform:
+      type: 'select'
   'containers.$.containerId':
     type: String
-
+    autoform:
+      type: 'select'
   'containers.$.condition':
     type: String
+    autoform:
+      type: 'select'
+      options: ->
+        Ice.List.condition()
 
   'containers.$.returnMoney':
     type: Number

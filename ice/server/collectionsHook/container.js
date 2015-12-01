@@ -1,3 +1,4 @@
 Ice.Collection.Container.before.insert(function (userId, doc) {
-  doc._id = idGenerator.gen(Ice.Collection.Container, 5);
+  var prefix = doc.branchId + '-';
+  doc._id = idGenerator.genWithPrefix(Ice.Collection.Container, prefix, 5);
 })

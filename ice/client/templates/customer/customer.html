@@ -1,13 +1,16 @@
 <template name="ice_customer">
 	{{> ice_customerTabular}}
+	<div class="hidden">
+		{{> ice_container}}
+	</div>
 </template>
 
 <template name="ice_customerTabular">
     <p>
         <button type="button" class="btn btn-primary insert">{{fa "plus"}} Add New</button>
     </p>
-
     {{> tabular table=Ice.TabularTable.Customer selector=selector class="table table-striped table-bordered table-condensed table-hover customer"}}
+
 </template>
 
 <!--Action-->
@@ -22,6 +25,16 @@
 	<button class="btn btn-default lending-count">
         {{#if _lendingCount}}
          {{_lendingCount}}
+        {{else}}
+         0
+        {{/if}}
+        <!-- <i class="fa fa-arrow-circle-right"></i>Order List -->
+      </button>
+</template>
+<template name="ice_returningCount">
+	<button class="btn btn-default returning-count">
+        {{#if _returningCount}}
+         {{_returningCount}}
         {{else}}
          0
         {{/if}}
