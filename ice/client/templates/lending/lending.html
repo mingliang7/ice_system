@@ -15,64 +15,6 @@
     {{/tabularAction}}
 </template>
 
-<!-- insert -->
-<template name="ice_lendingInsert">
-		{{> containerDropDown}}
-    {{#autoForm collection=Ice.Collection.Lending id="ice_lendingInsert" type="insert"}}
-        <div class="row">
-					<div class="col-md-12">
-                {{> afQuickField name='customerId' value=customerId type='hidden'}}
-            <div class="col-md-4">
-							<label for="">Customer<b>*</b></label>
-							<input type="text" value={{customerName}} class="form-control" readonly="true">
-            </div>
-						<div class="col-md-4">
-							{{> afQuickField name='lendingDate'}}
-						</div>
-						<div class="col-md-4">
-							{{> afQuickField name='staffId'}}
-						</div>
-					</div>
-        </div>
-				<div class="row">
-					<div class="col-md-12">
-						{{> afArrayField name="containers" id="container" template="customArrayLendingField" subtemplate="customObjectLendingField"}}
-					</div>
-				</div>
-        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
-        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
-    {{/autoForm}}
-</template>
-
-<!-- update -->
-<template name="ice_lendingUpdate">
-	{{> containerDropDown}}
-	{{#autoForm collection=Ice.Collection.Lending doc=this id="ice_lendingUpdate" type="update"}}
-			<div class="row">
-				<div class="col-md-12">
-							{{> afQuickField name='customerId' value=customerId type='hidden'}}
-					<div class="col-md-4">
-						<label for="">Customer<b>*</b></label>
-						<input type="text" value={{customerName}} class="form-control" readonly="true">
-					</div>
-					<div class="col-md-4">
-						{{> afQuickField name='lendingDate'}}
-					</div>
-					<div class="col-md-4">
-						{{> afQuickField name='staffId'}}
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					{{> afArrayField name="containers" id="container" template="customArrayLendingField" subtemplate="customObjectLendingField"}}
-				</div>
-			</div>
-			<button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
-			<button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
-	{{/autoForm}}
-</template>
-
 <!-- Show -->
 <template name="ice_lendingShow">
     <dl class="dl-horizontal">
@@ -176,25 +118,4 @@
             <label>Condition:</label>
         </div>
     </div>
-</template>
-
-
-<template name="containerDropDown">
-    <div class="container">
-    <div class="row">
-      <div class="modal fade containerDropDown" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="myModalLabel"><i class="fa fa-list-alt"></i> Container</h4>
-            </div>
-            <div class="modal-body">
-            	{{> ice_containerTabular data=false}}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>

@@ -2,6 +2,7 @@ var indexTpl = Template.ice_returning,
   insertTpl = Template.ice_returningInsert,
   updateTpl = Template.ice_returningUpdate,
   showTpl = Template.ice_returningShow;
+var state = new ReactiveObj();
 insertTpl.helpers({
   customerId: function () {
     return Session.get('ice_customer_id');
@@ -22,26 +23,56 @@ Template.customObjectReturningField.helpers({
     return listLending;
   },
   listContainer: function () {
-    var lendingId = Session.get('lendingId');
+    var condition = this.current.condition;
+    var lendingId = state.get(condition);
     return ReactiveMethod.call('listContainer', lendingId);
   }
 });
 
 Template.customObjectReturningField.events({
   'change .lendingId': function (event) {
+    var condition = event.currentTarget.name.replace('lendingId',
+      'condition');
     try {
-      Session.set('lendingId', $(event.currentTarget).val())
+      state.set(condition, $(event.currentTarget).val())
     } catch (e) {
 
     }
   },
   'change .containerId': function (event) {
-    var currentElemName = event.currentTarget.name.replace('containerId',
-      'condition');
-    var condition = $('[name="' + event.currentTarget.name +
-      '"] option:selected').text();
-    $('select[name="' + currentElemName + '"]').val(condition.split(' ')[
-      3]);
+    var currentValue = event.currentTarget.value;
+    var currentReturnMoney = event.currentTarget.name.replace(
+      'containerId', 'returnMoney');
+    var arr = [];
+    $('[name="' + event.currentTarget.name + '"]').val('') //set current selected value to ''
+    $('.containerId').each(function (position, obj) {
+      arr.push(obj.value);
+    })
+    var validateContainer = !_.contains(arr, currentValue); // if not contain selected value
+    if (validateContainer) {
+      $('[name="' + event.currentTarget.name + '"]').val(currentValue) //set current selected value
+      var currentElemName = event.currentTarget.name.replace(
+        'containerId',
+        'condition');
+      var condition = $('[name="' + event.currentTarget.name +
+        '"] option:selected').text();
+      $('select[name="' + currentElemName + '"]').val(condition.split(' ')[
+        3]);
+      $('[name="' + currentReturnMoney + '"]').attr('readonly', true);
+    } else {
+      $('[name="' + event.currentTarget.name + '"]').val('');
+      alertify.warning('Container ID dupplicated. Please choose other!');
+    }
+  },
+  'change .condition': function (event) {
+    var currentValue = event.currentTarget.value;
+    var currentReturnMoney = event.currentTarget.name.replace('condition',
+      'returnMoney');
+    if (currentValue == 'broken') {
+      $('[name="' + currentReturnMoney + '"]').attr('readonly', false);
+    } else {
+      $('[name="' + currentReturnMoney + '"]').attr('readonly', true);
+    }
   }
 });
 AutoForm.hooks({

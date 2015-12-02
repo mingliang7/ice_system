@@ -150,16 +150,16 @@
 <!--Custom object field-->
 <template name="customObjectReturningField">
 		<div class="col-sm-3">
-				{{> afQuickField name=current.lendingId template="bootstrap3" label=false class="input-sm item customer lendingId" options=listLending}}
+				{{> afQuickField name=current.lendingId template="bootstrap3" label=false class="input-sm item  lendingId" options=listLending}}
 	  </div>
 	    <div class="col-sm-3">
-	        {{> afQuickField name=current.containerId template="bootstrap3" label=false class="input-sm condition containerId" options=listContainer}}
+	        {{> afQuickField name=current.containerId template="bootstrap3" label=false class="input-sm  containerId" options=listContainer}}
 	    </div>
 	    <div class="col-sm-2">
-	        {{> afQuickField name=current.condition template="bootstrap3" label=false class="input-sm condition cursor-pointer"}}
+	        {{> afQuickField name=current.condition template="bootstrap3" label=false class="input-sm cursor-pointer condition"}}
 	    </div>
 			<div class="col-sm-2">
-					{{> afQuickField name=current.returnMoney template="bootstrap3" label=false class="input-sm condition cursor-pointer"}}
+					{{> afQuickField name=current.returnMoney template="bootstrap3" label=false class="input-sm" readonly='true'}}
 			</div>
 </template>
 
@@ -180,25 +180,4 @@
             <label>Return Money:</label>
         </div>
     </div>
-</template>
-
-
-<template name="userDropDown">
-    <div class="user">
-    <div class="row">
-      <div class="modal fade userDropDown" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="myModalLabel"><i class="fa fa-list-alt"></i> Users</h4>
-            </div>
-            <div class="modal-body">
-            	{{> ice_customerTabular}}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>

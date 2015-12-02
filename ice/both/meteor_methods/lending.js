@@ -1,4 +1,7 @@
 Meteor.methods({
+  getLending: function (id) {
+    return Ice.Collection.Lending.findOne(id);
+  },
   checkReturn: function (id) {
     var flag, returnDate;
     returnDate = Ice.Collection.Lending.findOne({
