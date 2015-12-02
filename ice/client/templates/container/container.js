@@ -126,7 +126,7 @@ insertTpl.events({
     var obj = {};
     obj.qty = parseInt($(event.currentTarget).val());
     unit = $("[name='unit']").val();
-    price = $("[name='unit']").val();
+    price = $("[name='price']").val();
     obj.condition = $('[name="condition"]').val()
     obj.branchId = Session.get('currentBranch');
     if (unit == '' || price == '' || obj.condition == '') {

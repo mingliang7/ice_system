@@ -15,20 +15,24 @@ Meteor.methods({
   },
   listLendingByCustomerId: function (customerId) {
     var list = [];
+    var flag = [];
     var lendings = Ice.Collection.Lending.find({
-      customerId: customerId,
-      'containers.returnDate': {
-        $exists: false
-      }
+      customerId: customerId
     }).fetch();
     if (lendings.length > 0) {
       lendings.forEach(function (lending) {
-        list.push({
-          label: lending._id + ' | Date:' + lending.lendingDate,
-          value: lending._id
-        })
+        for (var i = 0; i < lending.containers.length; i++) {
+          if (_.isUndefined(lending.containers[i].returnDate)) {
+            list.push({
+              label: lending._id + ' | Date:' + lending.lendingDate,
+              value: lending._id
+            })
+            break
+          }
+        }
       });
     }
+    console.log(list);
     return list;
   },
   listContainer: function (lendingId) {
@@ -37,11 +41,14 @@ Meteor.methods({
     var lending = Ice.Collection.Lending.findOne(lendingId);
     if (!_.isUndefined(lending)) {
       lending.containers.forEach(function (container) {
-        list.push({
-          label: container.containerId + ' | condition: ' +
-            container.condition,
-          value: container.containerId
-        });
+        if (!container.returnDate) {
+          list.push({
+            label: container.containerId + ' | condition: ' +
+              container.condition,
+            value: container.containerId
+          });
+
+        }
       });
     }
     return list;

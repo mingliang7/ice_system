@@ -20,7 +20,7 @@
     {{#autoForm collection=Ice.Collection.Returning id="ice_returningInsert" type="insert"}}
         <div class="row">
 					<div class="col-md-12">
-                {{> afQuickField name='customerId' value=customerId }}
+                {{> afQuickField name='customerId' value=customerId type='hidden'}}
             <div class="col-md-4">
 							<label for="">Customer<b>*</b></label>
 							<input type="text" value={{customerName}} class="form-control" readonly="true">

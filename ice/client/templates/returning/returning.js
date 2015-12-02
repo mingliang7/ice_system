@@ -13,6 +13,12 @@ insertTpl.helpers({
     return name;
   }
 });
+insertTpl.onRendered(function () {
+  datePicker();
+});
+updateTpl.onRendered(function () {
+  datePicker();
+});
 
 Template.customObjectReturningField.helpers({
   listLending: function () {
@@ -75,6 +81,10 @@ Template.customObjectReturningField.events({
     }
   }
 });
+var datePicker = function () {
+  returningDate = $('[name="returningDate"]');
+  return DateTimePicker.dateTime(returningDate);
+}
 AutoForm.hooks({
   ice_returningInsert: {
     before: {
@@ -85,6 +95,7 @@ AutoForm.hooks({
     },
     onSuccess: function (type, result) {
       alertify.success('Successfully Insert')
+      alertify.returning().close();
     },
     onError: function (type, err) {
       alertify.error(err.message);
