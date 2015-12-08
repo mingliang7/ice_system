@@ -13,11 +13,25 @@ insertTpl.helpers({
     return name;
   }
 });
+
 insertTpl.onRendered(function () {
   datePicker();
 });
+
 updateTpl.onRendered(function () {
   datePicker();
+});
+
+indexTpl.onRendered(function () {
+  createNewAlertify('returning')
+});
+
+indexTpl.events({
+  'click .update': function () {
+    var data = this;
+    alertify.returning(fa('pencil', 'Edit Returning'), renderTemplate(
+      updateTpl, data)).maximize();
+  }
 });
 
 Template.customObjectReturningField.helpers({
@@ -32,6 +46,14 @@ Template.customObjectReturningField.helpers({
     var condition = this.current.condition;
     var lendingId = state.get(condition);
     return ReactiveMethod.call('listContainer', lendingId);
+  },
+  checkForm: function (formId) {
+    console.log(formId);
+    if (formId == 'ice_returningUpdate') {
+      return true;
+    } else {
+      return false;
+    }
   }
 });
 

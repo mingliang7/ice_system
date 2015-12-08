@@ -30,7 +30,7 @@ Ice.TabularTable.Returning = new (Tabular.Table)(
       title: 'Staff'
     }
     {
-      data: 'returnDate'
+      data: 'returningDate'
       title: 'Returning Date'
     }
     {

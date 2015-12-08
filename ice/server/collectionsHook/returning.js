@@ -10,3 +10,12 @@ Ice.Collection.Returning.after.insert(function (userId, doc) {
     Container.updateLending(doc, doc.containers)
   });
 })
+
+Ice.Collection.Returning.after.update(function (userId, doc) {
+  var preDoc = this.previous;
+  var currentDoc = doc;
+  Meteor.defer(function () {
+    Meteor._sleepForMs(1500);
+    Container.freeContainer(preDoc._id, preDoc.containers);
+  });
+});
