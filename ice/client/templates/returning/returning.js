@@ -20,6 +20,12 @@ insertTpl.onRendered(function () {
 
 updateTpl.onRendered(function () {
   datePicker();
+  var index = 0;
+  //set state foreach conainer
+  this.data.containers.forEach(function (container) {
+    state.set('containers.' + index + '.condition', container.lendingId);
+    index++;
+  });
 });
 
 indexTpl.onRendered(function () {
@@ -36,16 +42,32 @@ indexTpl.events({
 
 Template.customObjectReturningField.helpers({
   listLending: function () {
-    var customerId = Session.get('ice_customer_id');
-    var listLending = ReactiveMethod.call('listLendingByCustomerId',
-      customerId);
-    console.log(listLending)
-    return listLending;
+    var customerId, listLening;
+    if (this.formId == 'ice_returningUpdate') {
+      customerId = $('[name="customerId"]').val();
+      listLending = ReactiveMethod.call('listUpdateLendingByCustomerId',
+        customerId);
+      console.log(listLending)
+      return listLending;
+    } else {
+      customerId = Session.get('ice_customer_id');
+      listLending = ReactiveMethod.call('listLendingByCustomerId',
+        customerId);
+      console.log(listLending)
+      return listLending;
+    }
   },
   listContainer: function () {
     var condition = this.current.condition;
-    var lendingId = state.get(condition);
-    return ReactiveMethod.call('listContainer', lendingId);
+    var lendingId;
+    if (this.formId == 'ice_returningUpdate') {
+      debugger
+      lendingId = state.get(condition);
+      return ReactiveMethod.call('listUpdateContainer', lendingId);
+    } else {
+      lendingId = state.get(condition);
+      return ReactiveMethod.call('listContainer', lendingId);
+    }
   },
   checkForm: function (formId) {
     console.log(formId);

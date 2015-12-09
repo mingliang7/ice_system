@@ -148,23 +148,13 @@
 
 <!--Custom object field-->
 <template name="customObjectReturningField">
-	{{#if checkForm formId}}
-		<div class="col-sm-3">
-				{{> afQuickField name=current.lendingId template="bootstrap3" label=false class="input-sm item  lendingId" }}
-	  </div>
-	    <div class="col-sm-3">
-	        {{> afQuickField name=current.containerId template="bootstrap3" label=false class="input-sm  containerId" }}
-	    	</div>
-			{{else}}
+
 			<div class="col-sm-3">
 					{{> afQuickField name=current.lendingId template="bootstrap3" label=false class="input-sm item  lendingId" options=listLending}}
 			</div>
 				<div class="col-sm-3">
 						{{> afQuickField name=current.containerId template="bootstrap3" label=false class="input-sm  containerId" options=listContainer}}
 					</div>
-
-			{{/if}}
-
 	    <div class="col-sm-2">
 	        {{> afQuickField name=current.condition template="bootstrap3" label=false class="input-sm cursor-pointer condition"}}
 	    </div>
