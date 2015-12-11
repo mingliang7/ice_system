@@ -17,5 +17,15 @@ Ice.Collection.Returning.after.update(function (userId, doc) {
   Meteor.defer(function () {
     Meteor._sleepForMs(1500);
     Container.freeContainer(preDoc._id, preDoc.containers);
+    Container.updateLending(doc, doc.containers, preDoc);
+  });
+});
+
+Ice.Collection.Returning.after.remove(function (userId, doc) {
+  var removedDoc = doc;
+  Meteor.defer(function () {
+    Meteor._sleepForMs(1500);
+    Container.unfreeContainer(removedDoc._id, removedDoc.containers);
+    Container.unsetReturningContainer(removedDoc);
   });
 });

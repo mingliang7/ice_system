@@ -13,7 +13,7 @@ Meteor.methods({
     flag = _.isUndefined(returnDate) ? false : true;
     return flag;
   },
-  listLendingByCustomerId: function (customerId) {
+  listUpdateLendingByCustomerId: function (customerId) {
     var list = [];
     var flag = [];
     var lendings = Ice.Collection.Lending.find({
@@ -21,22 +21,15 @@ Meteor.methods({
     }).fetch();
     if (lendings.length > 0) {
       lendings.forEach(function (lending) {
-        for (var i = 0; i < lending.containers.length; i++) {
-          if (_.isUndefined(lending.containers[i].returnDate)) {
-            list.push({
-              label: lending._id + ' | Date:' + lending.lendingDate,
-              value: lending._id
-            })
-            break
-          }
-        }
+        list.push({
+          label: lending._id + ' | Date:' + lending.lendingDate,
+          value: lending._id
+        })
       });
     }
-    console.log(list);
     return list;
   },
   listContainer: function (lendingId) {
-    console.log(lendingId);
     var list = [];
     var lending = Ice.Collection.Lending.findOne(lendingId);
     if (!_.isUndefined(lending)) {
@@ -53,7 +46,7 @@ Meteor.methods({
     }
     return list;
   },
-  listUpdateLendingByCustomerId: function (customerId) {
+  listLendingByCustomerId: function (customerId) {
     var list = [];
     var flag = [];
     var lendings = Ice.Collection.Lending.find({
@@ -66,23 +59,36 @@ Meteor.methods({
             label: lending._id + ' | Date:' + lending.lendingDate,
             value: lending._id
           })
+          break
         }
       });
     }
-    console.log(list);
     return list;
   },
-  listUpdateContainer: function (lendingId) {
-    console.log(lendingId);
+  listUpdateContainer: function (lendingId, returnId) {
     var list = [];
     var lending = Ice.Collection.Lending.findOne(lendingId);
     if (!_.isUndefined(lending)) {
       lending.containers.forEach(function (container) {
-        list.push({
-          label: container.containerId + ' | condition: ' +
-            container.condition,
-          value: container.containerId
-        });
+        var returnContainer = Ice.Collection.Returning.findOne({
+          _id: {
+            $ne: returnId
+          },
+          containers: {
+            $elemMatch: {
+              containerId: container.containerId,
+              lendingId: lendingId
+            }
+          }
+        })
+        if (_.isUndefined(returnContainer)) // if no container available in other record
+        {
+          list.push({
+            label: container.containerId + ' | condition: ' +
+              container.condition,
+            value: container.containerId
+          });
+        }
       });
     }
     return list;

@@ -22,6 +22,8 @@ updateTpl.onRendered(function () {
   datePicker();
   var index = 0;
   //set state foreach conainer
+  state.set('returnId', this.data._id);
+  debugger
   this.data.containers.forEach(function (container) {
     state.set('containers.' + index + '.condition', container.lendingId);
     index++;
@@ -37,36 +39,53 @@ indexTpl.events({
     var data = this;
     alertify.returning(fa('pencil', 'Edit Returning'), renderTemplate(
       updateTpl, data)).maximize();
+  },
+  'click .remove': function () {
+    var returningId = this._id;
+    alertify.confirm(
+      fa("remove", "Returning"),
+      "Are you sure to delete [" + returningId + "]?",
+      function () {
+        Ice.Collection.Returning.remove(returningId, function (
+          error) {
+          if (error) {
+            alertify.warning(error.message);
+          } else {
+            alertify.success("Successfully removed!");
+          }
+        });
+      },
+      null
+    );
   }
 });
 
 Template.customObjectReturningField.helpers({
   listLending: function () {
-    var customerId, listLening;
+    var customerId, listLending;
     if (this.formId == 'ice_returningUpdate') {
       customerId = $('[name="customerId"]').val();
       listLending = ReactiveMethod.call('listUpdateLendingByCustomerId',
         customerId);
-      console.log(listLending)
       return listLending;
     } else {
       customerId = Session.get('ice_customer_id');
       listLending = ReactiveMethod.call('listLendingByCustomerId',
         customerId);
-      console.log(listLending)
       return listLending;
     }
   },
   listContainer: function () {
     var condition = this.current.condition;
-    var lendingId;
+    var lendingId = state.get(condition);
+    var returnId = state.get('returnId');
     if (this.formId == 'ice_returningUpdate') {
-      debugger
-      lendingId = state.get(condition);
-      return ReactiveMethod.call('listUpdateContainer', lendingId);
+      listLendingUpdate = ReactiveMethod.call('listUpdateContainer',
+        lendingId, returnId);
+      return listLendingUpdate;
     } else {
-      lendingId = state.get(condition);
-      return ReactiveMethod.call('listContainer', lendingId);
+      listLending = ReactiveMethod.call('listContainer', lendingId);
+      return _.unique(listLending)
     }
   },
   checkForm: function (formId) {
