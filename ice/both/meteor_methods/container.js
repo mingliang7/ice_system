@@ -10,6 +10,7 @@ Meteor.methods({
         obj = {
           price: containerObj.price,
           unit: containerObj.unit,
+          importDate: containerObj.date,
           condition: containerObj.condition,
           transaction: [],
           branchId: containerObj.branchId

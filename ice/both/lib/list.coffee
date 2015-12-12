@@ -1,4 +1,14 @@
 @Ice.List =
+	lendingType: ->
+		[{label: '(Select One)', value: ''},{label: 'Short Term', value: 'shortTerm'},{label: 'Long Term', value: 'longTerm'}]
+	containerCondition: ->
+		[
+						{label: '(Select One)', value: ''}
+						{label: 'Good', value: 'good'},
+						{label: 'Medium', value: 'medium'},
+						{label: 'Bad', value: 'bad'},
+						{label: 'Broken', value: 'broken'}
+					 ]
 	condition: ()->
 		list = [
 						{label: 'Good', value: 'good'},

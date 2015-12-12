@@ -4,6 +4,13 @@ Ice.Schema.Lending = new SimpleSchema({
   lendingDate:
     type: String
 
+  lendingType:
+    type: String
+    autoform:
+      type: 'select2'
+      options: ->
+        Ice.List.lendingType()
+
   customerId:
     type: String
 

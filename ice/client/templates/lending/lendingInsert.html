@@ -5,14 +5,17 @@
         <div class="row">
 					<div class="col-md-12">
                 {{> afQuickField name='customerId' value=customerId type='hidden'}}
-            <div class="col-md-4">
+            <div class="col-md-3">
 							<label for="">Customer<b>*</b></label>
 							<input type="text" value={{customerName}} class="form-control" readonly="true">
             </div>
-						<div class="col-md-4">
+						<div class="col-md-3">
 							{{> afQuickField name='lendingDate'}}
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-3">
+							{{> afQuickField name='lendingType'}}
+						</div>
+						<div class="col-md-3">
 							{{> afQuickField name='staffId'}}
 						</div>
 					</div>

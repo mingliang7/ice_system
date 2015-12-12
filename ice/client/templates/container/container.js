@@ -30,6 +30,12 @@ Template.ice_containerTabular.helpers({
 
   }
 })
+insertTpl.onRendered(function () {
+  datePicker();
+});
+updateTpl.onRendered(function () {
+  datePicker();
+});
 Template.ice_containerTabular.helpers({
   containerSelector: {
 
@@ -127,14 +133,16 @@ insertTpl.events({
     obj.qty = parseInt($(event.currentTarget).val());
     unit = $("[name='unit']").val();
     price = $("[name='price']").val();
+    date = $('[name=importDate]').val();
     obj.condition = $('[name="condition"]').val()
     obj.branchId = Session.get('currentBranch');
-    if (unit == '' || price == '' || obj.condition == '') {
-      alertify.warning('Please fill in Unit, Price and Condition');
+    if (unit == '' || price == '' || obj.condition == '' || date == '') {
+      alertify.warning('Please fill in Unit, Price and Condition, Date');
       $('.quantity').val('1');
     } else {
       obj.price = parseInt(price);
       obj.unit = parseInt(unit);
+      obj.date = date;
       Session.set('generateContainerQty', obj);
     }
   }
@@ -144,7 +152,11 @@ indexTpl.onDestroyed(function () {
   Session.set('Broken', undefined);
 });
 // autoform hooks
-
+var datePicker = function () {
+    importDate = $('[name="importDate"]');
+    return DateTimePicker.dateTime(importDate);
+  }
+  //datepicker
 AutoForm.hooks({
   ice_insert: {
     before: {
