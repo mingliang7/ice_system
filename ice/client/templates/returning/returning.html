@@ -48,7 +48,7 @@
 	{{#autoForm collection=Ice.Collection.Returning doc=this id="ice_returningUpdate" type="update"}}
 	<div class="row">
 		<div class="col-md-12">
-					{{> afQuickField name='customerId' value=customerId }}
+					{{> afQuickField name='customerId' value=customerId type='hidden'}}
 			<div class="col-md-4">
 				<label for="">Customer<b>*</b></label>
 				<input type="text" value={{_customer.name}} class="form-control" readonly="true">

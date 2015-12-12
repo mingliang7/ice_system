@@ -87,14 +87,6 @@ Template.customObjectReturningField.helpers({
       listLending = ReactiveMethod.call('listContainer', lendingId);
       return _.unique(listLending)
     }
-  },
-  checkForm: function (formId) {
-    console.log(formId);
-    if (formId == 'ice_returningUpdate') {
-      return true;
-    } else {
-      return false;
-    }
   }
 });
 
@@ -141,6 +133,7 @@ Template.customObjectReturningField.events({
       $('[name="' + currentReturnMoney + '"]').attr('readonly', false);
     } else {
       $('[name="' + currentReturnMoney + '"]').attr('readonly', true);
+      $('[name="' + currentReturnMoney + '"]').val('');
     }
   }
 });

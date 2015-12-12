@@ -1,5 +1,5 @@
 Ice.Collection.Lending.before.insert(function (userId, doc) {
-  var prefix = doc._id + '-';
+  var prefix = doc._id + '-L';
   doc._id = idGenerator.genWithPrefix(Ice.Collection.Lending, prefix, 9);
 });
 

@@ -1,7 +1,6 @@
 Container = {
   //Available container after update
   unfreeContainer: function (propId, containers) {
-    console.log(containers);
     containerTransaction(propId, containers, 'false');
   },
   freeContainer: function (propId, containers) {
@@ -60,7 +59,6 @@ Container = {
 
 var unsetReturning = function (preDoc) {
   var selector = {}
-  console.log(preDoc);
   preDoc.containers.forEach(function (container) {
     selector['containers.$.returnDate'] = '';
     selector['containers.$.returnCondition'] = '';
