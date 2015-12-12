@@ -7,7 +7,7 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
   columnDefs: [ {
     'width': '12px'
     'targets': 0
-  }, {'width': '12px', 'targets': 8} ]
+  }, {'width': '12px', 'targets': 8},{'width': '12px', 'targets': 9} ]
   order: [ [
     '1'
     'desc'
@@ -57,6 +57,11 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
       data: '_lendingCount'
       title: 'LC <i class="fa fa-arrow-up"></i>'
       tmpl: Meteor.isClient and Template.ice_lendingCount
+    }
+    {
+      data: '_returningCount'
+      title: 'RC <i class="fa fa-arrow-down"></i>'
+      tmpl: Meteor.isClient and Template.ice_returningCount
     }
   ])
 

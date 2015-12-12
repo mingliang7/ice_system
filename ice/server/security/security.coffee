@@ -61,3 +61,9 @@ Ice.Collection.Lending.permit([
   'update'
   'remove'
 ]).ice_ifGeneral().apply()
+
+Ice.Collection.Returning.permit([
+  'insert'
+  'update'
+  'remove'
+]).ice_ifGeneral().apply()

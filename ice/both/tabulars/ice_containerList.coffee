@@ -1,22 +1,17 @@
 # Customer
-Ice.TabularTable.Container = new (Tabular.Table)(
-  name: 'iceContainer'
+Ice.TabularTable.ContainerList = new (Tabular.Table)(
+  name: 'iceContainerList'
   collection: Ice.Collection.Container
   pagingType: 'full_numbers'
   autoWidth: false
   columnDefs: [ {
-    'width': '12px'
-    'targets': 0
+
   } ]
   order: [ [
     '1'
     'desc'
   ] ]
   columns: [
-    {
-      title: '<i class="fa fa-bars"></i>'
-      tmpl: Meteor.isClient and Template.ice_containerAction
-    }
     {
       data: '_id'
       title: 'ID'

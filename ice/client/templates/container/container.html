@@ -22,11 +22,11 @@
 
 <!--Action-->
 <template name="ice_containerAction">
-    {{#tabularAction}}
-        <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
-        <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
-        <li><a href="#" class="show">{{fa "eye"}} Show</a></li>
-    {{/tabularAction}}
+	    {{#tabularAction}}
+	        <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
+	        <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
+	        <li><a href="#" class="show">{{fa "eye"}} Show</a></li>
+	    {{/tabularAction}}
 </template>
 
 <!-- insert -->
@@ -37,6 +37,8 @@
                 {{> afQuickField name='unit'}}
                 {{> afQuickField name='price'}}
                 {{> afQuickField name='condition'}}
+								<label>Quantity</label>
+								<input type="text" class="form-control quantity" value='1'>
             </div>
 
         </div>
@@ -51,10 +53,9 @@
     {{#autoForm collection=Ice.Collection.Container doc=this id="ice_update" type="update"}}
         <div class="row">
             <div class="col-md-12">
-              {{> afQuickField name='code'}}
-              {{> afQuickField name='unit'}}
-              {{> afQuickField name='price'}}
-              {{> afQuickField name='condition'}}
+							{{> afQuickField name='unit'}}
+							{{> afQuickField name='price'}}
+							{{> afQuickField name='condition'}}
             </div>
         </div>
 
