@@ -10,9 +10,9 @@
     </p>
 		<p class="pull-right">
 			<span>
-				Available: <input type="checkbox" name="available" value="Available" checked="true">
-				Unavailable: <input type="checkbox" name="unavailable" value="Unavailable" >
-				Broken: <input type="checkbox" name="broken" value="Broken">
+				<input type="checkbox" name="available" value="Available" checked="true">Available:
+				<input type="checkbox" name="unavailable" value="Unavailable" >Unavailable:
+				<input type="checkbox" name="broken" value="Broken">Broken:
 			</span>
 		</p>
 	{{/if}}
@@ -34,6 +34,7 @@
     {{#autoForm collection=Ice.Collection.Container id="ice_insert" type="insert"}}
         <div class="row">
             <div class="col-md-12">
+								{{> afQuickField name='importDate'}}
                 {{> afQuickField name='unit'}}
                 {{> afQuickField name='price'}}
                 {{> afQuickField name='condition'}}
@@ -53,6 +54,7 @@
     {{#autoForm collection=Ice.Collection.Container doc=this id="ice_update" type="update"}}
         <div class="row">
             <div class="col-md-12">
+							{{> afQuickField name='importDate'}}
 							{{> afQuickField name='unit'}}
 							{{> afQuickField name='price'}}
 							{{> afQuickField name='condition'}}

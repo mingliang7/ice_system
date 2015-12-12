@@ -1,6 +1,10 @@
 Ice.Collection.Container = new Mongo.Collection('ice_container');
 
 Ice.Schema.Container = new SimpleSchema({
+  importDate: {
+    label: 'Import Date',
+    type: String
+  },
   unit: {
     type: Number
   },
@@ -15,9 +19,9 @@ Ice.Schema.Container = new SimpleSchema({
   condition: {
     type: String,
     autoform: {
-      type: 'select',
+      type: 'select2',
       options: function () {
-        return Ice.List.condition();
+        return Ice.List.containerCondition();
       }
     }
   },

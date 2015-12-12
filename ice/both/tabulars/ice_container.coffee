@@ -22,6 +22,10 @@ Ice.TabularTable.Container = new (Tabular.Table)(
       title: 'ID'
     }
     {
+      data: 'importDate'
+      title: 'Import Date'
+    }
+    {
       data: 'unit'
       title: 'Unit'
     }
