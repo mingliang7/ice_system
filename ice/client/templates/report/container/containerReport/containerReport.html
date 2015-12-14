@@ -1,0 +1,104 @@
+<template name="ice_containerReport">
+{{> ice_containerReportInsert}}
+</template>
+<template name="ice_containerReportInsert">
+    {{#autoForm schema=Ice.Schema.ContainerReport id="ice_containerReport" action="containerReportGen" target="_blank"}}
+    <div class="row">
+      <div class="col-md-6">
+          {{> afQuickField name="status" }}
+      </div>
+      <div class="col-md-6">
+          {{> afQuickField name="importDate" }}
+      </div>
+    </div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+
+<!--Generate-->
+<template name="ice_containerReportGen">
+    {{#if data}}
+        {{#with data}}
+        <!--Title-->
+        <div class="report-title">
+            <div class="company-name-en" style="font-size: 20px;">{{title.company}}</div>
+            <div class="report-name">Container Report</div>
+        </div>
+
+        <!--Header-->
+        <div style="width: 100%">
+            {{#with header}}
+                <div style="width: 50%; float: left">
+                    <ul class="list-unstyled">
+                        <li><strong>Status:</strong> {{status}}</li>
+                    </ul>
+                </div>
+                <div style="width: 50%; float: right">
+                    <ul class="list-unstyled">
+                        <li><strong>Date:</strong> {{date}}</li>
+                    </ul>
+                </div>
+            {{/with}}
+        </div>
+
+        <!--Content-->
+        <table class="report-content">
+            <thead class="report-content-header">
+            <tr>
+                <th>No</th>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Unit</th>
+                <th>Price</th>
+                <th>Condition</th>
+                <th>Status</th>
+            </tr>
+
+            </thead>
+
+            <tbody class="report-content-body">
+            {{#each content}}
+                <tr align='center' style="border-bottom: 1px solid #ddd;">
+                    <td>{{index}}</td>
+                    <td>{{_id}}</td>
+                    <td>{{importDate}}</td>
+                    <td>{{unit}}</td>
+                    <td>{{price}}</td>
+                    <td>{{condition}}</td>
+                    <td>{{status}}</td>
+                </tr>
+            {{/each}}
+              {{#with footer}}
+                <tr>
+                    <td colspan="6" align="right">Available:</td>
+                    <td align='center'>{{available}}</td>
+                </tr>
+                <tr>
+                    <td colspan="6" align="right">Unavailable:</td>
+                    <td align='center'>{{unavailable}}</td>
+                </tr>
+                <tr>
+                    <td colspan="6" align="right">Broken:</td>
+                    <td align='center'>{{broken}}</td>
+                </tr>
+                <tr>
+                    <td colspan="6" align="right">Total:</td>
+                    <td align='center'>{{total}}</td>
+                </tr>
+              {{/with}}
+            </tbody>
+        </table>
+
+        <!--Footer-->
+        <!--Sign-->
+        {{> signFooter}}
+
+        {{/with}}
+    {{else}}
+        {{> loading}}
+    {{/if}}
+
+
+</template>
