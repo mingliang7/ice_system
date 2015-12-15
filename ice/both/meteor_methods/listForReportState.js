@@ -1,5 +1,9 @@
 Meteor.methods({
-  customerByType: function(type) {
+  getAllCustomer: function () {
+    customers = findCustomer();
+    return customers;
+  },
+  customerByType: function (type) {
     var list = [];
     var customerType = type;
     customerType = customerType == undefined ? '' : customerType;
@@ -13,7 +17,7 @@ Meteor.methods({
     }
     return list;
   },
-  generalCustomer: function() {
+  generalCustomer: function () {
     var list = [];
     var customers = Ice.Collection.Customer.find({
       customerType: 'general',
@@ -23,7 +27,7 @@ Meteor.methods({
       label: "(Select One)",
       value: ""
     });
-    customers.forEach(function(customer) {
+    customers.forEach(function (customer) {
       list.push({
         label: '' + customer._id + ' | ' + customer.name + '(' +
           customer.customerType + ')',
@@ -34,7 +38,7 @@ Meteor.methods({
   }
 });
 
-var findCustomerByType = function(type) {
+var findCustomerByType = function (type) {
   arr = [];
   customers = undefined;
   if (type != '') {
@@ -48,7 +52,23 @@ var findCustomerByType = function(type) {
     label: 'All',
     value: ''
   });
-  customers.forEach(function(customer) {
+  customers.forEach(function (customer) {
+    arr.push({
+      label: '' + customer._id + ' | ' + customer.name,
+      value: customer._id
+    });
+  });
+  return arr;
+};
+
+var findCustomer = function () {
+  arr = [];
+  customers = Ice.Collection.Customer.find();
+  arr.push({
+    label: 'All',
+    value: ''
+  });
+  customers.forEach(function (customer) {
     arr.push({
       label: '' + customer._id + ' | ' + customer.name,
       value: customer._id

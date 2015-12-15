@@ -60,6 +60,13 @@ indexTpl.events({
         );
       }
     });
+  },
+  'click .print': function () {
+    var id = this._id;
+    if (this.lendingType == 'longTerm') {
+      url = "/ice/lendingContractReportGen/" + id;
+      window.open(url, '_blank');
+    }
   }
 });
 

@@ -1,0 +1,57 @@
+<template name="ice_lendingContractReportGen">
+    {{#if data}}
+      <div class="col-md-12" align='center' style=" style='font-size: 14px;font-family: Khmer OS Muol Light;'"><span>
+        ព្រះរាជាណាចក្រកម្ពុជា</span><br><br>&nbsp;&nbsp;ជាតិ សាសនា ព្រះមហាក្សត្រ
+      <br><hr>
+      </div>
+      <div class="col-md-12" align='center' style=" style='font-size: 14px;font-family: Khmer OS Muol Light;'"><span>
+      <u>កិច្ចសន្យាខ្ចីធុងទឹកកក</u></span>
+      </div>
+
+    <div style='margin-top: 30px;'></div>
+      {{#with data}}
+      <div class='col-md-12' style="padding: 20px;">
+        <p style="font-family: khmer os battambang;font-size: 13px; line-height: 50px;">ខ្ញុំបាទ/នាងខ្ញុំឈ្មោះ&nbsp;&nbsp;&nbsp;<b>{{_customer.name}}</b>&nbsp;&nbsp;&nbsp;&nbsp;
+       &nbsp;&nbsp;ភេទ&nbsp;&nbsp;&nbsp;<b>{{_customer.gender}}</b>&nbsp;&nbsp;&nbsp;
+       អាយុ........................ជាតិ.........................សញ្ជាតិ........................
+       រស់នៅភូមិ...................................ឃុំ...........................................ស្រុក.................................ខេត្ត........................................។
+       បានយល់ព្រមខ្ចី ធុង ទឹកកកដែលមានលេខសំគាល់({{#each containers}}<b>BP{{containerId}}</b>,&nbsp;{{/each}})ពីក្រុមហ៊ុន <b style="font-family:Khmer Os Muol Light">
+         បេងភីក្រុងបាត់ដំបង</b> ដើម្បីដាក់លក់ប្រចាំថ្ងៃ។  បើក្នុងករណីបាត់បង់ ឬខូចខាតធុង​ទឹកកក​របស់ក្រុមហ៊ុន​ ខ្ញុំបាទ(អ្នកខ្ចី)យល់ព្រមចេញ សងតម្លៃខូចខាតទៅអោយក្រុមហ៊ុនបេងភីវិញ។
+          <br>
+         <b style="font-size: 14px; font-family: khmer os muol light;">
+          <u>កំណត់ចំណាំ៖</u>
+        </b><br>
+         បើអតិថិជនណាឈប់លក់ ឬឈប់ទិញទឹកកក ពីក្រុមហ៊ុនបេងភី ត្រូវ​ប្រគល់ធុងទឹកកកគ្រប់ចំនួនតាមកិច្ចសន្យាទៅអោយក្រុមហ៊ុនវិញ។ បើមានការរឹងទទឹងមិនធ្វើតាមកិច្ចសន្យា ក្រុមហ៊ុននឹដោះស្រាយតាមផ្លូវច្បាប់។
+         </p>
+      </div>
+      <div class="col-md-12" style="padding: 20px;font-family: khmer os battambang;font-size: 13px; line-height: 50px;">
+        <p class="pull-right">ធ្វើនៅ បាត់ដំបងថ្ងៃទី...........ខែ........ឆ្នាំ២០១
+          <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          ក្រុមហ៊ុន<span style="font-family: khmer os muol light; font-size: 14px;"><b> បេងភីក្រុងបាត់ដំបង</b></span>
+        </p>
+      </div>
+      {{/with}}
+      {{> lendingSignFooter}}
+    {{else}}
+    {{/if}}
+</template>
+
+<template name="lendingSignFooter">
+    <table width="100%" border="0" style="font-family: khmer os battambang; font-size: 13px;text-align: center">
+        <tr>
+            <td width="33%">
+                អ្នកខ្ចី<br><br><br><br><br><br><br>
+                __________________<br>
+            </td>
+            <td width="33%">
+                សាក្សី<br><br><br><br><br><br><br>
+                __________________<br>
+            </td>
+            <td>តំណាងក្រុមហ៊ុន<br><br><br><br><br><br><br>
+                __________________<br>
+            </td>
+        </tr>
+
+    </table>
+</template>

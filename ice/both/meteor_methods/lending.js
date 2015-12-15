@@ -1,4 +1,11 @@
 Meteor.methods({
+  getLendingDoc: function (id) {
+    return Ice.Collection.Lending.findOne(id);
+  },
+  getLendingId: function (id) {
+    var lending = StateId.get(id);
+    return lending
+  },
   getLending: function (id) {
     return Ice.Collection.Lending.findOne(id);
   },
