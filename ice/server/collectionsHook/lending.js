@@ -1,6 +1,8 @@
 Ice.Collection.Lending.before.insert(function (userId, doc) {
-  var prefix = doc._id + '-L';
+  var prefix = doc.branchId + '-L';
+  var id = doc._id;
   doc._id = idGenerator.genWithPrefix(Ice.Collection.Lending, prefix, 9);
+  StateId.set('lending' + id, doc);
 });
 
 Ice.Collection.Lending.after.insert(function (userId, doc) {

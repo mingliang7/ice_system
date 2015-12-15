@@ -51,6 +51,10 @@ Ice.Schema.Lending = new SimpleSchema({
     decimal: true
     optional: true
 
+  branchId:
+    type: String
+    optional: true
+
 })
 
 Ice.Collection.Lending.attachSchema Ice.Schema.Lending

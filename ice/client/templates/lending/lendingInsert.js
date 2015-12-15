@@ -69,11 +69,18 @@ AutoForm.hooks({
   ice_lendingInsert: {
     before: {
       insert: function (doc) {
-        doc._id = Session.get('currentBranch');
+        doc.branchId = Session.get('currentBranch');
         return doc;
       }
     },
     onSuccess: function (type, result) {
+      Meteor.call('getLendingId', 'lending' + result, function (err,
+        result) {
+        if (result.lendingType == 'longTerm') {
+          url = "/ice/lendingContractReportGen/" + result._id;
+          window.open(url, '_blank');
+        }
+      });
       Router.go('ice.customer');
       alertify.success('Successfully Insert')
     },

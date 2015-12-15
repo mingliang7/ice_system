@@ -34,6 +34,10 @@ Ice.TabularTable.Lending = new (Tabular.Table)(
       title: 'Lending Date'
     }
     {
+      data: 'lendingType'
+      title: 'Lending Type'
+    }
+    {
       data: 'containers'
       title: 'Container', render: (containers) ->
         concate = ''
