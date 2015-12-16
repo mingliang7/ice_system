@@ -3,6 +3,18 @@
  */
 Ice.ListForReportState = new ReactiveObj();
 Ice.ListForReport = {
+  lendingType: function () {
+    return [{
+      label: 'All',
+      value: ''
+    }, {
+      label: 'Short Term',
+      value: 'shortTerm'
+    }, {
+      label: 'Long Term',
+      value: 'longTerm'
+    }]
+  },
   containerStatus: function () {
     var status = [{
       label: 'All',

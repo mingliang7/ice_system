@@ -1,5 +1,5 @@
-var insertTpl = Template.ice_lendingReportInsert;
-var lendingReportGen = Template.ice_lendingReportGen;
+var insertTpl = Template.ice_lendingBalanceReportInsert;
+var lendingReportGen = Template.ice_lendingBalanceReportGen;
 insertTpl.onRendered(function () {
   datePicker();
 })
@@ -8,11 +8,12 @@ lendingReportGen.helpers({
   data: function () {
     var self = this;
     var id = JSON.stringify(self);
-    var lendingReport = Meteor.callAsync(id, 'lendingReport', self);
-    if (!lendingReport.ready()) {
+    var lendingBalanceReport = Meteor.callAsync(id,
+      'lendingBalanceReport', self);
+    if (!lendingBalanceReport.ready()) {
       return false;
     }
-    return lendingReport.result();
+    return lendingBalanceReport.result();
   },
   extractContainer: function (containers) {
     var concate = ''
