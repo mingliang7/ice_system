@@ -1,7 +1,7 @@
 var indexTpl = Template.ice_container,
   insertTpl = Template.ice_insert,
   updateTpl = Template.ice_update,
-  showTpl = Template.ice_show;
+  showTpl = Template.ice_showContainer;
 indexTpl.onRendered(function () {
   Session.set('Available', 'Available');
   // Session.set('Broken', 'Unavailable');
@@ -118,6 +118,9 @@ indexTpl.events({
         );
       }
     });
+  },
+  'click .show': function () {
+    alertify.alert(renderTemplate(showTpl, this));
   }
 });
 

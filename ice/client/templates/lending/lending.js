@@ -67,9 +67,30 @@ indexTpl.events({
       url = "/ice/lendingContractReportGen/" + id;
       window.open(url, '_blank');
     }
+  },
+  'click .show': function () {
+    alertify.alert(renderTemplate(showTpl, this));
+
   }
 });
-
+showTpl.helpers({
+  extract: function (containers) {
+    var concate = ''
+    containers.forEach(function (container) {
+      var returnDate = container.returnDate == undefined ? '' :
+        container.returnDate;
+      var returnCondition = container.returnCondition == undefined ?
+        '' : container.condition;
+      concate += '<ul><li>Container ID: ' + container.containerId +
+        '</li>' +
+        '<li>Condition: ' + container.condition +
+        '</li><li> Return Date: ' + returnDate +
+        '</li>' + '<li>Return Condition: ' + returnCondition +
+        '</li></ul><hr>';
+    })
+    return concate;
+  }
+})
 Template.customObjectLendingField.helpers({
   check: function (formId) {
     if (formId == 'ice_lendingUpdate') {

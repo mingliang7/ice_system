@@ -23,7 +23,6 @@ updateTpl.onRendered(function () {
   var index = 0;
   //set state foreach conainer
   state.set('returnId', this.data._id);
-  debugger
   this.data.containers.forEach(function (container) {
     state.set('containers.' + index + '.condition', container.lendingId);
     index++;
@@ -57,9 +56,26 @@ indexTpl.events({
       },
       null
     );
+  },
+  'click .show': function () {
+    alertify.alert(renderTemplate(showTpl, this));
   }
 });
-
+showTpl.helpers({
+  extract: function (containers) {
+    var concate = ''
+    containers.forEach(function (container) {
+      var returnMoney = container.returnMoney == undefined ? '' :
+        container.returnMoney;
+      concate += '<ul><li>Container ID: ' + container.containerId +
+        '</li>' +
+        '<li>Condition: ' + container.condition +
+        '</li><li> Return Money: ' + returnMoney +
+        '</li></ul><hr>';
+    })
+    return concate;
+  }
+})
 Template.customObjectReturningField.helpers({
   listLending: function () {
     var customerId, listLending;

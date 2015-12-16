@@ -21,20 +21,18 @@
     <dl class="dl-horizontal">
         <dt>Id</dt>
         <dd>{{_id}}</dd>
-        <dt>Name</dt>
-        <dd>{{name}}</dd>
-        <dt>Gender</dt>
-        <dd>{{gender}}</dd>
-        <dt>Type</dt>
-        <dd>{{customerType}}</dd>
-        <dt>Status</dt>
-        <dd>{{status}}</dd>
-        <dt>Address</dt>
-        <dd>{{address}}</dd>
+        <dt>Customer</dt>
+        <dd>{{_customer.name}}</dd>
+        <dt>Staff</dt>
+        <dd>{{_staff.name}}</dd>
+        <dt>Lending Date</dt>
+        <dd>{{lendingDate}}</dd>
+        <dt>Lending Type</dt>
+        <dd>{{lendingType}}</dd>
+        <dt>Containers</dt>
+        <dd>{{{extract containers}}}</dd>
         <dt>Telephone</dt>
-        <dd>{{telephone}}</dd>
-        <dt>Description</dt>
-        <dd>{{Description}}</dd>
+        <dd>{{_customer.telephone}}</dd>
     </dl>
 </template>
 
