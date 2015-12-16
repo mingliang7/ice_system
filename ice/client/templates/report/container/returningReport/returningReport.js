@@ -23,7 +23,7 @@ returningReportGen.helpers({
         '</li>' + '<li>Container ID: ' + container.containerId +
         '</li>' +
         '<li>Return Condition: ' + container.condition + '</li>' +
-        '<li>Return Money: ' + returnMoney + '</li></ul>'
+        '<li>Return Money: ' + returnMoney + '</li></ul><hr>'
     });
     return concate;
   }

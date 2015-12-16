@@ -1,16 +1,15 @@
-<template name="ice_lendingReport">
-{{> ice_lendingReportInsert}}
+<template name="ice_lendingBalanceReport">
+{{> ice_lendingBalanceReportInsert}}
 </template>
-<template name="ice_lendingReportInsert">
-    {{#autoForm schema=Ice.Schema.LendingReport id="ice_lendingReport" action="lendingReportGen" target="_blank"}}
+<template name="ice_lendingBalanceReportInsert">
+    {{#autoForm schema=Ice.Schema.LendingBalance id="ice_lendingBalanceReport" action="lendingBalanceReportGen" target="_blank"}}
     <div class="row">
       <div class="col-md-6">
-        {{> afQuickField name="customer"}}
-        {{> afQuickField name='type'}}
         {{> afQuickField name="staffId"}}
+        {{> afQuickField name='type'}}
       </div>
       <div class="col-md-6">
-        {{> afQuickField name='lendingDate'}}
+        {{> afQuickField name='date'}}
       </div>
     </div>
         <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
@@ -20,13 +19,13 @@
 
 
 <!--Generate-->
-<template name="ice_lendingReportGen">
+<template name="ice_lendingBalanceReportGen">
     {{#if data}}
         {{#with data}}
         <!--Title-->
         <div class="report-title">
             <div class="company-name-en" style="font-size: 20px;">{{title.company}}</div>
-            <div class="report-name">Lending Report</div>
+            <div class="report-name">Lending Balance Report</div>
         </div>
 
         <!--Header-->
@@ -34,7 +33,6 @@
             {{#with header}}
                 <div style="width: 50%; float: left">
                     <ul class="list-unstyled">
-                        <li><strong>Customer:</strong> {{customer}}</li>
                         <li><strong>Staff:</strong> {{staff}}</li>
                     </ul>
                 </div>
@@ -53,10 +51,12 @@
                 <th>No</th>
                 <th>ID</th>
                 <th>Customer</th>
+                <th>Telephone</th>
                 <th>Staff</th>
                 <th>Lending Date</th>
                 <th>Lending Type</th>
                 <th>Container</th>
+                <th>Amount</th>
             </tr>
             </thead>
 
@@ -66,32 +66,23 @@
                     <td>{{index}}</td>
                     <td>{{_id}}</td>
                     <td>{{_customer.name}}</td>
+                    <td>{{_customer.telephone}}</td>
                     <td>{{_staff.name}}</td>
                     <td>{{lendingDate}}</td>
                     <td>{{lendingType}}</td>
                     <td>
                         {{{extractContainer containers}}}
                     </td>
+                    <td>{{count}}</td>
                 </tr>
             {{/each}}
-              <!-- {{#with footer}}
+              {{#with footer}}
                 <tr>
-                    <td colspan="6" align="right">Available:</td>
-                    <td align='center'>{{available}}</td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="right">Unavailable:</td>
-                    <td align='center'>{{unavailable}}</td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="right">Broken:</td>
-                    <td align='center'>{{broken}}</td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="right">Total:</td>
+                    <td colspan="8" align="right">Total:</td>
                     <td align='center'>{{total}}</td>
                 </tr>
-              {{/with}} -->
+
+              {{/with}}
             </tbody>
         </table>
 

@@ -1,5 +1,5 @@
 Meteor.methods({
-  lendingReport: function (params) {
+  lendingBalanceReport: function (params) {
     var self = params;
     var data = {
       title: {},
@@ -10,54 +10,57 @@ Meteor.methods({
 
 
     /********* Header ********/
-    customerId = self.customer == '' ? 'All' : self.customer;
     staffId = self.staffId == '' ? 'All' : self.staffId;
-    type = self.type == '' ? 'All' : self.type;
+    type = self.type == '' ? 'All' : self.type
     var company = Cpanel.Collection.Company.findOne();
     data.title = {
-      type: type,
       company: company.enName,
       address: company.khAddress,
       telephone: company.telephone
     };
     data.header = {
-      date: self.lendingDate,
-      customer: customerId,
+      date: self.date,
       staff: staffId
     };
     /********** Content **********/
     var content = [];
     var selector = {};
     var index = 1;
-    date = self.lendingDate.split(' To ');
-    startDate = date[0];
-    addOneDay = moment(date[1]).add(1, 'days')
-    endDate = moment(addOneDay._d).format('YYYY-MM-DD HH:mm:ss');
+    var total = 0;
+    addOneDay = moment(self.date).add(1, 'days')
+    date = moment(addOneDay._d).format('YYYY-MM-DD HH:mm:ss');
     selector.lendingDate = {
-      $gte: startDate,
-      $lt: endDate
-    }
+      $lt: date
+    };
     if (type != 'All') {
       selector.lendingType = type
-    }
-    if (customerId != 'All') {
-      selector.customerId = customerId;
     }
     if (staffId != 'All') {
       selector.staffId = staffId;
     }
-    console.log(selector);
     var lendings = Ice.Collection.Lending.find(selector).fetch()
     lendings.forEach(function (lending) {
       lending.index = index;
+      var reduceContainers = [];
+      var containers = lending.containers;
+      containers.forEach(function (container) {
+        if (!_.isUndefined(container.returnDate) && container.returnDate >
+          date) {
+          reduceContainers.push(container);
+        } else if (_.isUndefined(container.returnDate)) {
+          reduceContainers.push(container)
+        }
+      })
+      lending.containers = reduceContainers;
+      lending.count = lending.containers.length
+      total += lending.count
       content.push(lending)
       index++;
     })
-
     if (content.length > 0) {
       data.content = content;
       data.footer = {
-
+        total: total
       }
       return data;
     } else {
@@ -67,4 +70,5 @@ Meteor.methods({
       return data;
     }
   }
-})
+
+});
