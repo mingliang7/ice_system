@@ -47,7 +47,9 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
     }
     {
       data: 'address'
-      title: 'Address'
+      title: 'Address', render: (value) ->
+        if value isnt undefined
+          "Village: #{value[0].village}, Commune: #{value[0].commune}..."
     }
     {
       data: 'telephone'

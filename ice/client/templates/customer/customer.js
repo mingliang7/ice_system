@@ -74,7 +74,24 @@ Template.ice_customer.events({
     }
   }
 });
-
+Template.ice_insertTemplate.events({
+  'click .check-info': function (event) {
+    if ($(event.currentTarget).prop('checked')) {
+      $('.additional-info').removeClass('hidden', 500);
+    } else {
+      $('.additional-info').addClass('hidden', 500);
+    }
+  }
+})
+Template.ice_updateTemplate.events({
+  'click .check-info': function (event) {
+    if ($(event.currentTarget).prop('checked')) {
+      $('.additional-info').removeClass('hidden', 500);
+    } else {
+      $('.additional-info').addClass('hidden', 500);
+    }
+  }
+})
 AutoForm.hooks({
   insertTemplate: {
     before: {
