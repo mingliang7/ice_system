@@ -2,7 +2,7 @@
     {{#if data}}
       <div class="col-md-12" align='center' style=" style='font-size: 14px;font-family: Khmer OS Muol Light;'"><span>
         ព្រះរាជាណាចក្រកម្ពុជា</span><br><br>&nbsp;&nbsp;ជាតិ សាសនា ព្រះមហាក្សត្រ
-      <br><hr>
+      <br><br>
       </div>
       <div class="col-md-12" align='center' style=" style='font-size: 14px;font-family: Khmer OS Muol Light;'"><span>
       <u>កិច្ចសន្យាខ្ចីធុងទឹកកក</u></span>
@@ -12,9 +12,17 @@
       {{#with data}}
       <div class='col-md-12' style="padding: 20px;">
         <p style="font-family: khmer os battambang;font-size: 13px; line-height: 50px;">ខ្ញុំបាទ/នាងខ្ញុំឈ្មោះ&nbsp;&nbsp;&nbsp;<b>{{_customer.name}}</b>&nbsp;&nbsp;&nbsp;&nbsp;
-       &nbsp;&nbsp;ភេទ&nbsp;&nbsp;&nbsp;<b>{{_customer.gender}}</b>&nbsp;&nbsp;&nbsp;
+       &nbsp;ភេទ&nbsp;&nbsp;<b>{{_customer.gender}}</b>&nbsp;&nbsp;
+       {{#if check _customer.additionalInfo}}
+       {{#each _customer.additionalInfo}}
+       អាយុ&nbsp;&nbsp;<b>{{age}}</b>&nbsp;&nbsp;ជាតិ&nbsp;&nbsp;<b>{{national}}</b>&nbsp;&nbsp;សញ្ជាតិ&nbsp;&nbsp;<b>{{citizenship}}</b>
+       &nbsp;&nbsp;រស់នៅភូមិ&nbsp;&nbsp;<b>{{village}}</b>&nbsp;&nbsp;ឃុំ&nbsp;&nbsp;<b>{{commune}}</b>&nbsp;&nbsp;ស្រុក&nbsp;&nbsp;<b>{{district}}</b>&nbsp;&nbsp;
+       ខេត្ត&nbsp;&nbsp;<b>{{province}}</b>។
+       {{/each}}
+      {{else}}
        អាយុ........................ជាតិ.........................សញ្ជាតិ........................
        រស់នៅភូមិ...................................ឃុំ...........................................ស្រុក.................................ខេត្ត........................................។
+      {{/if}}
        បានយល់ព្រមខ្ចី ធុង ទឹកកកដែលមានលេខសំគាល់({{#each containers}}<b>BP{{containerId}}</b>,&nbsp;{{/each}})ពីក្រុមហ៊ុន <b style="font-family:Khmer Os Muol Light">
          បេងភីក្រុងបាត់ដំបង</b> ដើម្បីដាក់លក់ប្រចាំថ្ងៃ។  បើក្នុងករណីបាត់បង់ ឬខូចខាតធុង​ទឹកកក​របស់ក្រុមហ៊ុន​ ខ្ញុំបាទ(អ្នកខ្ចី)យល់ព្រមចេញ សងតម្លៃខូចខាតទៅអោយក្រុមហ៊ុនបេងភីវិញ។
           <br>
