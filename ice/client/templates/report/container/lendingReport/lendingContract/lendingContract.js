@@ -1,7 +1,6 @@
 Template.ice_lendingContractReportGen.helpers({
-  check: function (address) {
-    debugger
-    return address == undefined ? false : true;
+  check: function (additionalInfo) {
+    return additionalInfo == undefined ? false : true;
   },
   data: function () {
     var lendingId = Router.current().params.lendingId;

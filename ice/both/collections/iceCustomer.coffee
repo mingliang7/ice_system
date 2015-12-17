@@ -12,33 +12,36 @@ Ice.Schema.Customer = new SimpleSchema(
 			type: 'select2'
 			options: ->
 				Ice.List.gender()
-
 	address:
+		type: String
+		optional: true
+		
+	additionalInfo:
 		type: Array
 		max: 500
 		optional: true
-	'address.$':
+	'additionalInfo.$':
 		optional: true
 		type: Object
-	'address.$.age':
+	'additionalInfo.$.age':
 		type: String
 		optional: true
-	'address.$.national':
+	'additionalInfo.$.national':
 		type: String
 		optional: true
-	'address.$.citizenship':
+	'additionalInfo.$.citizenship':
 		type: String
 		optional: true
-	'address.$.village':
+	'additionalInfo.$.village':
 		type: String
 		optional: true
-	'address.$.commune':
+	'additionalInfo.$.commune':
 		type: String
 		optional: true
-	'address.$.district':
+	'additionalInfo.$.district':
 		type: String
 		optional: true
-	'address.$.province':
+	'additionalInfo.$.province':
 		type: String
 		optional: true
 	telephone:

@@ -46,8 +46,8 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
           "<p class='label label-warning'>#{val.capitalize()}</p>"
     }
     {
-      data: 'address'
-      title: 'Address', render: (value) ->
+      data: 'additionalInfo'
+      title: 'Address Info', render: (value) ->
         if value isnt undefined
           "Village: #{value[0].village}, Commune: #{value[0].commune}..."
     }
