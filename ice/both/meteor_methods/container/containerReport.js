@@ -29,6 +29,7 @@ Meteor.methods({
     var unavailable = 0;
     var index = 1;
     var total;
+    var totalPrice = 0;
     date = self.importDate.split(' To ');
     startDate = date[0];
     addOneDay = moment(date[1]).add(1, 'days')
@@ -42,6 +43,7 @@ Meteor.methods({
     }
     var containers = Ice.Collection.Container.find(selector).fetch()
     containers.forEach(function (container) {
+      totalPrice += container.price;
       if (container.status == 'Broken') {
         broken++;
       }
@@ -62,7 +64,8 @@ Meteor.methods({
         broken: broken,
         available: available,
         unavailable: unavailable,
-        total: total
+        total: total,
+        totalPrice: totalPrice
       }
       return data;
     } else {
