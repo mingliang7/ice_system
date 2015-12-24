@@ -29,7 +29,7 @@ Ice.Collection.Returning.after.update(function (userId, doc) {
   var currentDoc = doc;
   Meteor.defer(function () {
     Meteor._sleepForMs(1500);
-    Container.freeContainer(preDoc._id, preDoc.containers);
+    Container.unfreeContainer(preDoc._id, preDoc.containers);
     Container.updateContainer(doc, doc.containers, 'returning');
     Container.updateLending(doc, doc.containers, preDoc);
   });
