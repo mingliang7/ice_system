@@ -6,7 +6,7 @@ Ice.Schema.Container = new SimpleSchema({
     type: String
   },
   unit: {
-    type: Number
+    type: String
   },
   price: {
     type: Number,

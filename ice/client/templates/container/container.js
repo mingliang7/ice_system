@@ -131,23 +131,53 @@ insertTpl.helpers({
   }
 });
 insertTpl.events({
-  'keyup .quantity': function (event) {
-    var obj = {};
-    obj.qty = parseInt($(event.currentTarget).val());
-    unit = $("[name='unit']").val();
-    price = $("[name='price']").val();
-    date = $('[name=importDate]').val();
-    obj.condition = $('[name="condition"]').val()
-    obj.branchId = Session.get('currentBranch');
-    if (unit == '' || price == '' || obj.condition == '' || date == '') {
-      alertify.warning('Please fill in Unit, Price and Condition, Date');
-      $('.quantity').val('1');
+  'keyup .quantity': function (
+    event) {
+    var currentValue = event.currentTarget.value;
+    var qty = currentValue == '' ? 1 : parseInt(currentValue);
+    var obj = Session.get('generateContainerQty');
+    if (!_.isUndefined(obj)) {
+      var price = (_.isUndefined(obj.price) || obj.price == 0) ?
+        undefined : obj.price;
+      var unit = (_.isUndefined(obj.unit) || obj.unit == '') ? undefined :
+        obj.unit;
+      var condition = (_.isUndefined(obj.condition) || obj.condition ==
+          '') ?
+        undefined : obj.condition;
+      if (_.isUndefined(price) || _.isUndefined(unit) || _.isUndefined(
+          condition)) {
+        alertify.warning(
+          'Please fill in Unit, Price and Condition, Date');
+        $('.quantity').val('1');
+      } else {
+        var date = $('[name="importDate"]').val()
+        obj.qty = qty;
+        obj.date = date;
+        obj.branchId = Session.get('currentBranch');
+        console.log(obj);
+        Session.set('generateContainerQty', obj);
+      }
     } else {
-      obj.price = parseInt(price);
-      obj.unit = parseInt(unit);
-      obj.date = date;
-      Session.set('generateContainerQty', obj);
+      alertify.warning(
+        'Please fill in Unit, Price and Condition, Date');
+      $('.quantity').val('1');
     }
+  },
+  'keyup [name="price"]': function (event) {
+    var val = event.currentTarget.value;
+    getVal = val == '' ? '0' : val;
+    getObj('price', getVal);
+  },
+  'change [name="condition"]': function (event) {
+    var val = event.currentTarget.value;
+    if (val != '') {
+      getObj('condition', val);
+    }
+
+  },
+  'keyup [name="unit"]': function (event) {
+    var val = event.currentTarget.value;
+    getObj('unit', val)
   }
 });
 indexTpl.onDestroyed(function () {
@@ -173,7 +203,6 @@ AutoForm.hooks({
       alertify.success('Successfully Insert')
       var containerObj = Session.get('generateContainerQty')
       if (!_.isUndefined(containerObj)) {
-        debugger
         Meteor.call('generateQuantity', containerObj);
       }
       Session.set('generateContainerQty', undefined);
@@ -183,3 +212,14 @@ AutoForm.hooks({
     }
   }
 })
+
+
+
+var getObj = function (field, val) {
+  var getObj = Session.get('generateContainerQty');
+  var obj = getObj == undefined ? {} : getObj;
+  obj[field] = field == 'price' ? parseFloat(val) : val;
+  console.log(obj);
+  Session.set('generateContainerQty', obj);
+  return;
+}
