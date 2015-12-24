@@ -10,10 +10,10 @@ Ice.Collection.Returning.after.insert(function (userId, doc) {
     Container.updateLending(doc, doc.containers)
   });
 })
-Ice.Collection.Returning.before.update(function (userId, doc, modifier,
-  fieldNames,
-  options) {
+Ice.Collection.Returning.before.update(function (userId, doc, fieldNames,
+  modifier, options) {
   modifier.$set = modifier.$set || {};
+  console.log(modifier);
   if (modifier.$set.containers) {
     var containers = [];
     _.each(modifier.$set.containers, function (obj) {

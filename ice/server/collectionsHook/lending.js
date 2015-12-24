@@ -12,6 +12,20 @@ Ice.Collection.Lending.after.insert(function (userId, doc) {
   });
 });
 
+Ice.Collection.Lending.before.update(function (userId, doc, fieldNames,
+  modifier, options) {
+  modifier.$set = modifier.$set || {};
+  console.log(modifier.$set.containers);
+  if (modifier.$set.containers) {
+    var containers = [];
+    _.each(modifier.$set.containers, function (obj) {
+      if (!_.isNull(obj)) {
+        containers.push(obj);
+      }
+    });
+    modifier.$set.containers = containers;
+  }
+});
 Ice.Collection.Lending.after.update(function (userId, doc) {
   var preDoc = this.previous;
   var currentDoc = doc;
