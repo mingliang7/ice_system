@@ -19,8 +19,6 @@ Ice.Schema.OrderReport = new SimpleSchema(
 		type:String
 		label: 'Customer'
 		optional: true
-		autoform:
-			type: 'select2'
 
 	date:
 		label: 'Date'

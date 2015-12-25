@@ -3,10 +3,6 @@ Ice.Schema.LendingReport = new SimpleSchema(
     label: 'Customer'
     type: String
     optional: true
-    autoform:
-      type: 'select2'
-      options: ->
-        ReactiveMethod.call('getAllCustomer')
   type:
     label: 'Lending Type'
     type: String

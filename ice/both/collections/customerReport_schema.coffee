@@ -11,8 +11,6 @@ Ice.Schema.customerReport = new SimpleSchema(
 		type:String
 		label: 'Customer'
 		optional: true
-		autoform:
-			type: 'select2'
 	date:
 		label: 'Date'
 		type: String
