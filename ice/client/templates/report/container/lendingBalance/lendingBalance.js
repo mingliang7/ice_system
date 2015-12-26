@@ -28,7 +28,6 @@ lendingReportGen.helpers({
 
 
 var datePicker = function () {
-  var lendingDate = $('[name="lendingDate"]');
-  return DateTimePicker.dateTimeRange(lendingDate);
-
+  var date = $('[name="date"]');
+  return DateTimePicker.date(date);
 }

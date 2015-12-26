@@ -5,7 +5,13 @@
     {{#autoForm schema=Ice.Schema.ReturningReport id="ice_returningReport" action="returningReportGen" target="_blank"}}
     <div class="row">
       <div class="col-md-6">
-        {{> afQuickField name="customer"}}
+        <div class="typeahead-customer form-group">
+          <label for="">Customer:</label>
+          <input class="form-control  typeahead customer" name="search" type="text" placeholder="All"
+          autocomplete="on" spellcheck="off"
+          data-source="search" data-select='selected' data-highlight=true data-limit="9"/>
+        </div>
+        {{> afQuickField name="customer" type='hidden'}}
         {{> afQuickField name="staffId"}}
       </div>
       <div class="col-md-6">
