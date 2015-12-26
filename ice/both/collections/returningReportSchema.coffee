@@ -3,10 +3,6 @@ Ice.Schema.ReturningReport = new SimpleSchema(
     label: 'Customer'
     type: String
     optional: true
-    autoform:
-      type: 'select2'
-      options: ->
-        ReactiveMethod.call('getAllCustomer')
 
   staffId:
     type: String
