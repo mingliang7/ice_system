@@ -1,40 +1,91 @@
-Template.ice_paymentReport.onRendered(function() {
+Template.ice_paymentReport.onRendered(function () {
   datePicker();
+  Meteor.typeahead.inject();
 });
 
 Template.ice_paymentReport.events({
-  'change [name="staffId"]': function(e) {
+  'change [name="staffId"]': function (e) {
     value = $(e.currentTarget).val();
     return Ice.ListForReportState.set('staffId', value);
   },
-  'change [name="customerType"]': function(e) {
+  'change [name="customerType"]': function (e) {
     value = $(e.currentTarget).val();
-    return Ice.ListForReportState.set('customerType', value);
+    $('[name="customerId"]').val('').change();
+    $('.customer').val('');
+    if (value != '') {
+      $('.typeahead-customer').removeClass('hidden')
+    } else {
+      $('.typeahead-customer').addClass('hidden')
+    }
+    Ice.ListForReportState.set('customerType', value);
   },
-  'change [name="date"]': function(e) {
+  'change [name="date"]': function (e) {
     value = $('[name="date"]').val().split(' To ');
     Ice.ListForReportState.set('dateRange', value);
   },
-  'keyup [name="date"]': function(e) {
+  'keyup [name="date"]': function (e) {
     value = $('[name="date"]').val().split(' To ');
     Ice.ListForReportState.set('dateRange', value);
+  },
+  'keyup .customer': function (event) {
+    if (event.currentTarget.value == '') {
+      $('[name="customerId"]').val('')
+    }
+  },
+  'click .customer': function () {
+    $('.customer').select()
   }
 });
 Template.ice_paymentReportInsertTemplate.helpers({
-  customerOption: function() {
-    type = Ice.ListForReportState.get('customerType');
+  search: function (query, sync, callback) {
+    var type = Ice.ListForReportState.get('customerType');
     console.log(type);
-    if (!_.isUndefined(type)) {
-      return ReactiveMethod.call('customerByType', type);
-    } else {
-      return [{
-        label: 'All',
-        value: ''
-      }];
+    Meteor.call('generalCustomer', query, {}, type, function (err,
+      res) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (res.length > 0) {
+        callback(res.map(function (v) {
+          var customerType = v.customerType == 'general' ?
+            'General' : v.customerType +
+            'ថ្ងៃ';
+          return {
+            value: v._id + ' | ' + v.name + ' | ' +
+              customerType,
+            _id: v._id
+          };
+        }));
+      } else {
+        var displayNoResult = [{
+          message: 'No more results!',
+          _id: ''
+        }]
+        callback(displayNoResult.map(function (v) {
+          return {
+            value: v.message,
+            _id: v._id
+          }
+        }));
+      }
+    });
+  },
+  selected: function (event, suggestion, datasetName) {
+    // event - the jQuery event object
+    // suggestion - the suggestion object
+    // datasetName - the name of the dataset the suggestion belongs to
+    // TODO your event handler here
+
+    if (suggestion._id != '') {
+      $('[name="customerId"]').val(suggestion._id)
+    }
+    if (suggestion._id == '') {
+      $('[name="customerId"]').val('')
     }
   }
 });
-datePicker = function() {
+datePicker = function () {
   var date;
   date = $('[name="date"]');
   return DateTimePicker.dateTimeRange(date);
@@ -42,7 +93,7 @@ datePicker = function() {
 
 /***** Generate ******/
 Template.ice_paymentReportGen.helpers({
-  data: function() {
+  data: function () {
     var self = this;
     var id = JSON.stringify(self);
     var payment = Meteor.callAsync(id, 'paymentReport', self);
@@ -51,25 +102,25 @@ Template.ice_paymentReportGen.helpers({
     }
     return payment.result();
   },
-  name: function(id) {
+  name: function (id) {
     customer = ReactiveMethod.call('getCustomer', id);
     return customer.name + ' (' + customer.customerType + ')';
   },
-  itemDetail: function(orderDetail) {
+  itemDetail: function (orderDetail) {
     return sortItems(orderDetail);
   },
-  check: function(value, total) {
+  check: function (value, total) {
     return value == undefined ? total : formatKh(value);
   },
-  findName: function(id) {
+  findName: function (id) {
     return Ice.Collection.Staffs.findOne(id).name;
   },
-  sumTotal: function(content) {
+  sumTotal: function (content) {
     td = '';
     dueAmount = 0;
     outstandingAmount = 0;
     paidAmount = 0;
-    content.forEach(function(item) {
+    content.forEach(function (item) {
       dueAmount += item.dueAmount;
       paidAmount += item.paidAmount;
       outstandingAmount += item.outstandingAmount;
@@ -79,10 +130,10 @@ Template.ice_paymentReportGen.helpers({
       '</td>' + '<td>' + '<strong>' + formatKh(outstandingAmount) +
       '</strong>' + '</td>';
   },
-  formatCurrency: function(value) {
+  formatCurrency: function (value) {
     return formatKh(value);
   },
-  totalInDollar: function(content) {
+  totalInDollar: function (content) {
     td = '';
     dueAmount = 0;
     outstandingAmount = 0;
@@ -91,7 +142,7 @@ Template.ice_paymentReportGen.helpers({
     exchange = Cpanel.Collection.Exchange.find().fetch();
     currency = exchange[0].base == 'KHR' ? JSON.parse(formatEx(exchange[0]
       ._id)).USD : JSON.parse(formatEx(exchange[0]._id)).KHR;
-    content.forEach(function(item) {
+    content.forEach(function (item) {
       dueAmount += (item.dueAmount * parseFloat(currency));
       paidAmount += (item.paidAmount * parseFloat(currency));
       outstandingAmount += (item.outstandingAmount * parseFloat(
@@ -105,22 +156,22 @@ Template.ice_paymentReportGen.helpers({
 });
 
 // methods
-findStaff = function(id) {
+findStaff = function (id) {
   return Ice.Collection.Staffs.findOne(id).name;
 };
 
-sortItems = function(orderDetail) {
+sortItems = function (orderDetail) {
   td = "";
   listItem = {};
   items = Ice.Collection.Item.find();
   count = 0;
-  items.forEach(function(item) {
+  items.forEach(function (item) {
     listItem[item._id] = item;
     listItem[item._id].qty = 0;
     listItem[item._id].amount = 0;
 
   });
-  orderDetail.forEach(function(order) {
+  orderDetail.forEach(function (order) {
     listItem[order.iceItemId] = {
       qty: listItem[order.iceItemId].qty += order.qty,
       price: order.price,
@@ -136,21 +187,21 @@ sortItems = function(orderDetail) {
   return td;
 };
 
-formatKh = function(val) {
+formatKh = function (val) {
   return numeral(val).format('0,0');
 };
-formatUS = function(val) {
+formatUS = function (val) {
   return numeral(val).format('0,0.00');
 };
-formatEx = function(id) {
+formatEx = function (id) {
   exchange = Cpanel.Collection.Exchange.findOne(id);
   return JSON.stringify(exchange.rates);
 };
 
-formatQty = function(val) {
+formatQty = function (val) {
   return numeral(val).format('0.0');
 };
-findCustomerByType = function(type) {
+findCustomerByType = function (type) {
   arr = [];
   customers = undefined;
   if (type != 'All') {
@@ -160,7 +211,7 @@ findCustomerByType = function(type) {
   } else {
     customers = Ice.Collection.Customer.find();
   }
-  customers.forEach(function(customer) {
+  customers.forEach(function (customer) {
     arr.push(customer._id);
   });
   return arr;

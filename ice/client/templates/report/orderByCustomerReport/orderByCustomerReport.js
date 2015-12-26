@@ -1,42 +1,93 @@
-Template.ice_customerReport.onRendered(function() {
+Template.ice_customerReport.onRendered(function () {
   datePicker();
+  Meteor.typeahead.inject();
 });
 
 Template.ice_customerReport.events({
-  'change [name="staffId"]': function(e) {
+  'change [name="staffId"]': function (e) {
     value = $(e.currentTarget).val();
     return Ice.ListForReportState.set('staffId', value);
   },
-  'change [name="customerType"]': function(e) {
+  'change [name="customerType"]': function (e) {
     value = $(e.currentTarget).val();
-    return Ice.ListForReportState.set('customerType', value);
+    $('[name="customerId"]').val('').change();
+    $('.customer').val('');
+    if (value != '') {
+      $('.typeahead-customer').removeClass('hidden')
+    } else {
+      $('.typeahead-customer').addClass('hidden')
+    }
+    Ice.ListForReportState.set('customerType', value);
   },
-  'change [name="date"]': function(e) {
+  'change [name="date"]': function (e) {
     value = $('[name="date"]').val().split(' To ');
     Ice.ListForReportState.set('dateRange', value);
   },
-  'keyup [name="date"]': function(e) {
+  'keyup [name="date"]': function (e) {
     value = $('[name="date"]').val().split(' To ');
     Ice.ListForReportState.set('dateRange', value);
+  },
+  'keyup .customer': function (event) {
+    if (event.currentTarget.value == '') {
+      $('[name="customerId"]').val('')
+    }
+  },
+  'click .customer': function () {
+    $('.customer').select()
   }
 });
 
 Template.ice_customerReportInsertTemplate.helpers({
-  customerOption: function() {
-    type = Ice.ListForReportState.get('customerType');
+  search: function (query, sync, callback) {
+    var type = Ice.ListForReportState.get('customerType');
     console.log(type);
-    if (!_.isUndefined(type)) {
-      return ReactiveMethod.call('customerByType', type);
-    } else {
-      return [{
-        label: 'All',
-        value: ''
-      }];
+    Meteor.call('generalCustomer', query, {}, type, function (err,
+      res) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (res.length > 0) {
+        callback(res.map(function (v) {
+          var customerType = v.customerType == 'general' ?
+            'General' : v.customerType +
+            'ថ្ងៃ';
+          return {
+            value: v._id + ' | ' + v.name + ' | ' +
+              customerType,
+            _id: v._id
+          };
+        }));
+      } else {
+        var displayNoResult = [{
+          message: 'No more results!',
+          _id: ''
+        }]
+        callback(displayNoResult.map(function (v) {
+          return {
+            value: v.message,
+            _id: v._id
+          }
+        }));
+      }
+    });
+  },
+  selected: function (event, suggestion, datasetName) {
+    // event - the jQuery event object
+    // suggestion - the suggestion object
+    // datasetName - the name of the dataset the suggestion belongs to
+    // TODO your event handler here
+
+    if (suggestion._id != '') {
+      $('[name="customerId"]').val(suggestion._id)
+    }
+    if (suggestion._id == '') {
+      $('[name="customerId"]').val('')
     }
   }
 });
 
-datePicker = function() {
+datePicker = function () {
   var date;
   date = $('[name="date"]');
   return DateTimePicker.dateTimeRange(date);
@@ -44,7 +95,7 @@ datePicker = function() {
 
 /***** Generate ******/
 Template.ice_customerReportGen.helpers({
-  data: function() {
+  data: function () {
     var self = this;
     var id = JSON.stringify(self)
     var orderByCustomer = Meteor.callAsync(id, 'orderByCustomer', self);
@@ -53,22 +104,22 @@ Template.ice_customerReportGen.helpers({
     }
     return orderByCustomer.result();
   },
-  name: function(id) {
+  name: function (id) {
     customer = Ice.Collection.Customer.findOne(id);
     return customer.name + ' (' + customer.customerType + ')'
   },
-  itemDetail: function(orderDetail) {
+  itemDetail: function (orderDetail) {
     return sortItems(orderDetail);
   },
-  check: function(value, total) {
+  check: function (value, total) {
     return value == undefined ? total : formatKh(value)
   },
-  sumTotal: function(content) {
+  sumTotal: function (content) {
     td = ''
     dueAmount = 0;
     outstandingAmount = 0;
     paidAmount = 0
-    content.forEach(function(item) {
+    content.forEach(function (item) {
       dueAmount += item.dueAmount
       paidAmount += item.paidAmount
       outstandingAmount += item.outstandingAmount
@@ -78,10 +129,10 @@ Template.ice_customerReportGen.helpers({
       '</td>' + '<td>' + '<strong>' + formatKh(outstandingAmount) +
       '</strong>' + '</td>';
   },
-  formatCurrency: function(value) {
+  formatCurrency: function (value) {
     return formatKh(value);
   },
-  totalInDollar: function(content) {
+  totalInDollar: function (content) {
     td = ''
     dueAmount = 0;
     outstandingAmount = 0;
@@ -90,7 +141,7 @@ Template.ice_customerReportGen.helpers({
     exchange = Cpanel.Collection.Exchange.find().fetch()
     currency = exchange[0].base == 'KHR' ? JSON.parse(formatEx(exchange[0]
       ._id)).USD : JSON.parse(formatEx(exchange[0]._id)).KHR;
-    content.forEach(function(item) {
+    content.forEach(function (item) {
       dueAmount += (item.dueAmount * parseFloat(currency))
       paidAmount += (item.paidAmount * parseFloat(currency))
       outstandingAmount += (item.outstandingAmount * parseFloat(
@@ -104,22 +155,22 @@ Template.ice_customerReportGen.helpers({
 });
 
 // methods
-findStaff = function(id) {
+findStaff = function (id) {
   return Ice.Collection.Staffs.findOne(id).name;
 }
 
-sortItems = function(orderDetail) {
+sortItems = function (orderDetail) {
   td = ""
   listItem = {};
   items = Ice.Collection.Item.find()
   count = 0;
-  items.forEach(function(item) {
+  items.forEach(function (item) {
     listItem[item._id] = item;
     listItem[item._id].qty = 0;
     listItem[item._id].amount = 0;
 
   });
-  orderDetail.forEach(function(order) {
+  orderDetail.forEach(function (order) {
     listItem[order.iceItemId] = {
       qty: listItem[order.iceItemId].qty += order.qty,
       price: order.price,
@@ -135,21 +186,21 @@ sortItems = function(orderDetail) {
   return td;
 }
 
-formatKh = function(val) {
+formatKh = function (val) {
   return numeral(val).format('0,0')
 }
-formatUS = function(val) {
+formatUS = function (val) {
   return numeral(val).format('0,0.00');
 }
-var formatEx = function(id) {
+var formatEx = function (id) {
   exchange = Cpanel.Collection.Exchange.findOne(id)
   return JSON.stringify(exchange.rates);
 }
 
-var formatQty = function(val) {
+var formatQty = function (val) {
   return numeral(val).format('0.0');
 }
-var findCustomerByType = function(type) {
+var findCustomerByType = function (type) {
   arr = []
   customers = undefined;
   if (type != 'All') {
@@ -159,17 +210,17 @@ var findCustomerByType = function(type) {
   } else {
     customers = Ice.Collection.Customer.find()
   }
-  customers.forEach(function(customer) {
+  customers.forEach(function (customer) {
     arr.push(customer._id);
   });
   return arr;
 }
 
-var findCustomerName = function(id) {
+var findCustomerName = function (id) {
     return Ice.Collection.Customer.findOne(id).name;
   }
   // group all order group invoices by customer
-var orderGroupCustomer = function(total, id, startDate, endDate) {
+var orderGroupCustomer = function (total, id, startDate, endDate) {
   var startDate = startDate.split(' ');
   var endDate = endDate.split(' ');
   var outstandingAmount = 0;
@@ -183,7 +234,7 @@ var orderGroupCustomer = function(total, id, startDate, endDate) {
       $lte: endDate[0]
     }
   })
-  groupOrders.forEach(function(order) {
+  groupOrders.forEach(function (order) {
     paidAmount += order.paidAmount
     outstandingAmount = total - paidAmount
   });
@@ -197,12 +248,12 @@ var orderGroupCustomer = function(total, id, startDate, endDate) {
 
 // grouping all customer
 
-var groupCustomer = function(order) {
+var groupCustomer = function (order) {
   var orders = order;
   var customer = customerItem(orders);
   var gItems = getItems();
   var customerObj = {};
-  orders.forEach(function(order) {
+  orders.forEach(function (order) {
     var id = order.iceCustomerId;
     customerObj[id] == undefined ? customerObj[id] = {} : customerObj[id];
     if (order.paidAmount != undefined) {
@@ -218,7 +269,7 @@ var groupCustomer = function(order) {
           order.paidAmount;
       }
     }
-    order.iceOrderDetail.forEach(function(item) {
+    order.iceOrderDetail.forEach(function (item) {
       customerObj[id]['total'] == undefined ? customerObj[id]['total'] =
         item.amount : customerObj[id]['total'] = customerObj[id][
           'total'
@@ -262,11 +313,11 @@ var groupCustomer = function(order) {
 }
 
 
-var customerItem = function(customerObj) {
+var customerItem = function (customerObj) {
   var iceItemObj = {};
   var customers = {};
   var items = Ice.Collection.Item.find()
-  items.forEach(function(item) {
+  items.forEach(function (item) {
     iceItemObj[item._id] = {
       code: item.code,
       name: item.name,
@@ -277,16 +328,16 @@ var customerItem = function(customerObj) {
 
     }
   });
-  customerObj.forEach(function(customer) {
+  customerObj.forEach(function (customer) {
     customers[customer.iceCustomerId] = iceItemObj;
   });
   return customers;
 }
 
-var getItems = function() {
+var getItems = function () {
   var iceItemObj = {};
   var items = Ice.Collection.Item.find()
-  items.forEach(function(item) {
+  items.forEach(function (item) {
     iceItemObj[item._id] = {
       code: item.code,
       name: item.name,
@@ -300,7 +351,7 @@ var getItems = function() {
   return iceItemObj;
 }
 
-listCustomerAsTable = function(reduceCustomer) {
+listCustomerAsTable = function (reduceCustomer) {
   td = ''
   for (var k in reduceCustomer) {
     td += '<tr><th colspan="4" align="center"><u>' + k + ' | ' +
@@ -346,7 +397,7 @@ listCustomerAsTable = function(reduceCustomer) {
 }
 
 
-var listTotalSummary = function(reduceCustomer) {
+var listTotalSummary = function (reduceCustomer) {
   var td = '';
   var totalItem = {};
   var outstandingAmount = 0;

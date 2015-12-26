@@ -1,0 +1,36 @@
+/* CSS declarations go here */
+.tt-menu{
+  margin-top: 3px;
+	padding: 10px;
+	background: #fff;
+	border: 1px solid #ddd;
+	color: #000;
+  font-size: 15px;
+	width: 560px;
+  border-radius: 5px;
+  -webkit-box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.3);
+-moz-box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.3);
+box-shadow: -1px 2px 10px 0px rgba(0,0,0,0.3);
+}
+
+.tt-input{
+	width: 560px;
+}
+
+.tt-selectable{
+	cursor: pointer;
+	padding: 5px;
+}
+
+.tt-selectable:hover{
+	background: #17A4FF;
+	color: #fff;
+}
+.tt-highlight{
+	background: yellow;
+	color: #000;
+}
+.tt-cursor {
+    background-color: #17A4FF!important;
+    color: #FFFFFF !important;
+}

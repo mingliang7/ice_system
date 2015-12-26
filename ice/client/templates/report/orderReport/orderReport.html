@@ -7,7 +7,13 @@
 		<div class="col-md-6">
 					{{> afQuickField name="staffId" }}
 					{{> afQuickField name="customerType" }}
-					{{> afQuickField name="customerId" options=customerOption}}
+					<div class="typeahead-customer form-group hidden">
+						<label for="">Customer:</label>
+						<input class="form-control  typeahead customer" name="search" type="text" placeholder="All"
+						autocomplete="on" spellcheck="off"
+						data-source="search" data-select='selected' data-highlight=true data-limit="10"/>
+					</div>
+					{{> afQuickField name="customerId" type='hidden'}}
 		</div>
 		<div class="col-md-6">
 					{{> afQuickField name="date"}}

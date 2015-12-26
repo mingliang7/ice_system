@@ -17,24 +17,34 @@ Meteor.methods({
     }
     return list;
   },
-  generalCustomer: function () {
-    var list = [];
-    var customers = Ice.Collection.Customer.find({
-      customerType: 'general',
-      status: 'enable'
-    });
-    list.push({
-      label: "(Select One)",
-      value: ""
-    });
-    customers.forEach(function (customer) {
-      list.push({
-        label: '' + customer._id + ' | ' + customer.name + '(' +
-          customer.customerType + ')',
-        value: customer._id
-      });
-    });
-    return list;
+  generalCustomer: function (query, options, type) {
+    options = options || {};
+    var selector = {}
+    var regex = new RegExp(query, 'i');
+    selector.status = 'enable'
+    if (!_.isEmpty(type)) {
+      selector.customerType = type;
+    }
+    selector.$or = [{
+      name: {
+        $regex: regex
+      }
+    }, {
+      _id: {
+        $regex: regex
+      }
+    }]
+    console.log(selector);
+    // guard against client-side DOS: hard limit to 50
+    if (options.limit) {
+      options.limit = Math.min(50, Math.abs(options.limit));
+    } else {
+      options.limit = 50;
+    }
+
+    // TODO fix regexp to support multiple tokens
+    return Ice.Collection.Customer.find(
+      selector, options).fetch();
   }
 });
 
