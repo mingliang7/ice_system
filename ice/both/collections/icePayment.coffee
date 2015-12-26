@@ -10,10 +10,7 @@ Ice.Schema.Payment = new SimpleSchema(
 	customerId:
 		type: String
 		label: 'Customer'
-		autoform:
-			type: 'select2'
-			options: ->
-				ReactiveMethod.call('customer')
+		
 	staffId:
 		type: String
 		label: 'Staff'

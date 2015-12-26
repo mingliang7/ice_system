@@ -23,21 +23,13 @@
     {{#autoForm collection=Ice.Collection.Payment id="ice_paymentInsertTemplate" type="insert"}}
         <div class="row">
             <div class="col-md-7">
-                <div class="form-group{{#if afFieldIsInvalid name='customerId'}} has-error{{/if}}" data-required="true">
-                    <label class="control-label" for="customerId">Customer</label>
-
-                    <div class="input-group  select2-bootstrap-append">
-                        {{> afFieldInput name='customerId' class="customerId input-sm"}}
-                        <span class="input-group-addon">
-                            <a href="#" class="customerAddOn">
-                                {{fa "plus"}}
-                            </a>
-                        </span>
-                    </div>
-                    {{#if afFieldIsInvalid name='customerId'}}
-                        <span class="help-block">{{afFieldMessage name='customerId'}}</span>
-                    {{/if}}
-                </div>
+              <div class="typeahead-customer form-group">
+                <label for="">Customer<span style="color: red;">*</span></label><br>
+                <input class="form-control  typeahead customer" name="search" type="text" placeholder="Type to find customers"
+                autocomplete="on" spellcheck="off"
+                data-source="search" data-select='selected' data-highlight=true data-limit="9" style="width: 650px;"/>
+              </div>
+              {{> afFieldInput name='customerId' class="customerId input-sm" type='hidden'}}
 
                 <div class="form-group{{#if afFieldIsInvalid name='orderId_orderGroupId'}} has-error{{/if}}" data-required="true">
                     <label class="control-label" for="orderId_orderGroupId">invoice ID</label>
