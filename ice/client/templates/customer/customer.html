@@ -57,9 +57,33 @@
         </div>
 				<div class="row">
 					<div class="col-md-12 hidden additional-info">
-                {{> afArrayField name= 'additionalInfo'}}
+						<div class="row">
+							<div class="col-md-3">
+                {{> afQuickField name= 'age'}}
+							</div>
+							<div class="col-md-3">
+                {{> afQuickField name= 'national'}}
+							</div>
+							<div class="col-md-3">
+                {{> afQuickField name= 'citizenship'}}
+							</div>
+							<div class="col-md-3">
+								{{> afQuickField name= 'village'}}
+							</div>
+						</div>
+					<div class="row">
+						<div class="col-md-3">
+							{{> afQuickField name= 'commune'}}
+						</div>
+						<div class="col-md-3">
+							{{> afQuickField name= 'district'}}
+						</div>
+						<div class="col-md-3">
+							{{> afQuickField name= 'province'}}
+						</div>
 					</div>
 				</div>
+			</div>
         <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
         <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
     {{/autoForm}}
@@ -84,7 +108,31 @@
         </div>
 				<div class="row">
 					<div class="col-md-12 hidden additional-info">
-								{{> afArrayField name= 'additionalInfo'}}
+						<div class="row">
+							<div class="col-md-3">
+								{{> afQuickField name= 'age'}}
+							</div>
+							<div class="col-md-3">
+								{{> afQuickField name= 'national'}}
+							</div>
+							<div class="col-md-3">
+								{{> afQuickField name= 'citizenship'}}
+							</div>
+							<div class="col-md-3">
+								{{> afQuickField name= 'village'}}
+							</div>
+						</div>
+					<div class="row">
+						<div class="col-md-3">
+							{{> afQuickField name= 'commune'}}
+						</div>
+						<div class="col-md-3">
+							{{> afQuickField name= 'district'}}
+						</div>
+						<div class="col-md-3">
+							{{> afQuickField name= 'province'}}
+						</div>
+					</div>
 					</div>
 				</div>
 

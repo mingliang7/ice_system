@@ -15,33 +15,27 @@ Ice.Schema.Customer = new SimpleSchema(
 	address:
 		type: String
 		optional: true
-		
-	additionalInfo:
-		type: Array
-		max: 500
-		optional: true
-	'additionalInfo.$':
-		optional: true
-		type: Object
-	'additionalInfo.$.age':
+
+
+	age:
 		type: String
 		optional: true
-	'additionalInfo.$.national':
+	national:
 		type: String
 		optional: true
-	'additionalInfo.$.citizenship':
+	citizenship:
 		type: String
 		optional: true
-	'additionalInfo.$.village':
+	village:
 		type: String
 		optional: true
-	'additionalInfo.$.commune':
+	commune:
 		type: String
 		optional: true
-	'additionalInfo.$.district':
+	district:
 		type: String
 		optional: true
-	'additionalInfo.$.province':
+	province:
 		type: String
 		optional: true
 	telephone:

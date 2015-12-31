@@ -1,5 +1,6 @@
 Ice.Collection.Lending.cacheDoc('customer', Ice.Collection.Customer, ['name',
-  'telephone', 'additionalInfo', 'description', 'gender'
+  'telephone', 'age', 'national', 'citizenship', 'village', 'commune',
+  'district', 'province', 'description', 'gender'
 ], {
   refField: 'customerId'
 });
