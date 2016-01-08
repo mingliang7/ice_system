@@ -11,5 +11,9 @@ Template.ice_lendingContractReportGen.helpers({
       return false;
     }
     return containerReport.result();
+  },
+  getUnit: function (id) {
+    var container = ReactiveMethod.call('findContainer', id);
+    return container.unit;
   }
 })

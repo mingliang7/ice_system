@@ -11,29 +11,55 @@
     <div style='margin-top: 30px;'></div>
       {{#with data}}
       <div class='col-md-12' style="padding: 20px;">
-        <p style="font-family: khmer os battambang;font-size: 13px; line-height: 50px;">ខ្ញុំបាទ/នាងខ្ញុំឈ្មោះ&nbsp;&nbsp;&nbsp;<b>{{_customer.name}}</b>&nbsp;&nbsp;&nbsp;&nbsp;
+        <p style="font-family: khmer os battambang;font-size: 13px; line-height: 50px;">កិច្ចសន្យានេះធ្វើឡើងរវាងឈ្មោះ...................ភេទ.................អាយុ...................ឆ្នាំ............
+      ....&nbsp;&nbsp;កាន់អត្តសញ្ញាណប័ណ្ណលេខ.................................ដែលមានទីលំនៅនៅផ្ទះលេខ...................ក្រុមទី..........................ភូមិ......................ឃុំ/សង្កាត់.............................ស្រុក/ក្រុង...........................
+      ខេត្ត..................................
+       តំណាងអោយសិប្បកម្មទឹកកកអនាម័យ <b>បេងភី</b>តទៅនេះហៅថាភាកី <b>"ក" &nbsp;(ជាអ្នកឲ្យខ្ចី)ជាមួយឈ្មោះ&nbsp;&nbsp;&nbsp;</b><b>{{_customer.name}}</b>&nbsp;&nbsp;&nbsp;&nbsp;
        &nbsp;ភេទ&nbsp;&nbsp;<b>{{_customer.gender}}</b>&nbsp;&nbsp;
        {{#if check _customer.age}}
        អាយុ&nbsp;&nbsp;<b>{{_customer.age}}</b>&nbsp;&nbsp;ជាតិ&nbsp;&nbsp;<b>{{_customer.national}}</b>&nbsp;&nbsp;សញ្ជាតិ&nbsp;&nbsp;<b>{{_customer.citizenship}}</b>
        &nbsp;&nbsp;រស់នៅភូមិ&nbsp;&nbsp;<b>{{_customer.village}}</b>&nbsp;&nbsp;ឃុំ&nbsp;&nbsp;<b>{{_customer.commune}}</b>&nbsp;&nbsp;ស្រុក&nbsp;&nbsp;<b>{{_customer.district}}</b>&nbsp;&nbsp;
-       ខេត្ត&nbsp;&nbsp;<b>{{_customer.province}}</b>។
+       ខេត្ត&nbsp;&nbsp;<b>{{_customer.province}}</b>
       {{else}}
        អាយុ........................ជាតិ.........................សញ្ជាតិ........................
-       រស់នៅភូមិ...................................ឃុំ...........................................ស្រុក.................................ខេត្ត........................................។
+       រស់នៅភូមិ...................................ឃុំ...........................................ស្រុក.................................ខេត្ត........................................
       {{/if}}
-       បានយល់ព្រមខ្ចី ធុង ទឹកកកដែលមានលេខសំគាល់({{#each containers}}<b>BP{{containerId}}</b>,&nbsp;{{/each}})ពីសិប្បកម្មទឹកកកអនាម័យ <b style="font-family:Khmer Os Muol Light">
-          បេងភី</b>ដើម្បីដាក់លក់ប្រចាំថ្ងៃ។<br>
-         <b style="font-size: 14px; font-family: khmer os muol light;">
-          <u>កំណត់ចំណាំ៖</u>
-        </b><br>
-         បើអតិថិជនណាឈប់លក់ ឬឈប់ទិញទឹកកក ពីសិប្បកម្មទឹកកកអនាម័យ បេងភី ត្រូវ​ប្រគល់ធុងទឹកកកគ្រប់ចំនួនតាមកិច្ចសន្យាទៅអោយក្រុមហ៊ុនវិញ។ បើមានការរឹងទទឹងមិនធ្វើតាមកិច្ចសន្យា ក្រុមហ៊ុននឹដោះស្រាយតាមផ្លូវច្បាប់។
+      តទៅនេះហៅថាភាគី <b>“ខ” (ជាអ្នកខ្ចី)</b>។
+      <p><h5 align='center'><b>ភាគីទាំងពីរបានព្រមព្រៀងគ្នា តាមលក្ខខណ្ឌដូចខាងក្រោម៖</b></h5></p>
+      -<b>ភាគី “ក”</b> បានយល់ព្រមឱ្យ<b>ភាគី “ខ”</b> ខ្ចីធុងទឹកកក ដើម្បីដាក់លក់ប្រចាំថ្ងៃដែលរួមមាន៖
+      <table class="report-content">
+        <thead class="report-content-header">
+          <tr>
+            <th>លេខសំគាល់</th>
+            <th>បរិយាយ</th>
+            <th>ចំណុះ</th>
+            <th>ស្ថានភាព</th>
+            <th>ផ្សេងៗ</th>
+          </tr>
+        </thead>
+        <tbody class="report-content-body">
+        {{#each containers}}
+        <tr style="border: 1px solid #000;">
+          <td style="font-size:14px;" align='center'><b>BP{{containerId}}</b></td>
+          <td style="font-size:14px;" align='center'>ធុងទឹកកក</td>
+          <td style="font-size:14px;" align='center'>{{getUnit containerId}}</td>
+          <td style="font-size:14px;" align='center'>{{condition}}</td>
+          <td></td>
+        </tr>
+        {{/each}}
+      </tbody>
+      </table>
+      -<b>ភាគី “ខ”</b> យល់ព្រមសងធុងត្រឡប់ឱ្យទៅ<b>ភាគី “ក” </b>វិញឱ្យបានគ្រប់ចំនួន នៅពេលឈប់លក់ ឬទិញទឹកកកពីសិប្បកម្មរបស់<b>ភាគី “ក” </b>។
+      <br>-<b>ភាគី “ខ”</b> យល់ព្រមសងធុង ឬសងជាប្រាក់តាមតម្លៃជាក់ស្តែងឳ្យទៅ<b>ភាគី “ក”</b> ក្នុងករណីមានការខូតខាត ឬបាត់បង់ធុងទឹកកកដោយប្រការណាមួយនោះ។
+      <br>-ភាគីទាំងអស់បានអាន និងយល់ច្បាស់ពីខ្លឹមសារដែលមានចែង ហើយកិច្ចសន្យានេះមានប្រសិទ្ធភាពចាប់ពីថ្ងៃចុះហត្ថលេខា ឬផ្តិតមេដៃនេះតទៅ។
+      <br>-កិច្ចសន្យានេះត្រូវធ្វើឡើងចំនួនពីរច្បាប់ដើម សម្រាប់<b>ភាគី “ក”</b>  ចំនួនមួយច្បាប់ និង<b>ភាគី “ខ”</b> ចំនួនមួយច្បាប់។
          </p>
       </div>
       <div class="col-md-12" style="padding: 20px;font-family: khmer os battambang;font-size: 13px; line-height: 50px;">
         <p class="pull-right">ធ្វើនៅ បាត់ដំបងថ្ងៃទី...........ខែ........ឆ្នាំ២០១
-          <br>
+          <!-- <br>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          សិប្បកម្មទឹកកកអនាម័យ<span style="font-family: khmer os muol light; font-size: 14px;"><b> បេងភី</b></span>
+          សិប្បកម្មទឹកកកអនាម័យ<span style="font-family: khmer os muol light; font-size: 14px;"><b> បេងភី</b></span> -->
         </p>
       </div>
       {{/with}}
@@ -47,15 +73,14 @@
     <table width="100%" border="0" style="font-family: khmer os battambang; font-size: 13px;text-align: center">
         <tr>
             <td width="33%">
-                អ្នកខ្ចី<br><br><br><br><br><br><br>
-                __________________<br>
+                <b>ឈ្មោះ និងស្នាមមេដៃភាគី “ខ”</b><br><br><br><br><br><br><br>
+                <b>ឈ្មោះ និងស្នាមមេដៃសាក្សីភាគី “ខ”</b><br>
             </td>
             <td width="33%">
-                សាក្សី<br><br><br><br><br><br><br>
-                __________________<br>
+
             </td>
-            <td>តំណាងក្រុមហ៊ុន<br><br><br><br><br><br><br>
-                __________________<br>
+            <td><b>ឈ្មោះ និងស្នាមមេដៃភាគី “ក”</b><br><br><br><br><br><br><br>
+                <b>ឈ្មោះ និងស្នាមមេដៃសាក្សីភាគី “ក”</b><br>
             </td>
         </tr>
 
