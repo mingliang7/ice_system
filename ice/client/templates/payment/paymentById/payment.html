@@ -1,0 +1,41 @@
+<template name="ice_paymentById">
+    {{#autoForm collection=Ice.Collection.Payment id="ice_paymentById" type="insert"}}
+        <div class="row">
+            <div class="col-md-7">
+              <label>Customer:</label>
+              <input type="text" readonly="true" value="{{customerName}}" class="form-control">
+              {{> afFieldInput name='customerId' class="customerId input-sm" readonly=true type="hidden" value=customerId}}
+
+              {{> afQuickField name='orderId_orderGroupId' type="text" value=invoiceId readonly=true class="form-control orderId_orderGroupId input-sm"}}
+
+
+                <div class="form-group{{#if afFieldIsInvalid name='staffId'}} has-error{{/if}}" data-required="true">
+                    <label class="control-label" for="staffId">Staff</label>
+
+                    <div class="input-group  select2-bootstrap-append">
+                        {{> afFieldInput name='staffId' class="staffId input-sm"}}
+                        <span class="input-group-addon">
+                            <a href="#" class="staffAddOn">
+                                {{fa "plus"}}
+                            </a>
+                        </span>
+                    </div>
+                    {{#if afFieldIsInvalid name='staffId'}}
+                        <span class="help-block">{{afFieldMessage name='staffId'}}</span>
+                    {{/if}}
+                </div>
+
+                {{> afQuickField name="paymentDate"}}
+                <p>{{checkDate}}</p>
+            </div>
+            <div class="col-md-5">
+                {{> afQuickField name="dueAmount" value=dueAmount readonly='true'}}
+                {{> afQuickField name="paidAmount" value=paidAmount}}
+                {{> afQuickField name="outstandingAmount" value=outstandingAmount readonly='true'}}
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>

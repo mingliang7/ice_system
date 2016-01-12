@@ -144,10 +144,21 @@ Template.ice_paymentInsertTemplate.events({
   'click .staffAddOn': function () {
     alertify.staffAddOn(fa('plus', 'Staff'), renderTemplate(Template.ice_staffInsertTemplate));
   },
+  'blur [name="paymentDate"]': function (e) {
+    var currentDate = e.currentTarget.value;
+    var checkDate = Session.get('checkDate');
+    if (checkDate != '') {
+      if (currentDate < checkDate) {
+        alertify.warning('Date Must greater than ' + checkDate);
+        $("[name='paymentDate']").val('');
+      }
+    }
+  },
   'change [name="orderId_orderGroupId"]': function (e) {
     var currentInvoice, currentInvoiceId, type;
     currentInvoiceId = $(e.currentTarget).val();
-    datePicker(currentInvoiceId);
+    Session.set('currentInvoiceId', currentInvoiceId);
+    datePicker();
     type = Ice.ListForReportState.get('type');
 
     if (type === 'general') {
@@ -208,6 +219,19 @@ Template.ice_paymentInsertTemplate.helpers({
       Ice.ListForReportState.set('type', invoice.type);
       return invoice.list;
     }
+  },
+  checkDate: function () {
+    var invoiceId = Session.get('currentInvoiceId')
+    payments = ReactiveMethod.call('payment', invoiceId)
+    var maxDate = '';
+    if (payments != undefined) {
+      payments.forEach(function (payment) {
+        maxDate = maxDate > payment.paymentDate ? maxDate :
+          payment.paymentDate
+      });
+    }
+    Session.set('checkDate', maxDate);
+    return maxDate == "" ? '' : 'Date Must >' + maxDate;
   }
 });
 Template.ice_paymentUpdateTemplate.helpers({
@@ -277,20 +301,6 @@ var removeOrderGroupPayment = function (doc) {
 };
 
 var datePicker = function (currentInvoiceId) {
-  Meteor.call('payment', currentInvoiceId, function (err, payments) {
-    maxDate = '';
-    if (payments != undefined) {
-      payments.forEach(function (payment) {
-        maxDate = maxDate > payment.paymentDate ? maxDate : payment.paymentDate
-      });
-      maxDate;
-    }
-    var paymentDate = $('[name="paymentDate"]');
-    console.log(maxDate);
-    return DateTimePicker.dateTime(paymentDate);
-    // setTimeout(function () {
-    //   return maxDate == '' ? DateTimePicker.dateTime(paymentDate) :
-    //     paymentDate.data('DateTimePicker').minDate(maxDate);
-    // }, 2000);
-  });
+  var paymentDate = $('[name="paymentDate"]');
+  return DateTimePicker.dateTime(paymentDate);
 };

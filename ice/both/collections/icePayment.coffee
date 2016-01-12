@@ -10,7 +10,7 @@ Ice.Schema.Payment = new SimpleSchema(
 	customerId:
 		type: String
 		label: 'Customer'
-		
+
 	staffId:
 		type: String
 		label: 'Staff'
@@ -35,8 +35,6 @@ Ice.Schema.Payment = new SimpleSchema(
 
 	paymentDate:
 		type: String
-		defaultValue: ->
-			moment().format('YYYY-MM-DD HH:mm:ss')
 	createdAt:
 		type: Date
 		autoValue: ->
