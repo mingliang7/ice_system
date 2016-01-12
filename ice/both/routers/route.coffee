@@ -78,6 +78,17 @@ Router.route 'ice/new/payment',
 	icon: 'payment'
 	title: 'payment'
 
+Router.route 'ice/new/payment/:customerId/:id',
+	->
+		q = @params.query
+		@render 'ice_paymentById'
+	name: 'ice.paymentById'
+	header:
+		title: 'payment'
+		sub: ''
+	icon: 'payment'
+	title: 'payment'
+
 Router.route 'ice/edit/payment/:id',
 	->
 		q = @params.query

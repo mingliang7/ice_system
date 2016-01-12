@@ -90,6 +90,15 @@ Template.ice_order.events
   "click .print": ->
     Session.set('invioceReportId', null)
     GenReport(@_id) #generateReport alias function in order_autoform_hook
+  "click .payment": ->
+    self = this;
+    if(self._customer.customerType == 'general')
+      if(self.outstandingAmount != 0)
+        Router.go('ice.paymentById', {customerId: self.iceCustomerId, 'id': self._id})
+      else
+        alertify.warning("Already Paid!")
+    else
+      alertify.warning('CustomerType is not general')
   'click .save': ->
     Loading.set('loadingState', true)
     Session.set('invioceReportId', null)

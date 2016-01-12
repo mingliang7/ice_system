@@ -52,6 +52,10 @@ Ice.TabularTable.Customer = new (Tabular.Table)(
           "#{doc.village}, #{doc.commune}, #{doc.province}..."
     }
     {
+      data: 'address'
+      title: "Description"
+    }
+    {
       data: 'telephone'
       title: 'Telephone'
     }
