@@ -69,7 +69,7 @@ indexTpl.events({
     }
   },
   'click .show': function () {
-    alertify.alert(renderTemplate(showTpl, this));
+    alertify.alert(renderTemplate(showTpl, this).html);
 
   }
 });
