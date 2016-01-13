@@ -86,7 +86,7 @@ Template.ice_order.events
           alertify.error "Invoice ##{result.id} has payment"
   'click .show': () ->
     doc = Ice.Collection.Order.findOne(@_id)
-    alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, doc))
+    alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, doc).html)
   "click .print": ->
     Session.set('invioceReportId', null)
     GenReport(@_id) #generateReport alias function in order_autoform_hook
