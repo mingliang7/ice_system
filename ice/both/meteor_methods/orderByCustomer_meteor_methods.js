@@ -1,5 +1,5 @@
 Meteor.methods({
-	orderByCustomer: function(params) {
+	orderByCustomer: function (params) {
 		var self = params;
 		var data = {
 			title: {},
@@ -35,7 +35,7 @@ Meteor.methods({
 					$gte: startDate,
 					$lte: endDate
 				}
-			};
+			}
 			var order = Ice.Collection.Order.find(selector);
 			var index = 1;
 			var reduceCustomer = groupCustomer(order);
@@ -45,20 +45,17 @@ Meteor.methods({
 			});
 		} else if (customerType != 'All' && customer == 'All') {
 			var orderArr = [];
-			customers = findCustomerByType(customerType);
-			for (var i = 0; i < customers.length; i++) {
-				selector = {
-					iceCustomerId: customers[i],
-					orderDate: {
-						$gte: startDate,
-						$lte: endDate
-					}
+			selector = {
+				orderDate: {
+					$gte: startDate,
+					$lte: endDate
 				}
-				var orders = Ice.Collection.Order.find(selector);
-				orders.forEach(function(order) {
-					orderArr.push(order);
-				});
 			}
+			selector['_customer.customerType'] = customerType
+			var orders = Ice.Collection.Order.find(selector);
+			orders.forEach(function (order) {
+				orderArr.push(order);
+			});
 			var reduceCustomer = groupCustomer(orderArr);
 			var td = listCustomerAsTable(reduceCustomer);
 			content.push({
@@ -94,23 +91,23 @@ Meteor.methods({
 
 
 // methods
-findStaff = function(id) {
+findStaff = function (id) {
 	return Ice.Collection.Staffs.findOne(id).name;
 }
 
-sortItems = function(orderDetail) {
+sortItems = function (orderDetail) {
 	td = ""
 	listItem = {};
 	items = Ice.Collection.Item.find()
 	count = 0;
-	items.forEach(function(item) {
+	items.forEach(function (item) {
 		listItem[item._id] = item;
 		listItem[item._id].qty = 0;
 		listItem[item._id].amount = 0;
 		listItem[item._id].discount = 0;
 
 	});
-	orderDetail.forEach(function(order) {
+	orderDetail.forEach(function (order) {
 		listItem[order.iceItemId] = {
 			qty: listItem[order.iceItemId].qty += order.qty,
 			price: order.price,
@@ -126,21 +123,21 @@ sortItems = function(orderDetail) {
 	return td;
 }
 
-formatKh = function(val) {
+formatKh = function (val) {
 	return numeral(val).format('0,0')
 }
-formatUS = function(val) {
+formatUS = function (val) {
 	return numeral(val).format('0,0.00');
 }
-var formatEx = function(id) {
+var formatEx = function (id) {
 	exchange = Cpanel.Collection.Exchange.findOne(id)
 	return JSON.stringify(exchange.rates);
 }
 
-var formatQty = function(val) {
+var formatQty = function (val) {
 	return numeral(val).format('0.0');
 }
-var findCustomerByType = function(type) {
+var findCustomerByType = function (type) {
 	arr = []
 	customers = undefined;
 	if (type != 'All') {
@@ -150,17 +147,17 @@ var findCustomerByType = function(type) {
 	} else {
 		customers = Ice.Collection.Customer.find()
 	}
-	customers.forEach(function(customer) {
+	customers.forEach(function (customer) {
 		arr.push(customer._id);
 	});
 	return arr;
 }
 
-var findCustomerName = function(id) {
+var findCustomerName = function (id) {
 		return Ice.Collection.Customer.findOne(id).name;
 	}
 	// group all order group invoices by customer
-var orderGroupCustomer = function(total, id, startDate, endDate) {
+var orderGroupCustomer = function (total, id, startDate, endDate) {
 	var startDate = startDate.split(' ');
 	var endDate = endDate.split(' ');
 	var outstandingAmount = 0;
@@ -175,7 +172,7 @@ var orderGroupCustomer = function(total, id, startDate, endDate) {
 			$lte: endDate[0]
 		}
 	})
-	groupOrders.forEach(function(order) {
+	groupOrders.forEach(function (order) {
 		paidAmount += order.paidAmount
 		outstandingAmount = total - paidAmount
 		discount += order.discount;
@@ -191,12 +188,12 @@ var orderGroupCustomer = function(total, id, startDate, endDate) {
 
 // grouping all customer
 
-var groupCustomer = function(order) {
+var groupCustomer = function (order) {
 	var orders = order;
 	var customer = customerItem(orders);
 	var gItems = getItems();
 	var customerObj = {};
-	orders.forEach(function(order) {
+	orders.forEach(function (order) {
 		var id = order.iceCustomerId;
 		customerObj[id] == undefined ? customerObj[id] = {} : customerObj[id];
 		if (order.paidAmount != undefined) {
@@ -218,7 +215,7 @@ var groupCustomer = function(order) {
 				}
 			}
 		}
-		order.iceOrderDetail.forEach(function(item) {
+		order.iceOrderDetail.forEach(function (item) {
 			customerObj[id]['total'] == undefined ? customerObj[id]['total'] = item
 				.amount : customerObj[id]['total'] = customerObj[id]['total'] += item.amount;
 			if (customerObj[id][item.iceItemId] == undefined) {
@@ -260,11 +257,11 @@ var groupCustomer = function(order) {
 }
 
 
-var customerItem = function(customerObj) {
+var customerItem = function (customerObj) {
 	var iceItemObj = {};
 	var customers = {};
 	var items = Ice.Collection.Item.find()
-	items.forEach(function(item) {
+	items.forEach(function (item) {
 		iceItemObj[item._id] = {
 			code: item.code,
 			name: item.name,
@@ -275,16 +272,16 @@ var customerItem = function(customerObj) {
 
 		}
 	});
-	customerObj.forEach(function(customer) {
+	customerObj.forEach(function (customer) {
 		customers[customer.iceCustomerId] = iceItemObj;
 	});
 	return customers;
 }
 
-var getItems = function() {
+var getItems = function () {
 	var iceItemObj = {};
 	var items = Ice.Collection.Item.find()
-	items.forEach(function(item) {
+	items.forEach(function (item) {
 		iceItemObj[item._id] = {
 			code: item.code,
 			name: item.name,
@@ -298,7 +295,7 @@ var getItems = function() {
 	return iceItemObj;
 }
 
-listCustomerAsTable = function(reduceCustomer) {
+listCustomerAsTable = function (reduceCustomer) {
 	td = ''
 	for (var k in reduceCustomer) {
 		td += '<tr><th colspan="4" align="center"><u>' + k + ' | ' +
@@ -350,7 +347,7 @@ listCustomerAsTable = function(reduceCustomer) {
 }
 
 
-var listTotalSummary = function(reduceCustomer) {
+var listTotalSummary = function (reduceCustomer) {
 	var td = '';
 	var totalItem = {};
 	var outstandingAmount = 0;
