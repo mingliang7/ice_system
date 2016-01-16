@@ -5,6 +5,9 @@
 <template name="ice_paymentTabular">
     <p>
         <button type="button" class="btn btn-primary insert">{{fa "plus"}} Add New</button>
+         <span class="pull-right">
+            <input type="text" name="payment-filter-date" class="form-control" value="{{paymentFilterDate}}" style="width: 250px">
+        </span>
     </p>
 
     {{> tabular table=Ice.TabularTable.Payment selector=selector class="table table-striped table-bordered table-condensed table-hover"}}

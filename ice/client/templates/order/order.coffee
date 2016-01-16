@@ -31,10 +31,33 @@ Template.ice_orderInsertTemplate.onRendered ->
       $('.importPayment').hide()
   createNewAlertify(['staffAddOn','customerAddOn', 'paymentPopUP'])
   datePicker()
-Template.ice_order.helpers
+
+Template.ice_orderTabular.onRendered ->
+  filterDate = $('[name="filter-date"]')
+  DateTimePicker.dateRange filterDate
+
+Template.ice_orderTabular.helpers
   selector: ->
-    Tracker.nonreactive ->
-      {}
+    date = Session.get('filterDate')
+    if date is undefined
+      today = moment(new Date()).format('YYYY-MM-DD')
+      {orderDate: {$gte: "#{today} 00:00:00", $lte: "#{today} 23:59:59"}}
+    else
+      date
+  filterDate: ->
+    today= moment(new Date()).format('YYYY-MM-DD')
+    "#{today} To #{today} "
+Template.ice_orderTabular.events
+  'change [name="filter-date"]': (e) ->
+    selector = {}
+    selectedDateRange = e.currentTarget.value.split(' To ')
+    selector.orderDate = {
+      $gte: "#{selectedDateRange[0]} 00:00:00",
+      $lte: "#{selectedDateRange[1]} 23:59:59"
+    }
+    Session.set('filterDate', selector);
+Template.ice_orderTabular.onDestroyed ->
+  Session.set('filterDate', undefined )
 Template.ice_order.events
   "click .insert": ->
     Router.go('ice.customer')
