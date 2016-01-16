@@ -117,6 +117,7 @@ Template.ice_order.events
     self = this;
     if(self._customer.customerType == 'general')
       if(self.outstandingAmount != 0)
+        Session.set('monitor', 'order');
         Router.go('ice.paymentById', {customerId: self.iceCustomerId, 'id': self._id})
       else
         alertify.warning("Already Paid!")
