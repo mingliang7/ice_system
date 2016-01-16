@@ -67,11 +67,15 @@ Meteor.methods({
 					$lte: endDate
 				}
 			}
-			selector['_customer.customerType'] = customerType;
 			var getOrder = Ice.Collection.Payment.find(selector);
 			getOrder.forEach(function (obj) {
-				// Do something
-				content.push(obj);
+				var order = Ice.Collection.Order.findOne({
+					_id: obj.orderId_orderGroupId,
+					'_customer.customerType': customerType
+				});
+				if (!_.isUndefined(order)) {
+					content.push(obj);
+				}
 			});
 
 		} else if (staff == 'All' && customerType !== 'All' && customer == 'All') {
@@ -81,11 +85,15 @@ Meteor.methods({
 					$lte: endDate
 				}
 			}
-			selector['_customer.customerType'] = customerType
 			var getOrder = Ice.Collection.Payment.find(selector);
 			getOrder.forEach(function (obj) {
-				// Do something
-				content.push(obj);
+				var order = Ice.Collection.Order.findOne({
+					_id: obj.orderId_orderGroupId,
+					'_customer.customerType': customerType
+				});
+				if (!_.isUndefined(order)) {
+					content.push(obj);
+				}
 			});
 
 		} else if (staff == 'All' && customerType !== 'All' && customer != 'All') {
