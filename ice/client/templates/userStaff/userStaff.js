@@ -11,20 +11,13 @@ Template.ice_userStaff.onRendered(function () {
 Template.ice_userStaff.events({
     'click .insert': function (e, t) {
 
-        alertify.userStaff(renderTemplate(Template.ice_userStaffInsert))
-            .set({
-                title: "<i class='fa fa-plus'></i> Add New UserStaff"
-            })
-
+        alertify.userStaff(fa('plus', 'Add User Map'),renderTemplate(Template.ice_userStaffInsert))
     },
     'click .update': function (e, t) {
 
         var data = Ice.Collection.UserStaffs.findOne(this._id);
 
-        alertify.userStaff(renderTemplate(Template.ice_userStaffUpdate, data))
-            .set({
-                title: '<i class="fa fa-pencil"></i> Update Existing UserStaff'
-            })
+        alertify.userStaff(fa('pencil', 'Update User Map'), renderTemplate(Template.ice_userStaffUpdate, data))
 
     },
     'click .remove': function (e, t) {
@@ -46,10 +39,7 @@ Template.ice_userStaff.events({
     },
     'click .show': function (e, t) {
 
-        alertify.alert(renderTemplate(Template.ice_userStaffShow, this))
-            .set({
-                title: '<i class="fa fa-eye"></i> UserStaff Detail'
-            });
+        alertify.alert(fa('eyes', 'Show User Map'),renderTemplate(Template.ice_userStaffShow, this).html)
 
     }
 });

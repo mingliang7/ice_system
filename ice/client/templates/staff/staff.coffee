@@ -2,10 +2,7 @@ Template.ice_staff.onRendered ->
 	createNewAlertify('staff')
 Template.ice_staff.events
 	'click .show': ->
-		alertify.staff(renderTemplate(Template.ice_staffShowTemplate, this))
-            .set({
-                title: "<i class='fa fa-pencil'></i>Staff Info"
-            })
+		alertify.staff(fa('eye', 'Staff Show'),renderTemplate(Template.ice_staffShowTemplate, this).html)
 	'click .remove': ->
 		id = this._id
 		available = checkAvailable(id);
@@ -28,18 +25,12 @@ Template.ice_staff.events
 		id = @_id
 		available = checkAvailable(id)
 		if available
-			alertify.staff(renderTemplate(Template.ice_staffUpdateTemplate, data))
-            .set({
-                title: "<i class='fa fa-pencil'></i> Edit Staff"
-            })
+			alertify.staff(fa('pencil','Update Staff'),renderTemplate(Template.ice_staffUpdateTemplate, data))
             .maximize()
 		else
 	  	alertify.error "Staff ##{id} is in user map :("
 	'click .insert': ->
-		alertify.staff(renderTemplate(Template.ice_staffInsertTemplate))
-            .set({
-                title: "<i class='fa fa-plus'></i> Add New Staff"
-            })
+		alertify.staff(fa('plus', 'Add Staff'),renderTemplate(Template.ice_staffInsertTemplate))
             .maximize()
 
 AutoForm.hooks
