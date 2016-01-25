@@ -14,7 +14,7 @@
 <!--Action-->
 <template name="ice_orderAction">
     {{#tabularAction}}
-        <li><a href="#" class="print">{{fa "print"}} Print</a></li>
+        <li><a class="printInv">{{fa "printInv"}} Print</a></li>
         <li><a class="d-potiner payment">{{fa "money"}} Payment</a></li>
         <li class="divider"></li>
         <li><a href="#" class="update">{{fa "pencil"}} Update</a></li>
@@ -23,9 +23,9 @@
     {{/tabularAction}}
 </template>
 
-<template name="ice_printAction">
+<template name="ice_printInvAction">
     {{#tabularAction}}
-        <li><a href="#" class="print">{{fa "print"}} Print</a></li>
+        <li><a href="#" class="printInv">{{fa "printInv"}} Print</a></li>
     {{/tabularAction}}
 </template>
 
@@ -115,7 +115,7 @@
         </div>
         <div class="pull-right">
             <button type="submit" class="btn btn-primary save">{{fa "floppy-o"}} Save</button>
-            <button type="submit" class="btn btn-primary print">{{fa "print"}} Save & print</button>
+            <button type="submit" class="btn btn-primary printInv">{{fa "printInv"}} Save & print</button>
             <button type="submit" class="btn btn-primary saveNpay hidden">{{fa "money"}} Save & Pay</button>
             <button type="submit" class="btn btn-primary pay hidden">{{fa "money"}} Save & Pay & Print</button>
             <button type="reset" class="btn btn-default reset">{{fa "refresh"}} Reset</button>
@@ -193,7 +193,7 @@
         <div class="pull-right">
             <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
             <button type="submit" class="btn btn-primary pay hidden">{{fa "money"}} Save & Pay</button>
-            <button type="submit" class="btn btn-primary print">{{fa "print"}} Save & print</button>
+            <button type="submit" class="btn btn-primary printInv">{{fa "printInv"}} Save & print</button>
             <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
         </div>
     {{/autoForm}}

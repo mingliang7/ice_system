@@ -110,9 +110,10 @@ Template.ice_order.events
   'click .show': () ->
     doc = Ice.Collection.Order.findOne(@_id)
     alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, doc).html)
-  "click .print": ->
+  "click .printInv": ->
     Session.set('invioceReportId', null)
-    GenReport(@_id) #generateReport alias function in order_autoform_hook
+    # Router.go('ice.invoiceReportGen', {id: @_id})
+    GenReport(@_id)
   "click .payment": ->
     self = this;
     if(self._customer.customerType == 'general')
@@ -127,7 +128,6 @@ Template.ice_order.events
     Loading.set('loadingState', true)
     Session.set('invioceReportId', null)
   'click .saveNpay': ->
-    debugger
     # doc = Ice.Collection.Order.findOne(id)
     # alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, doc))
 # insert form event
@@ -175,17 +175,17 @@ Template.ice_orderInsertTemplate.events
     setTimeout(-> totalAmount()
     200)
 
-  'click .print': ->
-    Print.set 'print', true
+  'click .printInv': ->
+    PrintInv.set 'printInv', true
   'click .save': ->
     Loading.set('loadingState', true)
 
   'click .pay': ->
     Loading.set('loadingState', true)
-    Print.set 'pay', true
+    PrintInv.set 'pay', true
   'click .saveNpay': ->
     Loading.set('loadingState', true)
-    Print.set 'saveNpay', true
+    PrintInv.set 'saveNpay', true
 
   'change [name="exchange"]': (event) ->
     val = findExchange($(event.currentTarget).val())
@@ -239,8 +239,8 @@ Template.ice_orderUpdateTemplate.events
     setTimeout(-> totalAmount()
     200)
 
-  'click .print': ->
-    Print.set 'print', true
+  'click .printInv': ->
+    PrintInv.set 'printInv', true
 
   'click .pay': ->
     alertify.paymentPopUP(fa('money', 'Payment'), renderTemplate(Template.ice_paymentUrlInsertTemplate, this))

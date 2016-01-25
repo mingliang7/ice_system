@@ -1,22 +1,23 @@
-
 AutoForm.hooks({
   ice_paymentUrlInsertTemplate: {
     before: {
-      insert: function(doc) {
+      insert: function (doc) {
         doc.branchId = Session.get('currentBranch');
         return doc;
       }
     },
-    onSuccess: function(formType, result) {
+    onSuccess: function (formType, result) {
       id = Session.get('invioceReportId');
-      alertify.success('Successfully');
+      console.log(id)
       alertify.paymentPopUP().close();
-      if(!_.isUndefined(id)){
-        GenReport(id);
+      if (!_.isUndefined(id) || id == null) {
+        Router.go('ice.invoiceReportGen', {
+          id: id
+        });
         Session.set('invioceReportId', undefined)
       }
     },
-    onError: function(formType, error) {
+    onError: function (formType, error) {
       return alertify.error(error.message);
     }
   }

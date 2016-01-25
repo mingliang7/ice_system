@@ -21,36 +21,39 @@
 // });
 /************ Generate *************/
 Template.ice_invoiceReportGen.helpers({
-    data: function () {
-        var id = Router.current().params.id;
-        var callId = JSON.stringify(id);
-        var call = Meteor.callAsync(callId, 'retailInvoice', id);
-        if(!call.ready()){
-            return false;
-        }
-
-        return call.result();
-    },
-    check: function(){
-       
-    },
-
-    itemName: function(id){
-        var name = Ice.Collection.Item.findOne(id).name;
-        return name;
-    },
-    itemDiscount: function(discount) {
-        if(discount == undefined){
-            return '';
-        }else{
-            return discount;
-        }
+  data: function () {
+    var id = Router.current().params.id;
+    var callId = JSON.stringify(id);
+    var call = Meteor.callAsync(callId, 'retailInvoice', id);
+    if (!call.ready()) {
+      return false;
     }
+
+    return call.result();
+  },
+  printInvoice: function () {
+    setTimeout(function () {
+      window.print();
+      Router.go('ice.customer');
+
+    }, 1000)
+  },
+  itemName: function (id) {
+    var name = Ice.Collection.Item.findOne(id).name;
+    return name;
+  },
+  itemDiscount: function (discount) {
+    if (discount == undefined) {
+      return '';
+    } else {
+      return discount;
+    }
+  }
 });
 
-var formatDollar = function(value){
-    return numeral(value).format('0,0.00');
+var formatDollar = function (value) {
+  return numeral(value).format('0,0.00');
 }
-var formatKH = function(value){
-    return numeral(value).format('0,0');
+var formatKH = function (value) {
+  return numeral(value).format('0,0');
 }
