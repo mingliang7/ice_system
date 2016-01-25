@@ -61,7 +61,7 @@
             <tr>
                 <th></th>
                 <th></th>
-            <th class="pull-right">បញ្ចុះតម្លៃ: </th> <th>{{footer.discount}}</th> 
+            <th class="pull-right">បញ្ចុះតម្លៃ: </th> <th>{{footer.discount}}</th>
             </tr>
              <tr>
                 <th></th>
@@ -80,12 +80,12 @@
             </tr>
         </thead>
         </table>
-        
+
     {{/with}}
 
     <!--Sign-->
     {{> ice_invoiceReportGenFooterNote}}
-    {{autoprint close='true'}}
+    {{printInvoice}}
     {{else}}
         {{> loading}}
     {{/if}}
@@ -95,7 +95,7 @@
     <div style="font-size: 10px; text-align: center">
     <br>
     <strong> សូមអរគុណដែលបានជាវទឹកកកពីសិប្យកម្មយើងខ្ញំុ!</strong>
-    
+
     <p style="font-size: 8px;">(Developed by: Rabbit IT Solutions, Tel: 053 50 66 777)</p>
     </div>
 </template>
