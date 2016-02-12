@@ -1,5 +1,6 @@
 Meteor.methods({
 	paymentReport: function (params) {
+		this.unblock();
 		console.log(params);
 		var self = params;
 		var data = {

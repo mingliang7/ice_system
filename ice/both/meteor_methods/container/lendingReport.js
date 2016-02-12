@@ -1,5 +1,6 @@
 Meteor.methods({
   lendingReport: function (params) {
+    this.unblock();
     var self = params;
     var data = {
       title: {},

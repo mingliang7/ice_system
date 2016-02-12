@@ -8,6 +8,7 @@ function compare(a, b) {
 }
 Meteor.methods({
   unpaidGroup: function(params) {
+    this.unblock();
     var self = params;
     var data = {
       title: {},

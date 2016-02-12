@@ -1,5 +1,6 @@
 Meteor.methods({
-  removeInvoiceLogReport:function(params){ 
+  removeInvoiceLogReport:function(params){
+    this.unblock();
     var self = params;
     var data = {
         title: {},

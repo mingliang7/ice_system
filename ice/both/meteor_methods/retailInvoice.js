@@ -1,5 +1,6 @@
 Meteor.methods({
 	retailInvoice: function (id) {
+		this.unblock();
 		//var getOrder = Ice.Collection.Order.findOne(id);
 		var getOrder = StateId.get(id);
 		var _customer, _staff;

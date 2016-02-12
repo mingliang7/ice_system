@@ -1,5 +1,6 @@
 Meteor.methods({
     generalOrder: function(params) {
+        this.unblock();
         var self = params;
         var data = {
             title: {},
@@ -42,7 +43,7 @@ Meteor.methods({
         var newItem = {}
         newItem.item = [];
         getOrder.forEach(function(order) {
-            var tempDate = order.orderDate.split(' '); 
+            var tempDate = order.orderDate.split(' ');
             order.iceOrderDetail.forEach(function(item) {
                 if (_.isUndefined(currentObj[tempDate[0]])) {
                     currentObj[tempDate[0]] = {};
@@ -189,7 +190,7 @@ var extractItemByDate = function(currentObj) {
         }
     }
     td += '</tr>'
-    td += '<tr><td>សរុបទឹកប្រាក់:</td>';   
+    td += '<tr><td>សរុបទឹកប្រាក់:</td>';
     for(var j in itemTotalDetail){
         if(itemTotalDetail[j].amount){
             td += '<td>' + itemTotalDetail[j].amount + '</td>';

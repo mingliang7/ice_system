@@ -180,6 +180,7 @@ Meteor.methods({
     return alert(count + ' payments' + ' removed from order');
   },
   orderReport: function (params) {
+    this.unblock();
     console.log(params);
     var self = params;
     var data = {
