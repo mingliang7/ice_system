@@ -38,10 +38,10 @@ Meteor.methods({
         Meteor.users.update({_id: id}, {$set: {rolesBranch: doc.rolesBranch}});
 
         // Event
-        Events.trackInsert({
-            description: doc,
-            module: module
-        });
+        // Events.trackInsert({
+        //     description: doc,
+        //     module: module
+        // });
 
         return id;
     },
@@ -95,10 +95,10 @@ Meteor.methods({
         });
 
         // Event
-        Events.trackUpdate({
-            description: id + ' To ' + EJSON.stringify(doc),
-            module: module
-        });
+        // Events.trackUpdate({
+        //     description: id + ' To ' + EJSON.stringify(doc),
+        //     module: module
+        // });
 
         return true;
     },
@@ -118,10 +118,10 @@ Meteor.methods({
         Meteor.users.remove(id);
 
         // Event
-        Events.trackRemove({
-            description: user,
-            module: module
-        });
+        // Events.trackRemove({
+        //     description: user,
+        //     module: module
+        // });
 
         return id;
     }

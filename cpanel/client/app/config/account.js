@@ -30,19 +30,19 @@ Accounts.ui.config({
 /**
  * Events on login/out
  */
-Accounts.onLogin(function () {
-    Session.setPersistent('currentUserId', Meteor.userId());
-    Events.track({
-        type: 'Login'
-    });
-});
-
-accountsUIBootstrap3.logoutCallback = function (error) {
-    if (!error) {
-        Events.track({
-            type: 'Logout',
-            userId: Session.get('currentUserId')
-        });
-        Session.clear();
-    }
-};
+// Accounts.onLogin(function () {
+//     Session.setPersistent('currentUserId', Meteor.userId());
+//     Events.track({
+//         type: 'Login'
+//     });
+// });
+// 
+// accountsUIBootstrap3.logoutCallback = function (error) {
+//     if (!error) {
+//         Events.track({
+//             type: 'Logout',
+//             userId: Session.get('currentUserId')
+//         });
+//         Session.clear();
+//     }
+// };
