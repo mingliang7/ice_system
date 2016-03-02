@@ -6,8 +6,9 @@ DateTimePicker = {
         });
     },
     dateTime: function (element) {
+        var currentTime = moment(new Date()).format('HH:mm:ss');
         element.datetimepicker({
-            format: 'YYYY-MM-DD HH:mm:ss'
+            format: 'YYYY-MM-DD ' + currentTime 
         });
     },
     time: function (element) {
