@@ -47,7 +47,6 @@ Meteor.methods({
     if (staffId != 'All') {
       selector.staffId = staffId;
     }
-    console.log(selector);
     var lendings = Ice.Collection.Lending.find(selector).fetch()
     lendings.forEach(function (lending) {
       lending.index = index;

@@ -59,7 +59,6 @@ Meteor.methods({
 			}
 		}
 		var getOrder = Ice.Collection.Order.find(selector).fetch();
-		console.log(getOrder.length);
 		getOrder.forEach(function(obj) {
 			if (obj._payment != undefined) {
 				currentPayment = obj._payment;

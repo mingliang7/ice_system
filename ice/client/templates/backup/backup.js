@@ -9,7 +9,7 @@ function getBackupType(type) {
         'Events',
         'Meteor.roles',
         //files
-        
+
     ];
     var defaultType = [
         'Ice.Collection.Staffs',
@@ -33,7 +33,6 @@ function getBackupType(type) {
 AutoForm.hooks({
     ice_backup: {
         onSubmit: function (doc) {
-            debugger;
             var backupType = doc.backupType;
             var collections = getBackupType(backupType);
             var module = Session.get('currentModule');

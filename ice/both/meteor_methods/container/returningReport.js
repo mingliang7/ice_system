@@ -42,7 +42,6 @@ Meteor.methods({
     if (staffId != 'All') {
       selector.staffId = staffId;
     }
-    console.log(selector);
     var returnings = Ice.Collection.Returning.find(selector).fetch()
     returnings.forEach(function (returning) {
       returning.index = index;

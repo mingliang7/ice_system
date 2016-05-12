@@ -25,7 +25,6 @@ Meteor.methods({
 		var splitDate = getOrder.orderDate.split(' ');
 		var date = splitDate[0];
 		var time = splitDate[1];
-		console.log(splitDate);
 		var data = {
 			title: {},
 			header: [],
@@ -73,7 +72,6 @@ Meteor.methods({
 		});
 		content.push(itemsDetail);
 		delete StateId._obj[id]
-		console.log(StateId);
 		if (content.length > 0) {
 			data.content = content;
 			data.footer = {

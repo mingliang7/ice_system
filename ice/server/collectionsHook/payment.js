@@ -138,7 +138,6 @@ var checkType = function (customerId) {
 
 // Before update
 var updateInvoice = function (oldDoc, doc) {
-  console.log(doc);
   var invoiceId = oldDoc.orderId_orderGroupId;
   var oldPaidAmount = oldDoc.paidAmount;
   customerId = oldDoc.customerId;

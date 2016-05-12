@@ -56,7 +56,6 @@ Meteor.methods({
             try {
               closingDate = payment[obj].date;
             } catch (e) {
-              console.log(e);
             }
             return Ice.Collection.Order.update({
               _id: order._id
@@ -96,7 +95,6 @@ Meteor.methods({
     countPayment = 0;
     countOrder = 0;
     orders = Ice.Collection.OrderGroup.find();
-    console.log(orders.count());
     orders.forEach(function (order) {
       var closingDate, obj, payment, payments;
       if (order.paidAmount !== 0) {
@@ -109,7 +107,6 @@ Meteor.methods({
             paymentDate: 1
           }
         });
-        console.log(payments.count());
         payments.forEach(function (obj) {
           countPayment += 1;
           return payment[obj._id] = {
@@ -128,7 +125,6 @@ Meteor.methods({
           try {
             closingDate = payment[obj].date;
           } catch (e) {
-            console.log(e);
           }
           return Ice.Collection.OrderGroup.update({
             _id: order._id
@@ -181,7 +177,6 @@ Meteor.methods({
   },
   orderReport: function (params) {
     this.unblock();
-    console.log(params);
     var self = params;
     var data = {
       title: {},
@@ -280,7 +275,6 @@ Meteor.methods({
         }
       }
       selector['_customer.customerType'] = customerType
-      console.log(selector)
       var getOrder = Ice.Collection.Order.find(selector);
       getOrder.forEach(function (obj) {
         // Do something

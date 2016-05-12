@@ -54,7 +54,6 @@ Meteor.methods({
         currentPayment = obj._payment;
         var payment = _.findLastKey(currentPayment, function(payment) {
           if (payment.date < today) {
-            console.log(payment);
             return payment;
           }
         });

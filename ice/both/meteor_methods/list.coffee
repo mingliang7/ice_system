@@ -25,7 +25,7 @@ Meteor.methods
 		        list.push
 		          label: '' + invoice._id + ' | ' + invoice.orderDate
 		          value: invoice._id
-		   
+
 		      Ice.ListForReportState.set 'type', type
 		    else
 		      Ice.Collection.OrderGroup.find(iceCustomerId: customerId).forEach (invoice) ->
@@ -51,5 +51,4 @@ Meteor.methods
 		        return
 		  customerType = type
 
-		console.log(list)
 		{list: list, type: customerType}

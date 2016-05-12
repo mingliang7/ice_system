@@ -1,6 +1,5 @@
 Meteor.methods({
   removeOrderPayment: function(doc) {
-    console.log(doc)
     var oldPaymentDetail = Ice.Collection.Order.findOne(doc.orderId_orderGroupId)
       ._payment;
     delete oldPaymentDetail[doc._id];
@@ -77,7 +76,6 @@ Meteor.methods({
     var payments = Ice.Collection.Payment.find({
       orderId_orderGroupId: id
     }).fetch();
-    console.log(payments);
     return payments
 
   },

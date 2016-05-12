@@ -8,7 +8,6 @@ Meteor.methods({
 			if(orders.length > 0){
 				orders.forEach(function(order) {
 					var orderGroup = Ice.Collection.OrderGroup.findOne({_id: order.iceOrderGroupId})
-					console.log(orderGroup + ' ' + order._id);
 					if(_.isUndefined(orderGroup)){
 						getOrderGroupId(order, customer._id);
 					}
@@ -27,9 +26,8 @@ Meteor.methods({
 					var orderGroup = Ice.Collection.OrderGroup.findOne({_id: order.iceOrderGroupId})
 					if(!_.isUndefined(orderGroup)){
 						if(order._customer.name != orderGroup._customer.name){
-							Ice.Collection.Order.direct.update(order._id, 
+							Ice.Collection.Order.direct.update(order._id,
 								{$set: {_customer: orderGroup._customer}})
-							console.log('updated' + ' order._id');
 						}
 					}
 				});
@@ -40,19 +38,17 @@ Meteor.methods({
 
 var getOrderGroupId = function(order, customerId){
 	var orderDate = order.orderDate.split(' ');
-	var orderGroups = Ice.Collection.OrderGroup.find({iceCustomerId: customerId}); 
+	var orderGroups = Ice.Collection.OrderGroup.find({iceCustomerId: customerId});
 	var groupByDay = 'day' + orderDate[0];
-	console.log(groupByDay);
 	orderGroups.forEach(function(orderGroup) {
 		if(!_.isUndefined(orderGroup.groupBy[groupByDay])){
 			Ice.Collection.Order.direct.update(order._id, {$set: {iceOrderGroupId: orderGroup._id}})
-			console.log('updated ' + order._id);
 		}else{
 			if(orderDate[0] >= orderGroup.startDate && orderDate[0] <= orderGroup.endDate ){
 				var newObj = orderGroup;
 				var dueAmount = 0,
 					totalDiscount = 0,
-					total = 0, 
+					total = 0,
 					totalInDollar = 0 ;
 
 				newObj.groupBy[groupByDay]= {
@@ -68,8 +64,7 @@ var getOrderGroupId = function(order, customerId){
   				 totalInDollar += newObj.groupBy[i]['totalInDollar'];
 				}
 				Ice.Collection.OrderGroup.update({_id: orderGroup._id},{$set:{dueAmount: dueAmount, outstandingAmount: dueAmount, total: total, totalInDollar: totalInDollar, discount: totalDiscount, updatedAt: new Date(), groupBy: newObj.groupBy}})
-				Ice.Collection.Order.direct.update({_id: order._id}, {$set: {iceOrderGroupId: orderGroup._id}})	 
-				console.log('updated group' + orderGroup._id );
+				Ice.Collection.Order.direct.update({_id: order._id}, {$set: {iceOrderGroupId: orderGroup._id}})
 			}
 		}
 	});

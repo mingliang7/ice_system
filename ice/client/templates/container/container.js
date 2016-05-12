@@ -25,7 +25,6 @@ Template.ice_containerTabular.helpers({
     obj.status = {
       $in: statusArray
     }
-    console.log(obj);
     return obj;
 
   }
@@ -154,7 +153,6 @@ insertTpl.events({
         obj.qty = qty;
         obj.date = date;
         obj.branchId = Session.get('currentBranch');
-        console.log(obj);
         Session.set('generateContainerQty', obj);
       }
     } else {
