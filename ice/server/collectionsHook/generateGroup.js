@@ -1,7 +1,9 @@
 Ice.Collection.Order.after.insert(function(userId, doc) {
   Meteor.defer(function() {
+    Meteor._sleepForMs(100);
     doc.createdAt = new Date();
     doc.branchId = '001';
+    console.log('insert working');
     setOrderGroup(doc);
   });
 });

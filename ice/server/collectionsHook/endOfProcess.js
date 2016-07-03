@@ -1,9 +1,9 @@
 Ice.Collection.EndOfProcess.after.insert(function (userId, doc){
 	var date = moment(doc.date).format('YYYY-MM-DD 00:00:00');
 	Meteor.defer(function(){
-		Meteor._sleepForMs(1000);
+		Meteor._sleepForMs(200);
 		var payment = 0 ;
-		var removeOrder = 0 ; 
+		var removeOrder = 0 ;
 		var removeOrderGroup = 0 ;
 		var orders = Ice.Collection.Order.find({outstandingAmount: 0, orderDate: {$lt: date}}).fetch();
 		var orderGroups = Ice.Collection.OrderGroup.find({

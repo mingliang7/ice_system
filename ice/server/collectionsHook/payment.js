@@ -15,10 +15,9 @@ Ice.Collection.Payment.after.insert(function (userId, doc) {
     StateId.set(doc.orderId_orderGroupId, order);
   }
   Meteor.defer(function () {
-    Meteor._sleepForMs(1000);
+    Meteor._sleepForMs(200);
     invoiceUpdate(doc);
   });
-  return console.log('Defer started');
 });
 
 Ice.Collection.Payment.before.update(function (userId, doc, fieldNames,
@@ -35,7 +34,7 @@ Ice.Collection.Payment.after.update(function (userId, doc, fieldNames, modifier,
   options) {
   var oldDoc = this.previous
   Meteor.defer(function () {
-    Meteor._sleepForMs(2000);
+    Meteor._sleepForMs(200);
     updateInvoice(oldDoc, modifier.$set);
   });
   console.log('Payment Defer started');

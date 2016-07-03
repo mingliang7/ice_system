@@ -1,7 +1,8 @@
 Ice.Collection.Order.after.update(function(userId, doc) {
   var preDoc = this.previous;
+  console.log('update working');
   Meteor.defer(function() {
-    Meteor._sleepForMs(1000);
+    Meteor._sleepForMs(100);
     updateOrderGroup(preDoc, doc);
   });
 });

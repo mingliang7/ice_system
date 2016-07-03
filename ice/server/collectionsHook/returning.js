@@ -5,7 +5,7 @@ Ice.Collection.Returning.before.insert(function (userId, doc) {
 
 Ice.Collection.Returning.after.insert(function (userId, doc) {
   Meteor.defer(function () {
-    Meteor._sleepForMs(1500);
+    Meteor._sleepForMs(200);
     Container.updateContainer(doc, doc.containers, 'returning');
     Container.updateLending(doc, doc.containers)
   });
@@ -28,7 +28,7 @@ Ice.Collection.Returning.after.update(function (userId, doc) {
   var preDoc = this.previous;
   var currentDoc = doc;
   Meteor.defer(function () {
-    Meteor._sleepForMs(1500);
+    Meteor._sleepForMs(200);
     Container.unfreeContainer(preDoc._id, preDoc.containers);
     Container.updateContainer(doc, doc.containers, 'returning');
     Container.updateLending(doc, doc.containers, preDoc);
@@ -38,7 +38,7 @@ Ice.Collection.Returning.after.update(function (userId, doc) {
 Ice.Collection.Returning.after.remove(function (userId, doc) {
   var removedDoc = doc;
   Meteor.defer(function () {
-    Meteor._sleepForMs(1500);
+    Meteor._sleepForMs(200);
     Container.unfreeContainer(removedDoc._id, removedDoc.containers);
     Container.unsetReturningContainer(removedDoc);
   });
