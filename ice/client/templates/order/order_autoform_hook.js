@@ -28,7 +28,7 @@ Template.ice_paymentUrlInsertTemplate.events({ // on change for payment popup
     currentInvoiceId = $(e.currentTarget).val();
     datePicker(currentInvoiceId);
     type = Ice.ListForReportState.get('type');
-    if (type === 'general') {
+    if (type == 'general') {
       currentInvoice = Ice.Collection.Order.findOne(currentInvoiceId);
       Session.set('oldPaidAmount', currentInvoice.paidAmount);
       $('[name="dueAmount"]').val(currentInvoice.outstandingAmount);
@@ -49,7 +49,7 @@ Template.ice_paymentUrlInsertTemplate.events({ // on change for payment popup
     if (parseInt(paidAmount) > dueAmount) {
       $('[name="paidAmount"]').val(dueAmount);
       return $('[name="outstandingAmount"]').val(0);
-    } else if (paidAmount === '') {
+    } else if (paidAmount == '') {
       return $('[name="outstandingAmount"]').val(dueAmount);
     } else {
       return $('[name="outstandingAmount"]').val(dueAmount - parseInt(
@@ -103,7 +103,7 @@ AutoForm.hooks({
   ice_orderUpdateTemplate: {
     before: {
       update: function (doc) {
-        // if ((doc.$set.orderDate && doc.$set.iceCustomerId && doc.$set.iceOrderDetail) !== void 0) {
+        // if ((doc.$set.orderDate && doc.$set.iceCustomerId && doc.$set.iceOrderDetail) != undefined) {
         //   updateOrderGroup(doc.$set);
         // }
         type = Session.get('orderCustomerType')
@@ -135,7 +135,7 @@ var checkIfReady = function (aid) {
       printInv = PrintInv.get('printInv');
       pay = PrintInv.get('pay');
       saveNpay = PrintInv.get('saveNpay');
-      if (printInv === true) {
+      if (printInv == true) {
         Router.go('ice.invoiceReportGen', {
           id: id
         });

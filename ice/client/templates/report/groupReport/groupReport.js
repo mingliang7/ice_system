@@ -49,7 +49,7 @@ Template.ice_invoiceGroupReportGen.helpers({
         // var getGroup = Ice.Collection.OrderGroup.findOne({_id: self.groupId, iceCustomerId: self.customerId, startDate: {$lt: self.endDate}, endDate:{$gt: self.startDate}});
         // dueDate = '' + getGroup.startDate + '-' + getGroup.endDate;
 
-        if (customerDoc.customerType !== 'general') {
+        if (customerDoc.customerType != 'general') {
             type = customerDoc.customerType + ' ថ្ងៃ';
         }
         else {
@@ -108,9 +108,9 @@ Template.ice_invoiceGroupReportGen.helpers({
             results += '<tr style="border-bottom: 1px solid #000;">' + '<td>' + items[k]['orderDate'] + '</td>';
             for (var j in items[k]) {
                 if(items[k][j].qty != 0){
-                    if (items[k][j].name !== undefined && items[k][j].name !== 'ទឹកកកដើម (ដើម)') {
+                    if (items[k][j].name != undefined && items[k][j].name != 'ទឹកកកដើម (ដើម)') {
                         results += '<td>' + +items[k][j].qty + 'kg' + '</td>';
-                    } else if (items[k][j].name !== undefined && items[k][j].name == 'ទឹកកកដើម (ដើម)') {
+                    } else if (items[k][j].name != undefined && items[k][j].name == 'ទឹកកកដើម (ដើម)') {
                         results += '<td>' + +items[k][j].qty + 'ដើម' + '</td>';
                     }
                 }else{

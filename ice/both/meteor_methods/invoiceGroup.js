@@ -76,7 +76,7 @@ Meteor.methods({
         });
         return data;
       }
-    } else if (status != 'All' && customerType !== 'All' && customer == 'All') {
+    } else if (status != 'All' && customerType != 'All' && customer == 'All') {
       status = status == 'closed' ? true : false
       customers = findCustomerByType(customerType);
       var index = 1;
@@ -111,7 +111,7 @@ Meteor.methods({
         });
         return data;
       }
-    } else if (status == 'All' && customerType !== 'All' && customer == 'All') {
+    } else if (status == 'All' && customerType != 'All' && customer == 'All') {
       customers = findCustomerByType(customerType);
       for (var i = 0; i < customers.length; i++) {
         status = status == 'closed' ? true : false
@@ -143,7 +143,7 @@ Meteor.methods({
         });
         return data;
       }
-    } else if (status == 'All' && customerType !== 'All' && customer != 'All') {
+    } else if (status == 'All' && customerType != 'All' && customer != 'All') {
       var selector = {
         iceCustomerId: customer,
         startDate: {

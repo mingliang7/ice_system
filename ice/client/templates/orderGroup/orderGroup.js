@@ -4,7 +4,7 @@ Template.ice_orderGroup.events({
     var currentUserId = Meteor.userId();
     Meteor.call('getCurrentUserRole', currentUserId, function(err, result) {
       if (result) {
-        if (doc.paidAmount === 0) {
+        if (doc.paidAmount == 0) {
           alertify.confirm(
             fa('remove', 'Remove Order-Group'),
             'Are you sure to delete #' + doc._id + ' ?',
@@ -34,7 +34,7 @@ Template.ice_orderGroupShowTemplate.helpers({
     var concate = '';
     for (var key in groupBy) {
       for (var i in groupBy[key].items) {
-        if (groupBy[key].items[i].qty !== 0) {
+        if (groupBy[key].items[i].qty != 0) {
           var price = groupBy[key].items[i].price;
           var qty = groupBy[key].items[i].qty;
           var discount = groupBy[key].items[i].discount;
@@ -49,7 +49,7 @@ Template.ice_orderGroupShowTemplate.helpers({
 });
 itemQuery = {
   detail: function(itemId, price, qty, discount, amount) {
-    discount = discount === undefined ? 0 : discount;
+    discount = discount == undefined ? 0 : discount;
     name = Ice.Collection.Item.findOne(itemId).name;
     return "<li><small>Name: " + name + ', ' +
       "Price: " + price + ', ' +

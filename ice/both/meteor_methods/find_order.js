@@ -87,7 +87,7 @@ var findItem = function(doc) {
     };
   });
   doc.iceOrderDetail.forEach(function(item) {
-    if (item.discount !== void 0) {
+    if (item.discount != undefined) {
       discount = item.discount;
     }
     items[item.iceItemId] = {

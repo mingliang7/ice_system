@@ -72,10 +72,10 @@ Template.ice_invoiceGroupGen.helpers({
         items[k]['orderDate'] + '</td>';
       for (var j in items[k]) {
         if (items[k][j].qty != 0) {
-          if (items[k][j].name !== undefined && items[k][j].name !==
+          if (items[k][j].name != undefined && items[k][j].name !=
             'ទឹកកកដើម (ដើម)') {
             results += '<td>' + +items[k][j].qty + 'kg' + '</td>';
-          } else if (items[k][j].name !== undefined && items[k][j].name ==
+          } else if (items[k][j].name != undefined && items[k][j].name ==
             'ទឹកកកដើម (ដើម)') {
             results += '<td>' + +items[k][j].qty + 'ដើម' + '</td>';
           }

@@ -81,13 +81,13 @@ setOrderGroup = function(doc) {
   var group, id, orderGroup, prefix, type;
   orderGroup = new OrderGroup(doc);
   type = Ice.Collection.Customer.findOne(doc.iceCustomerId).customerType;
-  if (type !== 'general') {
+  if (type != 'general') {
     date = rangeDate(doc.orderDate, type);
     startDate = date.startDate;
     endDate = date.endDate;
     group = OneRecord.findOrderGroupActiveDate(doc.iceCustomerId, startDate,
       endDate);
-    if (group === void 0 || group === null) {
+    if (group == undefined || group == null) {
       prefix = "001-";
       id = idGenerator.genWithPrefix(Ice.Collection.OrderGroup, prefix, 12);
       return orderGroup.whenNoActiveDate(id, startDate, endDate);

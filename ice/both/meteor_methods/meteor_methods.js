@@ -2,7 +2,7 @@
 
 Meteor.methods({
   updatePaid: function (id, cond) {
-    if (cond === true) {
+    if (cond == true) {
       return Ice.Collection.OrderGroup.update({
         _id: id
       }, {
@@ -27,8 +27,8 @@ Meteor.methods({
     orders = Ice.Collection.Order.find();
     orders.forEach(function (order) {
       var closingDate, obj, payment, payments;
-      if (order.closing !== void 0) {
-        if (order.paidAmount !== 0) {
+      if (order.closing != undefined) {
+        if (order.paidAmount != 0) {
           countOrder += 1;
           payment = {};
           payments = Ice.Collection.Payment.find({
@@ -76,7 +76,7 @@ Meteor.methods({
           });
         }
       } else {
-        if (order.closing !== void 0 && order.closing === false) {
+        if (order.closing != undefined && order.closing == false) {
           return Ice.Collection.Order.update({
             _id: order._id
           }, {
@@ -97,7 +97,7 @@ Meteor.methods({
     orders = Ice.Collection.OrderGroup.find();
     orders.forEach(function (order) {
       var closingDate, obj, payment, payments;
-      if (order.paidAmount !== 0) {
+      if (order.paidAmount != 0) {
         countOrder += 1;
         payment = {};
         payments = Ice.Collection.Payment.find({
@@ -161,7 +161,7 @@ Meteor.methods({
     orders = Ice.Collection.Order.find();
     count = 0;
     orders.forEach(function (order) {
-      if (order.closingDate !== void 0) {
+      if (order.closingDate != undefined) {
         Ice.Collection.Order.update({
           _id: order._id
         }, {
@@ -248,7 +248,7 @@ Meteor.methods({
         content.push(obj);
       });
 
-    } else if (staff != 'All' && customerType !== 'All' && customer ==
+    } else if (staff != 'All' && customerType != 'All' && customer ==
       'All') {
       var index = 1;
       selector = {
@@ -265,7 +265,7 @@ Meteor.methods({
         obj.index = index;
         content.push(obj);
       });
-    } else if (staff == 'All' && customerType !== 'All' && customer ==
+    } else if (staff == 'All' && customerType != 'All' && customer ==
       'All') {
       var index = 1;
       selector = {
@@ -282,7 +282,7 @@ Meteor.methods({
         content.push(obj);
       });
 
-    } else if (staff == 'All' && customerType !== 'All' && customer !=
+    } else if (staff == 'All' && customerType != 'All' && customer !=
       'All') {
       selector = {
         iceCustomerId: self.customerId,

@@ -59,7 +59,7 @@ Meteor.methods({
 				content.push(obj);
 			});
 
-		} else if (staff != 'All' && customerType !== 'All' && customer == 'All') {
+		} else if (staff != 'All' && customerType != 'All' && customer == 'All') {
 			selector = {
 				staffId: self.staffId,
 				paymentDate: {
@@ -78,7 +78,7 @@ Meteor.methods({
 				}
 			});
 
-		} else if (staff == 'All' && customerType !== 'All' && customer == 'All') {
+		} else if (staff == 'All' && customerType != 'All' && customer == 'All') {
 			selector = {
 				paymentDate: {
 					$gte: startDate,
@@ -96,7 +96,7 @@ Meteor.methods({
 				}
 			});
 
-		} else if (staff == 'All' && customerType !== 'All' && customer != 'All') {
+		} else if (staff == 'All' && customerType != 'All' && customer != 'All') {
 			selector = {
 				customerId: self.customerId,
 				paymentDate: {

@@ -24,7 +24,7 @@ Template.ice_customer.events({
         "Are you sure to delete " + this.name + "?",
         function () {
           return Ice.Collection.Customer.remove(id, function (error) {
-            if (error === 'undefined') {
+            if (error == 'undefined') {
               return alertify.error(error.message);
             } else {
               return alertify.warning('Successfully Remove');

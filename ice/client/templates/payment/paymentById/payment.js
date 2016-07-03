@@ -24,7 +24,7 @@ Template.ice_paymentById.events({
         if (parseInt(paidAmount) > dueAmount) {
             $('[name="paidAmount"]').val(dueAmount);
             $('[name="outstandingAmount"]').val(0);
-        } else if (paidAmount === '') {
+        } else if (paidAmount == '') {
             $('[name="outstandingAmount"]').val(dueAmount);
         } else {
             $('[name="outstandingAmount"]').val(dueAmount - parseInt(paidAmount));

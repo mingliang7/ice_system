@@ -45,7 +45,7 @@ orderInvoiceUpdate = function (doc) {
   var newDate = doc.paymentDate;
   var oldPaymentDetail = Ice.Collection.Order.findOne(doc.orderId_orderGroupId);
   var payment = paymentDetail(oldPaymentDetail, doc); //extract payment detail
-  if (doc.outstandingAmount === 0) {
+  if (doc.outstandingAmount == 0) {
     return Ice.Collection.Order.direct.update({
       _id: doc.orderId_orderGroupId
     }, {
@@ -75,7 +75,7 @@ orderGroupInvoiceUpdate = function (doc) {
   var newDate = doc.paymentDate;
   var oldPaymentDetail = Ice.Collection.OrderGroup.findOne(doc.orderId_orderGroupId);
   var payment = paymentDetail(oldPaymentDetail, doc); //extract payment detail
-  if (doc.outstandingAmount === 0) {
+  if (doc.outstandingAmount == 0) {
     return Ice.Collection.OrderGroup.direct.update({
       _id: doc.orderId_orderGroupId
     }, {

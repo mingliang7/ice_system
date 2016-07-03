@@ -12,7 +12,7 @@ Template.ice_payment.onRendered(function () {
 Template.ice_payment.helpers({
     foo: function () {
         var self;
-        if (this !== null) {
+        if (this != null) {
             self = this;
             Session.set(customer, findCustomer(self.customerId));
         }
@@ -31,7 +31,7 @@ Template.ice_paymentTabular.helpers({
     selector: function() {
         var date, today;
         date = Session.get('paymentFilterDate');
-        if (date === void 0) {
+        if (date == undefined) {
             today = moment(new Date()).format('YYYY-MM-DD');
             return {
                 paymentDate: {
@@ -65,7 +65,7 @@ Template.ice_paymentTabular.events({
 });
 
 Template.ice_paymentTabular.onDestroyed(function() {
-    return Session.set('paymentFilterDate', void 0);
+    return Session.set('paymentFilterDate', undefined);
 });
 //end tabular
 
@@ -210,7 +210,7 @@ Template.ice_paymentInsertTemplate.events({
         datePicker();
         type = Ice.ListForReportState.get('type');
 
-        if (type === 'general') {
+        if (type == 'general') {
             Meteor.call('orderId', currentInvoiceId, function (err,
                                                                currentInvoice) {
                 $('[name="dueAmount"]').val(currentInvoice.outstandingAmount);
@@ -237,7 +237,7 @@ Template.ice_paymentInsertTemplate.events({
         if (parseInt(paidAmount) > dueAmount) {
             $('[name="paidAmount"]').val(dueAmount);
             $('[name="outstandingAmount"]').val(0);
-        } else if (paidAmount === '') {
+        } else if (paidAmount == '') {
             $('[name="outstandingAmount"]').val(dueAmount);
         } else {
             $('[name="outstandingAmount"]').val(dueAmount - parseInt(paidAmount));

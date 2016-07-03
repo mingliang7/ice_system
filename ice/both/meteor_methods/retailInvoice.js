@@ -45,7 +45,7 @@ Meteor.methods({
 
 		// var getGroup = Ice.Collection.OrderGroup.findOne({_id: getOrder.groupId, iceCustomerId: getOrder.customerId, startDate: {$lt: getOrder.endDate}, endDate:{$gt: getOrder.startDate}});
 		// dueDate = '' + getGroup.startDate + '-' + getGroup.endDate;
-		if (_customer.customerType !== 'general') {
+		if (_customer.customerType != 'general') {
 			type = _customer.customerType + ' ថ្ងៃ';
 		} else {
 			type = 'general';

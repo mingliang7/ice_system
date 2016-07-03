@@ -1,5 +1,5 @@
 var datePicker, fillInDetail, selectCustomer, selectInvoice;
-PaymentUrl = new ReactiveObj(); 
+PaymentUrl = new ReactiveObj();
 Template.ice_paymentUrlInsertTemplate.onRendered(function() {
   datePicker(this.data._id);
 });
@@ -16,7 +16,7 @@ Template.ice_paymentUrlInsertTemplate.events({
     if (parseFloat(paidAmount) > dueAmount) {
       $('[name="paidAmount"]').val(dueAmount);
       $('[name="outstandingAmount"]').val(0);
-    } else if (paidAmount === '') {
+    } else if (paidAmount == '') {
       $('[name="outstandingAmount"]').val(dueAmount);
     } else {
       $('[name="outstandingAmount"]').val(dueAmount - parseInt(paidAmount));
@@ -26,5 +26,5 @@ Template.ice_paymentUrlInsertTemplate.events({
 
 datePicker = function(currentInvoiceId) {
   paymentDate = $('[name="paymentDate"]');
-  return DateTimePicker.dateTime(paymentDate); 
+  return DateTimePicker.dateTime(paymentDate);
 };

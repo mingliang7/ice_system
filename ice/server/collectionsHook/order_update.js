@@ -12,7 +12,7 @@ updateOrderGroup = function(preDoc, doc) {
   iceOrderGroupId = preDoc.iceOrderGroupId;
   oldData = preDoc;
   type = preDoc._customer.customerType;
-  if (type !== 'general') {
+  if (type != 'general') {
     date = rangeDate(doc.orderDate, type);
     startDate = date.startDate;
     endDate = date.endDate;
@@ -30,14 +30,14 @@ var checkingOrder = function(oldDoc, data, newDoc) { // checking oldOrder when u
   order = {};
   order.items = {};
   order.discount = 0;
-  if (data.discount !== undefined) {
+  if (data.discount != undefined) {
     order.discount = data.discount;
   }
   order.total = data.total;
   order.totalInDollar = data.totalInDollar;
   data.iceOrderDetail.forEach(function(item) {
     var discount;
-    if (item.discount !== undefined) {
+    if (item.discount != undefined) {
       discount = item.discount;
     } else {
       discount = 0;
