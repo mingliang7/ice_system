@@ -229,3 +229,24 @@ Router.route 'ice/end_of_process',
 		sub: ''
 	icon: 'Process'
 	title: 'End of Process'
+Router.route 'ice/receive-payment',
+	->
+		@render 'ice_receivePayment'
+
+	name: 'ice.receivePayment'
+	header:
+		title: 'Receive Payment'
+		sub: ''
+	icon: 'Shit'
+	title: 'Receive Payment'
+
+Router.route 'ice/receive-payment/new',
+	->
+		@render 'ice_receivePaymentNew'
+
+	name: 'ice.receivePaymentNew'
+	header:
+		title: 'Group Receive Payment'
+		sub: ''
+	icon: 'Shit'
+	title: 'New Receive Payment'

@@ -1,0 +1,52 @@
+<template name="ice_receivePayment">
+    <p>
+        <a href="{{pathFor 'ice.receivePaymentNew'}}" class="btn btn-primary insert">Add new</a>
+        <span class="pull-right">
+            <!--<input type="text" name="payment-filter-date" class="form-control" value="{{paymentFilterDate}}" style="width: 250px">-->
+        </span>
+    </p>
+    {{> tabular table=Ice.TabularTable.ReceivePayment selector=selector class="table table-striped table-bordered table-condensed table-hover"}}
+</template>
+
+
+<template name="ice_receivePaymentNew">
+    {{#autoForm collection=Ice.Collection.ReceivePayment id="ice_receivePaymentNew" type="insert"}}
+        <div class="row">
+            <div class="col-md-7">
+                <div class="form-group">
+                    <label for="">Payment Date<span style="color: red;">*</span></label>
+                    {{> afFieldInput name="paymentDate" label="false"}}
+                </div>
+                <div class="typeahead-customer form-group">
+                    <label for="">Customer<span style="color: red;">*</span></label><br>
+                    <input class="form-control  typeahead customer" name="search" type="text" placeholder="Type to find customers"
+                           autocomplete="on" spellcheck="off"
+                           data-source="search" data-select='selected' data-highlight=true data-limit="9" style="width: 650px;"/>
+                </div>
+                {{> afFieldInput name='customerId' class="customerId input-sm" type='hidden'}}
+                <div class="form-group">
+                    <label for="">Invoice<span style="color: red;">*</span></label>
+                    {{> afFieldInput name="invoiceId" options=invoiceOptions label="false"}}
+                </div>
+                <div class="form-group">
+                    <label for="">Staff<span style="color: red;">*</span></label>
+                    {{> afFieldInput name="staffId" label="false"}}
+                </div>
+            </div>
+            <div class="col-md-5">
+                {{> afQuickField name="dueAmount" readonly='true' value=dueAmount}}
+                {{> afQuickField name="paidAmount" value=paidAmount}}
+                {{> afQuickField name="balanceAmount" readonly='true' value=balanceAmount}}
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Save</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+<template name="ice_receivePaymentAction">
+    {{#tabularAction}}
+        <li><a href="#" class="remove">{{fa "remove"}} Remove</a></li>
+    {{/tabularAction}}
+</template>

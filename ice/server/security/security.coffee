@@ -16,15 +16,23 @@ Ice.Collection.Order.permit([
 
 Ice.Collection.OrderGroup.permit([
 	'insert'
-	'update'
-	'remove'
+  'update'
+  'remove'
 ]).ice_ifGeneral().apply()
+Ice.Collection.OrderGroup.permit([
+		'insert'
+  	'update'
+  	'remove'
+]).ice_ifAdmin().apply()
 
+Ice.Collection.Payment.permit([
+	'insert'
+]).ice_ifGeneral().apply()
 Ice.Collection.Payment.permit([
 	'insert'
 	'update'
 	'remove'
-]).ice_ifGeneral().apply()
+]).ice_ifAdmin().apply()
 
 Ice.Collection.UserStaffs.permit([
 	'insert'
@@ -66,4 +74,14 @@ Ice.Collection.Returning.permit([
   'insert'
   'update'
   'remove'
+]).ice_ifGeneral().apply()
+Ice.Collection.GroupInvoice.permit([
+    'insert'
+    'update'
+    'remove'
+]).ice_ifGeneral().apply()
+Ice.Collection.ReceivePayment.permit([
+	'insert'
+	'update'
+	'remove'
 ]).ice_ifGeneral().apply()
