@@ -73,40 +73,44 @@ Template.ice_order.events
       else
         alertify.warning('Sorry , invoice ' + id + ' has payment')
     else
-      orderGroupId = data.iceOrderGroupId
-      Meteor.call 'orderGroupIdWithData', data, orderGroupId, (err, result) ->
-        group = result.group;
-        data = result.data;
-        discount = 0
-        if(group.paidAmount == 0)
-          # Session.set 'oldOrderValue', order
-          # Session.set 'iceOrderGroupId', orderGroupId
-          alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
+      alertify.order(fa('shopping-cart', 'Order'), renderTemplate(Template.ice_orderUpdateTemplate,data))
           .maximize()
-        else
-          alertify.warning('Sorry , invoice ' + id + ' has payment')
+
 
     $('[name="total"]').attr('readonly', true)
   "click .remove": ->
       data = this
-      Meteor.call "removeOrderAndOrderGroup", data, (error, result) ->
-        if error
-          console.log "error", error
-        if result.paidAmount == 0
-          alertify.confirm(
-            fa('remove', 'Remove order'),
-            "Are you sure to delete "+result.id+" ?",
-            ->
-              Ice.Collection.Order.remove result.id, (error) ->
-                if error is 'undefined'
-                  alertify.error error.message
-                else
-                  Meteor.call('removeInvoiceLog', result.selector)
-                  alertify.warning 'Successfully Remove'
-            null
-          )
-        else
-          alertify.error "Invoice ##{result.id} has payment"
+      if this._customer.customerType is 'general'
+        Meteor.call "removeOrderAndOrderGroup", data, (error, result) ->
+          if error
+            console.log "error", error
+          if result.paidAmount == 0
+            alertify.confirm(
+              fa('remove', 'Remove order'),
+              "Are you sure to delete "+result.id+" ?",
+              ->
+                Ice.Collection.Order.remove result.id, (error) ->
+                  if error is 'undefined'
+                    alertify.error error.message
+                  else
+                    Meteor.call('removeInvoiceLog', result.selector)
+                    alertify.warning 'Successfully Remove'
+              null
+            )
+          else
+            alertify.error "Invoice ##{result.id} has payment"
+      else
+        alertify.confirm(
+          fa('remove', 'Remove order'),
+          "Are you sure to delete "+data._id+" ?",
+          ->
+            Ice.Collection.Order.remove data._id, (error) ->
+              if error is 'undefined'
+                alertify.error error.message
+              else
+                alertify.warning 'Successfully Remove'
+          null
+        )
   'click .show': () ->
     doc = Ice.Collection.Order.findOne(@_id)
     alertify.alert(fa('eye', 'Order detail'), renderTemplate(Template.ice_orderShowTemplate, doc).html)
