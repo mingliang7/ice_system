@@ -13,7 +13,7 @@ indexTmpl.events({
             closeOnConfirm: false
         }, function () {
             Meteor.call('removeGroupInvoice', doc);
-            swal("Deleted!", "វិក័យប័ត្របង់ប្រាក់លេខ " + doc._id, "បានលុបដោយជោគជ័យ", "success");
+            swal("Deleted!", "វិក័យប័ត្របង់ប្រាក់លេខ " + doc._id + " បានលុបដោយជោគជ័យ", "success");
         });
     }
 });

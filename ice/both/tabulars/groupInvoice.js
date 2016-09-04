@@ -5,7 +5,7 @@ Ice.TabularTable.GroupInvoice = new Tabular.Table({
     columns: [{
         title: '<i class="fa fa-bars"></i>',
         tmpl: Meteor.isClient && Template.ice_groupInvoiceAction
-    },{
+    }, {
         data: "_id",
         title: "ID"
     }, {
@@ -36,6 +36,18 @@ Ice.TabularTable.GroupInvoice = new Tabular.Table({
     }, {
         data: 'total',
         title: 'Total'
+    }, {
+        data: 'status',
+        title: 'Status',
+        render: function (val) {
+            if (val == 'closed') {
+                return '<span class="label label-success">C</span>';
+            } else if (val == 'active') {
+                return '<span class="label label-primary">A</span>';
+            } else {
+                return '<span class="label label-danger">P</span>';
+            }
+        }
     }
 
     ],

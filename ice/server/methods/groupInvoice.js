@@ -57,7 +57,6 @@ Meteor.methods({
         return invoice[0];
     },
     removeGroupInvoice: function (doc) {
-        console.log(doc._id);
         if (doc.status == 'partial' || doc.status == 'closed') {
             Ice.Collection.ReceivePayment.remove({invoiceId: doc._id});
         }
