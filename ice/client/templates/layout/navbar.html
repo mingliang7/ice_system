@@ -30,6 +30,10 @@
             <ul class="dropdown-menu" role="menu">
                 <li class=""><a href="{{pathFor 'ice.orderGroup'}}">Invoice</a></li>
                 <li class="{{isActiveRoute regex='ice.receivepayment'}}"><a href="{{pathFor 'ice.receivePayment'}}">Receive Payment</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header"><i class="fa fa-shopping-basket"></i>&nbsp;Report</li>
+                <li class="{{isActiveRoute regex='ice.groupInvoiceReport'}}"><a href="{{pathFor 'ice.groupInvoiceReport'}}">Invoice Group</a></li>
+
             </ul>
         </li>
         <li class="dropdown">

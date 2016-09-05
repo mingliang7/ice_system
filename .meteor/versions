@@ -149,6 +149,7 @@ reload@1.1.4
 retry@1.0.4
 reywood:publish-composite@1.4.2
 risul:chance@1.0.8
+risul:moment-timezone@0.5.0_5
 routepolicy@1.0.6
 sacha:spin@2.3.1
 sergeyt:typeahead@0.11.1_8
@@ -171,6 +172,7 @@ theara:events@0.1.5
 theara:fa-helpers@0.0.3
 theara:id-generator@0.0.6
 theara:moneyjs@0.0.2
+theara:numeral-helpers@0.0.4
 theara:relation-exist@0.0.1
 theara:round-khr@0.0.1
 tmeasday:publish-counts@0.7.3

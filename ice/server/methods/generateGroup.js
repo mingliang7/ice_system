@@ -1,6 +1,6 @@
 Meteor.methods({
     generateInvoiceGroup: function(doc, type) {
-        var range = getRank(doc.orderDate, type);
+        var range = rangeDate(doc.orderDate, type);
         insertGroupInvoice(
             Ice.Collection.Order,
             range,
@@ -11,15 +11,15 @@ Meteor.methods({
 });
 
 getRank = function(date, type) {
-    obj = {};
+    var obj = {};
     var day, now, range;
     range = undefined;
     day = new Date(date).getDate();
-    now = new Date(date);
+    now = moment(date).toDate();
     range = 31;
-    startDate = '';
-    endDate = '';
-    onFeb = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    var startDate = '';
+    var endDate = '';
+    var onFeb = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
     for (var i = 1; i <= range; i += type) {
         for (var j = i; j < i + type; j++) {
             if (day <= j) {
@@ -79,6 +79,7 @@ rangeDate = function(date, type) {
 };
 
 function insertGroupInvoice(collection, range, doc, groupCollection) {
+    doc.orderDate = moment(doc.orderDate).toDate();
     var groupInvoice = groupCollection.findOne({
         customerId: doc.iceCustomerId,
         startDate: moment(range.startDate).toDate(),

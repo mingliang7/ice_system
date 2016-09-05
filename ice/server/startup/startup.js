@@ -20,4 +20,10 @@ Meteor.startup(function() {
     closing: 1,
     closingDate: 1
   });
+  Ice.Collection.GroupInvoice._ensureIndex({
+    startDate: 1,
+    endDate: 1,
+    customerId: 1,
+    status: 1
+  });
 });

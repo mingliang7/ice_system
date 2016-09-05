@@ -29,6 +29,8 @@ Ice.Collection.Order.before.update(function(userId, doc, fieldNames, modifier,
 Ice.Collection.Order.after.update(function(userId, doc) {
     var preDoc = this.previous;
     Meteor.defer(function() {
+        doc.orderDate = moment(doc.orderDate).toDate();
+        console.log(doc.orderDate);
         var type = Ice.Collection.Customer.findOne(doc.iceCustomerId).customerType;
         if (type != 'general') {
             removeInvoiceFromGroup(preDoc);

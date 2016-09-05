@@ -1,0 +1,118 @@
+<template name="ice_groupInvoiceReport">
+    {{> ice_groupInvoiceReportInsert}}
+</template>
+<template name="ice_groupInvoiceReportInsert">
+    {{#autoForm schema=Ice.Schema.invoiceGroup id="ice_groupInvoiceReportInsert" action="groupInvoiceReportGen" target="_blank"}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name="status" }}
+                {{> afQuickField name="customerType" }}
+                {{> afQuickField name="customerId" options=customerOption}}
+
+            </div>
+            <div class="col-md-6">
+                {{> afQuickField name="date"}}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+<template name="ice_groupInvoiceReportGen">
+    {{#if data}}
+        {{#with data}}
+            {{#each content}}
+                <!--Title-->
+                <div class="report-title">
+                <span class="report-company-name"
+                      style="font-family: 'Khmer OS Muol';">{{data.title.company}}</span><br>
+                    <span style='font-size: 10px;'>
+            អាស័យដ្ឋាន: {{data.title.address}}
+                        ទូរស័ព្ទ: {{data.title.telephone}}
+            </span><br>
+                    <u style="font-size: 16px">ប័ណ្ណទូរទាត់ប្រាក់</u><br>
+                </div>
+
+                <!--Header-->
+                <table width="100%" border="0" style="font-size: 15px;">
+                    {{#each header}}
+                        <tr>
+                            <td width="60%">{{col1}}</td>
+                            <td width="33%">{{col2}}</td>
+                            <td>{{col3}}</td>
+                        </tr>
+                    {{/each}}
+                </table>
+
+                <!--Content-->
+                <br>
+                <table class="report-content" style="font-size: 13px;">
+                    <thead class="report-content-header">
+                    <tr>
+                        <th>កាលបរិច្ឆេទ</th>
+                        {{#each data.displayFields}}
+                            <th>{{field}}</th>
+                        {{/each}}
+                    </tr>
+                    </thead>
+                    <tbody class="report-content-body-group">
+
+                    {{#each groupByDate}}
+                        <tr style="border-bottom: 1px solid #000;">
+                            <td>{{orderDate}}</td>
+                            {{{placeQty itemDoc}}}
+
+                        </tr>
+
+                    {{/each}}
+                    <tr class="dotted" style="font-size: 13px;">
+                        <td>ចំនួនសរុប:</td>
+                        {{{extractTotalQty footer}}}
+                    </tr>
+                    <tr style="font-size: 13px;">
+                        <td>តម្លៃជាមធ្យម:</td>
+                        {{{extractAvgPrice footer}}}
+                    </tr>
+                    <!-- <tr>
+                <td>បញ្ចុះតម្លៃ:</td>
+                {{{totalDetail.discount}}}
+            </tr> -->
+                    <tr style="font-size: 13px;">
+                        <td>ទឹកប្រាក់សរុប:</td>
+                        {{{extractTotalAmount footer}}}
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="small-table">
+                    <thead style="font-size: 13px;">
+                    <tr>
+                        <br>
+                    </tr>
+                    <tr>
+                        <th class="pull-right">តម្លៃសរុប($):</th>
+                        <th>{{numFormat dueAmount '0,0'}}</th>
+                        <th class="pull-right">ប្រាក់បង់(៛):</th>
+                        <th>{{numFormat paidAmount '0,0'}}</th>
+                        <th class="pull-right">ប្រាក់ជំពាក់(៛):</th>
+                        <th>{{numFormat balance '0,0'}}</th>
+                    </tr>
+                    </thead>
+                </table>
+                <div style="margin-top: 30px; font-size: 13px;">
+                    <p class="pull-right">
+                        ថ្ងៃទី..................ខែ...................ឆ្នាំ.................<br><br>
+                        &nbsp; &nbsp; &nbsp;អ្នកចេញប័ណ្ណ<br><br>
+                    </p>
+                </div>
+                <div style="margin-top: 150px;">
+                    {{> ice_invoiceReportGenFooterNote}}
+                </div>
+                <!--Footer-->
+                <p style="page-break-after:always"></p>
+            {{/each}}
+        {{/with}}
+    {{else}}
+        {{> loading}}
+    {{/if}}
+</template>

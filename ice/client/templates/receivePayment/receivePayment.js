@@ -14,6 +14,12 @@ Tracker.autorun(function () {
 var newTmpl = Template.ice_receivePaymentNew,
     indexTmpl = Template.ice_receivePayment;
 newTmpl.onRendered(function () {
+    var query = Router.current().params.query;
+    if (query.ci && query.in) {
+        Session.set('customer', query.ci); //ci is customerId
+        Session.set('invoiceId', query.in); //in is invoiceId
+        Session.set('paramCustomerName', query.cn);//cn is customer name
+    }
     Meteor.typeahead.inject();
     datePicker();
 });
@@ -37,9 +43,10 @@ indexTmpl.events({
 });
 newTmpl.events({
     'keyup .customer': function (event) {
+        clearSession();
         if (event.currentTarget.value == '') {
             $('[name="customerId"]').val('')
-            $('[name="invoiceId"]').attr('disabled', true);
+            // $('[name="invoiceId"]').attr('disabled', true);
             $('[name="invoiceId"]').val('');
         }
     },
@@ -76,8 +83,8 @@ newTmpl.helpers({
     search: function (query, sync, callback) {
         var type = {};
         console.log(query);
-        Meteor.call('generalCustomer', query, {}, type, function (err,
-                                                                  res) {
+        Meteor.call('generalCustomer', query, {}, {$ne: 'general'}, function (err,
+                                                                              res) {
             if (err) {
                 console.log(err);
                 return;
@@ -137,6 +144,18 @@ newTmpl.helpers({
     paidAmount: function () {
         var invoiceBalance = Session.get('invoiceBalance');
         return _.isUndefined(invoiceBalance) ? '' : invoiceBalance.paidAmount;
+    },
+    customerId: function () {
+        return Session.get('customer');
+    },
+    invoiceId: function () {
+        return Session.get('invoiceId');
+    },
+    customerNameParam: function () {
+        if (Session.get('paramCustomerName')) {
+            return Session.get('paramCustomerName');
+        }
+        return ''
     }
 });
 
@@ -144,15 +163,13 @@ var datePicker = function () {
     var paymentDate = $('[name="paymentDate"]');
     return DateTimePicker.dateTime(paymentDate);
 };
-newTmpl.onDestroyed(function(){
-    Session.set('invoiceBalance',undefined);
-    Session.set('invoiceId',undefined);
-    Session.set('customer', undefined);
+newTmpl.onDestroyed(function () {
+    clearSession();
 });
 AutoForm.hooks({
     ice_receivePaymentNew: {
         before: {
-            insert:function(doc) {
+            insert: function (doc) {
                 doc.branchId = Session.get('currentBranch');
                 return doc;
             }
@@ -160,12 +177,19 @@ AutoForm.hooks({
         onSuccess: function (type, result) {
             $('[name="staffId"]').select2('val', '');
             alertify.success('Successful');
-            Session.set('invoiceBalance',undefined);
-            Session.set('invoiceId',undefined);
-            Session.set('customer',undefined)
+            Session.set('invoiceBalance', undefined);
+            Session.set('invoiceId', undefined);
+            Session.set('customer', undefined)
         },
         onError: function (type, err) {
             alertify.error(err.message);
         }
     }
 });
+function clearSession() {
+    Session.set('invoiceBalance', undefined);
+    Session.set('invoiceId', undefined);
+    Session.set('customer', undefined);
+    Session.set('paramCustomerName', undefined);
+    Session.set('invoiceOptions', []);
+}

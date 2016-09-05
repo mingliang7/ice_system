@@ -15,5 +15,13 @@ indexTmpl.events({
             Meteor.call('removeGroupInvoice', doc);
             swal("Deleted!", "វិក័យប័ត្របង់ប្រាក់លេខ " + doc._id + " បានលុបដោយជោគជ័យ", "success");
         });
+    },
+    'click .groupPayment': function (event) {
+        var doc = this;
+        Meteor.call('groupCustomer', doc.customerId, function (err, result) {
+            var url = '/ice/receive-payment/new?' + 'cn=' + doc.customerId + ' | '+ result.name + '&ci=' + doc.customerId + '&in=' + doc._id;
+            Router.go(url);
+        });
+
     }
 });
