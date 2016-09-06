@@ -22,16 +22,17 @@ Ice.TabularTable.GroupInvoice = new Tabular.Table({
         }
     }, {
         data: "customerId",
-        title: "User",
+        title: "Customer",
         render: function (customerId) {
             var customer = Ice.Collection.TmpCollection.findOne(customerId);
             if (!customer) {
                 Meteor.call('groupCustomer', customerId, function (err, result) {
                     Ice.Collection.TmpCollection.insert(result);
                 });
-                return Ice.Collection.TmpCollection.findOne(customerId).name;
+                var currentCustomer = Ice.Collection.TmpCollection.findOne(customerId);
+                return currentCustomer.name + '(' + currentCustomer.customerType + 'ថ្ងៃ' + ')' ;
             }
-            return customer.name;
+            return customer.name + '(' + customer.customerType + 'ថ្ងៃ' + ')';
         }
     }, {
         data: 'total',

@@ -19,9 +19,17 @@ indexTmpl.events({
     'click .groupPayment': function (event) {
         var doc = this;
         Meteor.call('groupCustomer', doc.customerId, function (err, result) {
-            var url = '/ice/receive-payment/new?' + 'cn=' + doc.customerId + ' | '+ result.name + '&ci=' + doc.customerId + '&in=' + doc._id;
+            var url = '/ice/receive-payment/new?' + 'cn=' + doc.customerId + ' | ' + result.name + '&ci=' + doc.customerId + '&in=' + doc._id;
             Router.go(url);
         });
-
+    },
+    'click .show': function (event) {
+        var data = this;
+        var url = '/ice/groupInvoiceReportGen?status=&customerType=&' + 'customerId=' + data.customerId + '&date=' +
+            moment(data.startDate).format('YYYY-MM-DD') + ' To ' + moment(data.endDate).format('YYYY-MM-DD') + '&invoiceId=' + data._id;
+        window.open(url, "_blank");
     }
+});
+indexTmpl.onDestroy(function () {
+    Ice.Collection.TmpCollection.remove({});
 });

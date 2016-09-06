@@ -57,6 +57,9 @@ Meteor.methods({
         selector.endDate = {
             $lte: endDate
         };
+        if(self.invoiceId && self.invoiceId != '') {
+            selector._id = self.invoiceId
+        }
         content = Ice.Collection.GroupInvoice.aggregate([
             {$match: selector},
             {$unwind: {path: '$invoices'}},

@@ -1,0 +1,89 @@
+<template name="ice_receivePaymentReport">
+    {{#autoForm schema=Ice.Schema.ReceivePaymentReportSchema id="ice_receivePaymentReport" action="receivePaymentReportGen" target="_blank"}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name="status" }}
+                {{> afQuickField name="staffId" }}
+                {{> afQuickField name="customerType" }}
+                {{> afQuickField name="customerId" options=customerOption}}
+            </div>
+            <div class="col-md-6">
+                {{> afQuickField name="date"}}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
+        <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+    {{/autoForm}}
+</template>
+
+
+<template name="ice_receivePaymentReportGen">
+    {{#if data}}
+        {{#with data}}
+            <!--Title-->
+            <div class="report-title">
+                <span class="report-company-name" style="font-size: 20px;">{{title.company}}</span><br>
+                <div>របាយការណ៍បង់ប្រាក់អតិថិជនក្រុម</div>
+            </div>
+
+            <!--Header-->
+            <div style="width: 100%">
+                {{#with header}}
+                    <div style="width: 50%;">
+                        <ul class="list-unstyled">
+                            <li><strong>Date:</strong> {{date}}</li>
+                            <li><strong>Customer Type:</strong> {{customerType}}</li>
+                            <li><strong>Customer:</strong> {{customer}}</li>
+                            <li><strong>Staff:</strong> {{staff}}</li>
+                        </ul>
+                    </div>
+                {{/with}}
+            </div>
+
+            <!--Content-->
+            <!--Content-->
+            <table class="table table-borderd" style="font-size: 11px;">
+                <thead>
+                <tr>
+                    <th>Invoice ID</th>
+                    <th>Customer</th>
+                    <th>Staff</th>
+                    <th>Payment Date</th>
+                    <th>Due Amount</th>
+                    <th>Paid Amount</th>
+                    <th>Outstanding Amount</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {{#each content}}
+                    <tr>
+                        <td>{{invoiceId}}</td>
+                        <td>{{customerDoc.name}}</td>
+                        <td>{{staffDoc.name}}</td>
+                        <td>{{paymentDate}}</td>
+                        <td>{{numFormat dueAmount '0,0'}}</td>
+                        <td>{{numFormat paidAmount '0,0'}}</td>
+                        <td>{{numFormat balanceAmount '0,0'}}</td>
+                    </tr>
+
+                {{/each}}
+                <tr>
+                    <td colspan="4" align="right"><strong>Total: </strong></td>
+                    <td><b>{{numFormat footer.dueAmount '0,0'}}</b></td>
+                    <td><b> {{numFormat footer.paidAmount '0,0'}}</b></td>
+                    <td><b> {{numFormat footer.balanceAmount '0,0'}}</b></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!--Footer-->
+
+        {{/with}}
+
+        <!--Sign-->
+        {{> signFooter}}
+    {{else}}
+        {{> loading}}
+    {{/if}}
+</template>

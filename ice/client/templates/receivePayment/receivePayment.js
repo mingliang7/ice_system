@@ -165,6 +165,7 @@ var datePicker = function () {
 };
 newTmpl.onDestroyed(function () {
     clearSession();
+    Ice.Collection.ReceivePaymentTmpCollection.remove({});
 });
 AutoForm.hooks({
     ice_receivePaymentNew: {

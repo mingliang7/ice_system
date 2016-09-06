@@ -1,4 +1,4 @@
-Ice.Collection.TmpCollection = new Mongo.Collection(null);
+Ice.Collection.ReceivePaymentTmpCollection = new Mongo.Collection(null);
 Ice.TabularTable.ReceivePayment = new Tabular.Table({
     name: "iceReceivePayment",
     collection: Ice.Collection.ReceivePayment,
@@ -16,18 +16,18 @@ Ice.TabularTable.ReceivePayment = new Tabular.Table({
             data: "customerId",
             title: "Customer",
             render: function (val) {
-                // Meteor.call('getCustomer', {customerId: val}, function (err, result) {
-                //     let customer = tmpCollection.findOne(result._id);
-                //     if(!customer) {
-                //         tmpCollection.insert(result);
-                //     }
-                // });
-                // try {
-                //     return tmpCollection.findOne(val).name;
-                //
-                // }catch (e) {
-                //
-                // }
+                Meteor.call('groupCustomer', val, function (err, result) {
+                    var customer = Ice.Collection.ReceivePaymentTmpCollection.findOne(result._id);
+                    if(!customer) {
+                        Ice.Collection.ReceivePaymentTmpCollection.insert(result);
+                    }
+                });
+                try {
+                    return Ice.Collection.ReceivePaymentTmpCollection.findOne(val).name;
+
+                }catch (e) {
+
+                }
             }
         },
         {
