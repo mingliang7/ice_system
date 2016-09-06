@@ -1,0 +1,83 @@
+<template name="ice_overviewGroupCustomer">
+    {{#autoForm schema=Ice.Schema.UnpaidGroup id="ice_overviewGroupCustomer" action="overviewGroupCustomerGen" target="_blank"}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name="date"}}
+                <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
+                <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
+            </div>
+        </div>
+    {{/autoForm}}
+</template>
+
+<template name="ice_overviewGroupCustomerGen">
+    {{#if data}}
+        {{#with data}}
+            <!--Title-->
+            <div class="report-title">
+                <span class="report-company-name" style="font-size: 20px;">{{title.company}}</span><br>
+                <div>របាយការណ៍អតិថិជនជំពាក់</div>
+            </div>
+
+            <!--Header-->
+            <div style="width: 100%">
+                {{#with header}}
+                    <div style="width: 50%;">
+                        <ul class="list-unstyled">
+                            <li><strong>Date:</strong> {{date}}</li>
+                        </ul>
+                    </div>
+                {{/with}}
+            </div>
+
+            <!--Content-->
+            <!--Content-->
+            <table class="table table-borderd">
+                <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Invoice ID</th>
+                    <th>Order Date</th>
+                    <th>Due Amount</th>
+                    <th>Paid Amount</th>
+                    <th>Outstanding Amount</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {{#each obj in content}}
+                    <tr>
+                        <b style="font-size: 13px;">{{obj.customerDoc.name}}(ប្រភេទ: {{obj.customerDoc.customerType}}ថ្ងៃ)</b>
+                    </tr>
+                    {{#each obj.data}}
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a href="/ice/receive-payment/new?cn={{obj.customerDoc.name}}&ci={{obj._id}}&in={{_id}}">
+                                    {{_id}}
+                                </a>
+                            </td>
+                            <td>{{moFormat startDate 'YYYY-MM-DD'}}-{{moFormat endDate 'YYYY-MM-DD'}}</td>
+                            <td>{{numFormat dueAmount '0,0'}}</td>
+                            <td>{{numFormat paidAmount '0,0'}}</td>
+                            <td>{{numFormat balance '0,0'}}</td>
+                        </tr>
+                    {{/each}}
+                    <tr>
+                        {{{getTotal obj.dueAmountSubTotal obj.paidAmount obj.balance obj.customerDoc.name}}}
+                    </tr>
+                {{/each}}
+                    <!--<td colspan="3" align="right"><strong>Total:</strong></td> {{{totalAmount content}}}-->
+                </tbody>
+            </table>
+
+            <!--Footer-->
+
+        {{/with}}
+
+        <!--Sign-->
+        {{> signFooter}}
+    {{else}}
+        {{> loading}}
+    {{/if}}
+</template>

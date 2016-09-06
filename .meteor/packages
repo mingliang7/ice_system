@@ -92,5 +92,5 @@ spacebars
 check
 kevohagan:sweetalert
 lbee:moment-helpers
-risul:moment-timezone
+#risul:moment-timezone
 theara:numeral-helpers
