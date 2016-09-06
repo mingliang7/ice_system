@@ -16,14 +16,18 @@ Ice.Schema.GroupInvoice_schema = new SimpleSchema({
     },
     status: {
         type: String,
-        autoValue: function(){
-            if(this.isInsert) {
+        autoValue: function () {
+            if (this.isInsert) {
                 return 'active';
             }
         }
     },
     customerId: {
         type: String
+    },
+    customerName: {
+        type: String,
+        optional: true
     },
     branchId: {
         type: String,

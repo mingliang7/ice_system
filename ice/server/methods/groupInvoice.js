@@ -62,5 +62,13 @@ Meteor.methods({
         }
         Ice.Collection.Order.direct.remove({iceOrderGroupId: doc._id});
         Ice.Collection.GroupInvoice.remove(doc._id);
+    },
+    updateNameInGroupInvoice: function (doc) {
+        Meteor.defer(function () {
+            var customer = Ice.Collection.Customer.findOne(doc.customerId);
+            if (customer.name != doc.customerName) {
+                Ice.Collection.GroupInvoice.direct.update(doc._id, {$set: {customerName: customer.name}});
+            }
+        });
     }
 });

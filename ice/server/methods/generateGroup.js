@@ -113,6 +113,7 @@ function insertGroupInvoice(collection, range, doc, groupCollection) {
             endDate: moment(range.endDate).toDate(),
             total: doc.total,
             customerId: doc.iceCustomerId,
+            customerName: Ice.Collection.Customer.findOne(doc.iceCustomerId).name,
             status: 'active',
             invoices: [doc],
             branchId: doc.branchId
