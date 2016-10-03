@@ -30,6 +30,6 @@ indexTmpl.events({
         window.open(url, "_blank");
     }
 });
-indexTmpl.onDestroy(function () {
+indexTmpl.onDestroyed(function () {
     Ice.Collection.TmpCollection.remove({});
 });
