@@ -80,6 +80,7 @@ Template.ice_groupInvoiceReportGen.helpers({
     },
     extractTotalAmount: function (itemDoc) {
         var data = dataState.get();
+        console.log(extractItems(data, itemDoc, 'totalAmount'));
         return extractItems(data, itemDoc, 'totalAmount')
     }
 });
@@ -99,10 +100,16 @@ function extractItems(data, itemDoc, property) {
     });
     itemDoc.forEach(function (item) {
         itemObj[item.itemId].qty += item[property]
+        itemObj[item.itemId].price = item.avgPrice
+        itemObj[item.itemId].quantity = item.totalQty
     });
     for (var k in itemObj) {
         var fieldToDisplay = itemObj[k].qty == 0 ? '' : numeral(itemObj[k].qty).format('0,0');
-        concat += '<td align="center"><b>' + fieldToDisplay + '</b></td>';
+        if (property == 'totalAmount' && itemObj[k].price * itemObj[k].quantity != itemObj[k].qty) {
+            concat += '<td align="center"><b><u>' + fieldToDisplay + '</u></b></td>';
+        } else {
+            concat += '<td align="center"><b>' + fieldToDisplay + '</b></td>';
+        }
     }
     return concat;
 }

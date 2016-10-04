@@ -29,7 +29,10 @@ Ice.TabularTable.GroupInvoice = new Tabular.Table({
         }
     }, {
         data: 'total',
-        title: 'Total'
+        title: 'Total',
+        render: function(val) {
+            return numeral(val).format('0,0');
+        }
     }, {
         data: 'status',
         title: 'Status',
