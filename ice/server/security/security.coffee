@@ -27,12 +27,9 @@ Ice.Collection.OrderGroup.permit([
 
 Ice.Collection.Payment.permit([
 	'insert'
-]).ice_ifGeneral().apply()
-Ice.Collection.Payment.permit([
-	'insert'
 	'update'
 	'remove'
-]).ice_ifAdmin().apply()
+]).ice_ifGeneral().apply()
 
 Ice.Collection.UserStaffs.permit([
 	'insert'
