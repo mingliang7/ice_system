@@ -142,7 +142,7 @@ Meteor.methods({
                     total: {$sum: '$amount'}
                 }
             },
-            {$sort: {orderDate: -1}},
+            {$sort: {orderDate: 1}},
             {
                 $group: {
                     _id: '$_id.invoiceId',
@@ -150,7 +150,7 @@ Meteor.methods({
                     startDate: {$last: '$startDate'},
                     endDate: {$last: '$endDate'},
                     groupByDate: {
-                        $addToSet: {
+                        $push: {
                             orderDate: '$orderDate',
                             itemDoc: '$itemDoc'
                         }
