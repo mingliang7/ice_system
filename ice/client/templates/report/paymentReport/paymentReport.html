@@ -1,25 +1,26 @@
 <template name="ice_paymentReport">
-{{> ice_paymentReportInsertTemplate}}
+    {{> ice_paymentReportInsertTemplate}}
 </template>
 <template name="ice_paymentReportInsertTemplate">
     {{#autoForm schema=Ice.Schema.paymentReport id="ice_staffReportInsertTemplate" action="paymentReportGen" target="_blank"}}
-    <div class="row">
-        <div class="col-md-6">
-                    {{> afQuickField name="staffId" }}
-                    {{> afQuickField name="customerType" }}
-                    <div class="typeahead-customer form-group hidden">
-                      <label for="">Customer:</label>
-                      <input class="form-control  typeahead customer" name="search" type="text" placeholder="All"
-                      autocomplete="on" spellcheck="off"
-                      data-source="search" data-select='selected' data-highlight=true data-limit="9"/>
-                    </div>
-                    {{> afQuickField name="customerId" type='hidden'}}
+        <div class="row">
+            <div class="col-md-6">
+                {{> afQuickField name="staffId" }}
+                {{> afQuickField name="customerType" }}
+                <div class="typeahead-customer form-group hidden">
+                    <label for="">Customer:</label>
+                    <input class="form-control  typeahead customer" name="search" type="text" placeholder="All"
+                           autocomplete="on" spellcheck="off"
+                           data-source="search" data-select='selected' data-highlight=true data-limit="9"/>
+                </div>
+                {{> afQuickField name="includeGroup" }}
+                {{> afQuickField name="customerId" type='hidden'}}
+            </div>
+            <div class="col-md-6">
+                {{> afQuickField name="date"}}
+                {{> afQuickField name="exchange" readonly='true'}}
+            </div>
         </div>
-        <div class="col-md-6">
-                    {{> afQuickField name="date"}}
-                    {{> afQuickField name="exchange" readonly='true'}}
-        </div>
-    </div>
         <button type="submit" class="btn btn-primary">{{fa "floppy-o"}} Generate</button>
         <button type="reset" class="btn btn-default">{{fa "refresh"}} Reset</button>
     {{/autoForm}}
@@ -30,64 +31,77 @@
 <template name="ice_paymentReportGen">
     {{#if data}}
         {{#with data}}
-        <!--Title-->
-        <div class="report-title">
-            <div class="company-name-en" style="font-size: 20px;">{{title.company}}</div>
-            <div class="report-name">Payment Report</div>
-        </div>
+            <!--Title-->
+            <div class="report-title">
+                <div class="company-name-en" style="font-size: 20px;">{{title.company}}</div>
+                <div class="report-name">Payment Report</div>
+            </div>
 
-        <!--Header-->
-        <div style="width: 100%">
-            {{#with header}}
-                <div style="width: 50%; float: left">
-                    <ul class="list-unstyled">
-                        <li><strong>Staff:</strong> {{staff}}</li>
-                        <li><strong>customerType:</strong> {{customerType}}</li>
-                        <li><strong>Customer:</strong> {{customer}}</li>
-                    </ul>
-                </div>
-                <div style="width: 50%; float: right">
-                    <ul class="list-unstyled">
-                        <li><strong>Date:</strong> {{date}}</li>
-                         <li><strong>Exchange Rate:</strong> {{exchange}}</li>
-                    </ul>
-                </div>
-            {{/with}}
-        </div>
+            <!--Header-->
+            <div style="width: 100%">
+                {{#with header}}
+                    <div style="width: 50%; float: left">
+                        <ul class="list-unstyled">
+                            <li><strong>Staff:</strong> {{staff}}</li>
+                            <li><strong>customerType:</strong> {{customerType}}</li>
+                            <li><strong>Customer:</strong> {{customer}}</li>
+                        </ul>
+                    </div>
+                    <div style="width: 50%; float: right">
+                        <ul class="list-unstyled">
+                            <li><strong>Date:</strong> {{date}}</li>
+                            <li><strong>Exchange Rate:</strong> {{exchange}}</li>
+                        </ul>
+                    </div>
+                {{/with}}
+            </div>
 
-        <!--Content-->
-        <table class="report-content">
-            <thead class="report-content-header">
-            <tr>
-                <th>No</th>
-                <th>Invoice #</th>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Staff</th>
-                <th>Status</th>
-                <th>Due Amount</th>
-                <th>Paid Amount</th>
-                <th>Balance</th>
-
-            </tr>
-
-            </thead>
-
-            <tbody class="report-content-body">
-            {{#each content}}
+            <!--Content-->
+            <table class="report-content">
+                <thead class="report-content-header">
                 <tr>
-                    <td>{{index}}</td>
-                    <td>{{orderId_orderGroupId}}</td>
-                    <td>{{paymentDate}}</td>
-                    <td>{{name customerId}}</td>
-                    <td>{{findName staffId}}</td>
-                    <td>{{status}}</td>
-                    <td>{{formatCurrency dueAmount}}</td>
-                    <td>{{formatCurrency paidAmount}}</td>
-                    <td>{{formatCurrency outstandingAmount}}</td>
+                    <th>No</th>
+                    <th>Invoice #</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Staff</th>
+                    <th>Status</th>
+                    <th>Due Amount</th>
+                    <th>Paid Amount</th>
+                    <th>Balance</th>
 
                 </tr>
-            {{/each}}
+
+                </thead>
+
+                <tbody class="report-content-body">
+                {{#each content}}
+                    <tr>
+                        <td>{{index}}</td>
+                        <td>{{orderId_orderGroupId}}</td>
+                        <td>{{paymentDate}}</td>
+                        <td>{{name customerId}}</td>
+                        <td>{{findName staffId}}</td>
+                        <td>{{status}}</td>
+                        <td>{{formatCurrency dueAmount}}</td>
+                        <td>{{formatCurrency paidAmount}}</td>
+                        <td>{{formatCurrency outstandingAmount}}</td>
+
+                    </tr>
+                {{/each}}
+                {{#each groups}}
+                    <tr>
+                        <td>{{increaseIndex @index}}</td>
+                        <td>{{invoiceId}}</td>
+                        <td>{{paymentDate}}</td>
+                        <td>{{customerDoc.name}}({{customerDoc.customerType}} days)</td>
+                        <td>{{staffDoc.name}}</td>
+                        <td>{{status}}</td>
+                        <td>{{numFormat dueAmount '0,0'}}</td>
+                        <td>{{numFormat paidAmount '0,0'}}</td>
+                        <td>{{numFormat balanceAmount '0,0'}}</td>
+                    </tr>
+                {{/each}}
                 <tr>
                     <td colspan="6" align="right">Grand Total KHR:</td>
                     {{{sumTotal content}}}
@@ -96,12 +110,12 @@
                     <td colspan="6" align="right">USD:</td>
                     {{{totalInDollar content}}}
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
-        <!--Footer-->
-        <!--Sign-->
-        {{> signFooter}}
+            <!--Footer-->
+            <!--Sign-->
+            {{> signFooter}}
 
         {{/with}}
     {{else}}

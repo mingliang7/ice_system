@@ -30,4 +30,8 @@ Ice.Schema.paymentReport = new SimpleSchema(
 			type: 'select2'
 			options: ->
 				Ice.List.exchange()
+	includeGroup:
+		type: Boolean
+		label: 'Include Group'
+		optional: true
 )

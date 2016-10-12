@@ -83,7 +83,8 @@ function insertGroupInvoice(collection, range, doc, groupCollection) {
     var groupInvoice = groupCollection.findOne({
         customerId: doc.iceCustomerId,
         startDate: moment(range.startDate).toDate(),
-        endDate: moment(range.endDate).toDate()
+        endDate: moment(range.endDate).toDate(),
+        status: {$nin: ['closed', 'partial']}
     });
     if (groupInvoice) {
         var isUpdated = groupCollection.update(groupInvoice._id, {

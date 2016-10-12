@@ -100,6 +100,7 @@ Template.ice_paymentReportGen.helpers({
     if (!payment.ready()) {
       return false;
     }
+    this.dataInstance = payment.result();
     return payment.result();
   },
   name: function (id) {
@@ -115,7 +116,14 @@ Template.ice_paymentReportGen.helpers({
   findName: function (id) {
     return Ice.Collection.Staffs.findOne(id).name;
   },
+  increaseIndex: function(index){
+    var instance = Template.instance();
+    var length = instance.data.dataInstance.content.length;
+    var incIndex = index + 1 ;
+    return length + incIndex;
+  },
   sumTotal: function (content) {
+    var groupFooter = Template.instance().data.dataInstance.sumGroupFooter;
     td = '';
     dueAmount = 0;
     outstandingAmount = 0;
@@ -125,15 +133,16 @@ Template.ice_paymentReportGen.helpers({
       paidAmount += item.paidAmount;
       outstandingAmount += item.outstandingAmount;
     });
-    return '<td>' + '<strong>' + formatKh(dueAmount) + '</strong' +
-      '</td>' + '<td>' + '<strong>' + formatKh(paidAmount) + '</strong' +
-      '</td>' + '<td>' + '<strong>' + formatKh(outstandingAmount) +
+    return '<td>' + '<strong>' + formatKh(dueAmount + groupFooter.dueAmount) + '</strong' +
+      '</td>' + '<td>' + '<strong>' + formatKh(paidAmount + groupFooter.paidAmount) + '</strong' +
+      '</td>' + '<td>' + '<strong>' + formatKh(outstandingAmount + groupFooter.balanceAmount) +
       '</strong>' + '</td>';
   },
   formatCurrency: function (value) {
     return formatKh(value);
   },
   totalInDollar: function (content) {
+    var groupFooter = Template.instance().data.dataInstance.sumGroupFooter;
     td = '';
     dueAmount = 0;
     outstandingAmount = 0;
@@ -148,9 +157,9 @@ Template.ice_paymentReportGen.helpers({
       outstandingAmount += (item.outstandingAmount * parseFloat(
         currency));
     });
-    return '<td>' + '<strong>' + formatUS(dueAmount) + '</strong>' +
-      '</td>' + '<td>' + '<strong>' + formatUS(paidAmount) + '</strong>' +
-      '</td>' + '<td>' + '<strong>' + formatUS(outstandingAmount) +
+    return '<td>' + '<strong>' + formatUS(dueAmount + (groupFooter.dueAmount * parseFloat(currency))) + '</strong>' +
+      '</td>' + '<td>' + '<strong>' + formatUS(paidAmount + (groupFooter.paidAmount * parseFloat(currency))) + '</strong>' +
+      '</td>' + '<td>' + '<strong>' + formatUS(outstandingAmount + (groupFooter.balanceAmount * parseFloat(currency))) +
       '</td>';
   }
 });
